@@ -5,7 +5,7 @@ class MainButton extends StatelessWidget {
   final Function() action;
   final String title;
   final bool? showShadow;
-  final Widget? loadingWidget;
+  final bool? loadingWidget;
   const MainButton({
     super.key,
     required this.action,
@@ -94,7 +94,16 @@ class MainButton extends StatelessWidget {
                     ),
                     Visibility(
                       visible: loadingWidget != null,
-                      child: Center(child: loadingWidget),
+                      child: Center(
+                        child: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

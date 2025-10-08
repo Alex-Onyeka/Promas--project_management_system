@@ -463,17 +463,7 @@ class _CompanyTileState extends State<CompanyTile> {
                               showShadow: false,
                               loadingWidget: !isLoading
                                   ? null
-                                  : SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child:
-                                          CircularProgressIndicator(
-                                            color: Colors
-                                                .white,
-                                            strokeWidth:
-                                                1.5,
-                                          ),
-                                    ),
+                                  : true,
                               action: () async {
                                 setState(() {
                                   isLoading = !isLoading;
@@ -622,6 +612,7 @@ class _CreateCustomerFormState
             'Create Company',
           ),
           Text(
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.normal,

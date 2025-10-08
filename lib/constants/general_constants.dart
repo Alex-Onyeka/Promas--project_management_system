@@ -5,7 +5,11 @@ double screenSize(BuildContext context) {
 }
 
 double mobileScreen = 450;
-double tabletScreen = 950;
+
+double tabletScreenSmall = 650;
+double tabletScreen = 850;
+
+double tabletScreenBig = 1150;
 
 var mainBorderRadius = BorderRadius.only(
   bottomLeft: Radius.circular(10),
@@ -13,3 +17,7 @@ var mainBorderRadius = BorderRadius.only(
   topLeft: Radius.circular(10),
   topRight: Radius.circular(10),
 );
+
+String appName = 'Promas';
+
+const String mainLogo = 'assets/logo.svg';

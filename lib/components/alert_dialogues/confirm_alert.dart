@@ -4,10 +4,21 @@ import 'package:promas/components/buttons/secondary_button.dart';
 import 'package:promas/components/sections/heading_section.dart';
 import 'package:promas/constants/general_constants.dart';
 
-class ConfirmAlert extends StatelessWidget {
+class ConfirmAlert extends StatefulWidget {
   final String buttonText;
-  const ConfirmAlert({super.key, required this.buttonText});
+  final Function() action;
+  const ConfirmAlert({
+    super.key,
+    required this.buttonText,
+    required this.action,
+  });
 
+  @override
+  State<ConfirmAlert> createState() => _ConfirmAlertState();
+}
+
+class _ConfirmAlertState extends State<ConfirmAlert> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -38,8 +49,20 @@ class ConfirmAlert extends StatelessWidget {
               spacing: 7,
               children: [
                 MainButton(
-                  action: () {},
-                  title: buttonText,
+                  action: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    widget.action();
+                    await Future.delayed(
+                      Duration(seconds: 2),
+                    );
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  title: widget.buttonText,
+                  loadingWidget: isLoading ? true : null,
                 ),
                 SecondaryButton(
                   title: 'Cancel',

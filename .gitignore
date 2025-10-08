@@ -30,8 +30,7 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
-/coverage/
+.coverage/
 
 # Symbolication related
 app.*.symbols
@@ -44,8 +43,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-
-#Ignore all in build/ Except /web
+# Ignore all build outputs
 /build/*
+
+# But include the web build
 !/build/web
 !/build/web/**
