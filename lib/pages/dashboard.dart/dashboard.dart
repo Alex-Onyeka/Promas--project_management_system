@@ -89,7 +89,7 @@ class _DashboardState extends State<Dashboard> {
                                   UserProvider()
                                           .currentUser
                                           ?.name ??
-                                      'No User Found.',
+                                      'No User Found..',
                                 ),
                                 Container(
                                   height: 30,
