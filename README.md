@@ -1,16 +1,13 @@
-# promas
+# Promas  (Project-Management-System)
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
+Promas (short for Project Management System) is a Flutter-based admin dashboard designed to streamline company operations and employee productivity. 
+Built for efficiency and clarity, Promas empowers administrators to:
 
 A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Add and manage employees within a company
+- Create projects and define project branches
+- Assign project branches to specific employees
+- Track employee progress and project status in real time
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Whether you're managing a small team or a growing enterprise, Promas helps you stay organized, delegate tasks effectively, and monitor performance with ease.
