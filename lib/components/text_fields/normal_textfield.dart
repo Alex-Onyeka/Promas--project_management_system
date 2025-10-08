@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promas/main.dart';
 
 class NormalTextfield extends StatelessWidget {
   final TextEditingController? inputController;
@@ -34,6 +35,7 @@ class NormalTextfield extends StatelessWidget {
           child: Text(
             style: TextStyle(
               fontSize: 11,
+              color: returnTheme(context).mediumGrey(),
               fontWeight: FontWeight.normal,
             ),
             '$title${isOptional ? ' (Optional)' : ''}',
@@ -41,7 +43,10 @@ class NormalTextfield extends StatelessWidget {
         ),
         TextFormField(
           maxLines: numberOfLines ?? 1,
-          style: TextStyle(fontSize: 13),
+          style: TextStyle(
+            color: returnTheme(context).mediumGrey(),
+            fontSize: 13,
+          ),
           controller: inputController,
           enableSuggestions: true,
           keyboardType: TextInputType.text,

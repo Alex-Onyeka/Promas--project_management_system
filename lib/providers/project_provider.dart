@@ -100,6 +100,7 @@ class ProjectProvider extends ChangeNotifier {
     String uuid,
     ProjectClass project,
   ) async {
+    project.lastUpdate = DateTime.now();
     final response = await _client
         .from(_table)
         .update(project.toJson())

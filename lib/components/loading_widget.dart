@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promas/constants/general_constants.dart';
+import 'package:promas/main.dart';
 
 class LoadingWidget extends StatelessWidget {
   final Function() action;
@@ -14,7 +15,10 @@ class LoadingWidget extends StatelessWidget {
           height: 380,
           width: 380,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: returnTheme(
+              context,
+              listen: false,
+            ).lightGrey(),
             borderRadius: mainBorderRadius,
           ),
           child: Column(
@@ -30,7 +34,10 @@ class LoadingWidget extends StatelessWidget {
                     IconButton(
                       onPressed: action,
                       icon: Icon(
-                        color: Colors.grey,
+                        color: returnTheme(
+                          context,
+                          listen: false,
+                        ).darkMediumGrey(),
                         size: 20,
                         Icons.clear,
                       ),
@@ -39,7 +46,12 @@ class LoadingWidget extends StatelessWidget {
                 ),
               ),
               Center(
-                child: CircularProgressIndicator.adaptive(),
+                child: CircularProgressIndicator(
+                  color: returnTheme(
+                    context,
+                    listen: false,
+                  ).darkGrey(),
+                ),
               ),
               Opacity(
                 opacity: 0,
@@ -51,7 +63,10 @@ class LoadingWidget extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                       icon: Icon(
-                        color: Colors.grey,
+                        color: returnTheme(
+                          context,
+                          listen: false,
+                        ).darkMediumGrey(),
                         size: 20,
                         Icons.clear,
                       ),

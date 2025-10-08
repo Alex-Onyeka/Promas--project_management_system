@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promas/constants/general_constants.dart';
+import 'package:promas/main.dart';
 
 class AlertPlaceholder extends StatelessWidget {
   final bool? isMin;
@@ -13,7 +14,10 @@ class AlertPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: returnTheme(
+        context,
+        listen: false,
+      ).lightMediumGrey(),
       contentPadding: EdgeInsets.all(10),
       shape: OutlineInputBorder(
         borderRadius: mainBorderRadius,

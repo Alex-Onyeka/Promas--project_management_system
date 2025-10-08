@@ -110,6 +110,9 @@ class _MainSideBarState extends State<MainSideBar> {
                       context: context,
                       builder: (context) {
                         return ConfirmAlert(
+                          subText:
+                              'Are you sure you want to Log out?',
+                          title: 'Logout?',
                           action: () async {
                             await AuthService().signOut(
                               context: safeContext,

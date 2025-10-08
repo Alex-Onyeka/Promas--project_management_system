@@ -26,10 +26,14 @@ class EmailTextField extends StatelessWidget {
           'Email ${isOptional ? '(Optional)' : ''}',
         ),
         TextFormField(
-          style: TextStyle(fontSize: 13),
+          style: TextStyle(
+            color: returnTheme(context).mediumGrey(),
+            fontSize: 13,
+          ),
           controller: emailController,
           enableSuggestions: true,
           keyboardType: TextInputType.emailAddress,
+          textCapitalization: TextCapitalization.none,
           validator: (value) {
             if (isOptional == false &&
                 value.toString().isEmpty) {

@@ -99,6 +99,7 @@ class BranchProvider extends ChangeNotifier {
     String uuid,
     BranchClass branch,
   ) async {
+    branch.lastUpdate = DateTime.now();
     final response = await _client
         .from(_table)
         .update(branch.toJson())

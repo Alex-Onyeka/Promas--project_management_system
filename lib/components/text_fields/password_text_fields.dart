@@ -37,7 +37,10 @@ class _PasswordTextFieldState
               : 'Password',
         ),
         TextFormField(
-          style: TextStyle(fontSize: 13),
+          style: TextStyle(
+            color: returnTheme(context).mediumGrey(),
+            fontSize: 13,
+          ),
           controller: widget.passwordController,
           enableSuggestions: false,
           keyboardType: TextInputType.visiblePassword,

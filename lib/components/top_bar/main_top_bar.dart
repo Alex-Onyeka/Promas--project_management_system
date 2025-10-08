@@ -45,7 +45,11 @@ class MainTopBar extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 20),
+                Visibility(
+                  visible:
+                      screenSize(context) < tabletScreen,
+                  child: SizedBox(width: 20),
+                ),
                 Text(
                   style: TextStyle(
                     fontSize: 14,

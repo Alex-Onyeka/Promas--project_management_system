@@ -6,10 +6,12 @@ class ProjectClass {
   final double level;
   final int? companyId;
   final List<String> employees;
+  DateTime lastUpdate;
 
   ProjectClass({
     required this.uuid,
     required this.createdAt,
+    required this.lastUpdate,
     required this.name,
     required this.desc,
     required this.level,
@@ -22,6 +24,7 @@ class ProjectClass {
     return ProjectClass(
       uuid: json['uuid'] as String,
       createdAt: DateTime.parse(json['created_at']),
+      lastUpdate: DateTime.parse(json['last_update']),
       name: json['name'] ?? '',
       desc: json['desc'] ?? '',
       level: (json['level'] as num?)?.toDouble() ?? 0.0,
@@ -35,6 +38,7 @@ class ProjectClass {
     return {
       // 'uuid': uuid,
       'created_at': createdAt.toIso8601String(),
+      'last_update': lastUpdate.toIso8601String(),
       'name': name,
       'desc': desc,
       'level': level,

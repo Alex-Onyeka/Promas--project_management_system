@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:promas/components/buttons/secondary_button.dart';
 import 'package:promas/constants/general_constants.dart';
+import 'package:promas/main.dart';
 
 class ErrorAlert extends StatelessWidget {
   final String? title;
@@ -15,7 +16,10 @@ class ErrorAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: returnTheme(
+        context,
+        listen: false,
+      ).containerColor(),
       contentPadding: EdgeInsets.all(10),
       shape: OutlineInputBorder(
         borderRadius: mainBorderRadius,
@@ -64,6 +68,10 @@ class ErrorAlert extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.normal,
+                color: returnTheme(
+                  context,
+                  listen: false,
+                ).darkMediumGrey(),
               ),
               message,
             ),

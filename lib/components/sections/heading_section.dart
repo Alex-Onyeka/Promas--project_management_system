@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promas/main.dart';
 
 class HeadingSection extends StatelessWidget {
   final String title;
@@ -59,6 +60,10 @@ class HeadingSection extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 11,
+            color: returnTheme(
+              context,
+              listen: false,
+            ).darkMediumGrey(),
             fontWeight: FontWeight.normal,
           ),
           subText,

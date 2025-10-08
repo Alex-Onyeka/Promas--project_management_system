@@ -7,10 +7,12 @@ class BranchClass {
   final double? level;
   final List<String>? employees;
   final int? companyId;
+  DateTime lastUpdate;
 
   BranchClass({
     required this.uuid,
     required this.createdAt,
+    required this.lastUpdate,
     this.name,
     this.desc,
     this.projectId,
@@ -23,6 +25,7 @@ class BranchClass {
     return BranchClass(
       uuid: json['uuid'] as String,
       createdAt: DateTime.parse(json['created_at']),
+      lastUpdate: DateTime.parse(json['last_update']),
       name: json['name'],
       desc: json['desc'],
       projectId: json['project_id'],
@@ -40,6 +43,7 @@ class BranchClass {
     return {
       // 'uuid': uuid,
       'created_at': createdAt.toIso8601String(),
+      'last_update': lastUpdate.toIso8601String(),
       'name': name,
       'desc': desc,
       'project_id': projectId,

@@ -3,14 +3,19 @@ import 'package:promas/components/buttons/main_button.dart';
 import 'package:promas/components/buttons/secondary_button.dart';
 import 'package:promas/components/sections/heading_section.dart';
 import 'package:promas/constants/general_constants.dart';
+import 'package:promas/main.dart';
 
 class ConfirmAlert extends StatefulWidget {
   final String buttonText;
   final Function() action;
+  final String subText;
+  final String? title;
   const ConfirmAlert({
     super.key,
     required this.buttonText,
     required this.action,
+    required this.subText,
+    this.title,
   });
 
   @override
@@ -22,7 +27,10 @@ class _ConfirmAlertState extends State<ConfirmAlert> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: returnTheme(
+        context,
+        listen: false,
+      ).containerColor(),
       contentPadding: EdgeInsets.all(10),
       shape: OutlineInputBorder(
         borderRadius: mainBorderRadius,
@@ -41,8 +49,8 @@ class _ConfirmAlertState extends State<ConfirmAlert> {
           spacing: 5,
           children: [
             HeadingSection(
-              subText: 'Error Creating account',
-              title: 'Proceed With Action?',
+              subText: widget.subText,
+              title: widget.title ?? 'Proceed With Action?',
             ),
             SizedBox(height: 10),
             Column(
