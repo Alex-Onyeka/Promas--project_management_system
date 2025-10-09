@@ -145,13 +145,6 @@ class _DashboardState extends State<Dashboard> {
                                       ),
                                       SizedBox(height: 2),
                                       SizedBox(
-                                        // decoration: BoxDecoration(
-                                        //   border: Border.all(
-                                        //     color: Colors
-                                        //         .grey
-                                        //         .shade400,
-                                        //   ),
-                                        // ),
                                         height: 300,
                                         width:
                                             double.infinity,
@@ -159,7 +152,7 @@ class _DashboardState extends State<Dashboard> {
                                           children: [
                                             Visibility(
                                               visible: projects
-                                                  .isNotEmpty,
+                                                  .isEmpty,
                                               child: SizedBox(
                                                 height: double
                                                     .infinity,
@@ -210,7 +203,7 @@ class _DashboardState extends State<Dashboard> {
                                             ),
                                             Visibility(
                                               visible: projects
-                                                  .isEmpty,
+                                                  .isNotEmpty,
                                               child: Stack(
                                                 children: [
                                                   Visibility(
@@ -375,28 +368,28 @@ class _DashboardState extends State<Dashboard> {
                                                                 }
                                                               },
                                                         ),
-                                                        // Builder(
-                                                        //   builder:
-                                                        //       (
-                                                        //         context,
-                                                        //       ) {
-                                                        //         if (projects.length >
-                                                        //             2) {
-                                                        //           return ProjectTile(
-                                                        //             project: projects[2],
-                                                        //           );
-                                                        //         } else {
-                                                        //           return Visibility(
-                                                        //             visible:
-                                                        //                 projects.length >
-                                                        //                 2,
-                                                        //             child: Container(
-                                                        //               color: Colors.amber,
-                                                        //             ),
-                                                        //           );
-                                                        //         }
-                                                        //       },
-                                                        // ),
+                                                        Builder(
+                                                          builder:
+                                                              (
+                                                                context,
+                                                              ) {
+                                                                if (projects.length >
+                                                                    2) {
+                                                                  return ProjectTile(
+                                                                    project: projects[2],
+                                                                  );
+                                                                } else {
+                                                                  return Visibility(
+                                                                    visible:
+                                                                        projects.length >
+                                                                        2,
+                                                                    child: Container(
+                                                                      color: Colors.amber,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
+                                                        ),
                                                         AddProjectMainTile(),
                                                       ],
                                                     ),
