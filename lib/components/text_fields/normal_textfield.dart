@@ -38,7 +38,7 @@ class NormalTextfield extends StatelessWidget {
               color: returnTheme(context).mediumGrey(),
               fontWeight: FontWeight.normal,
             ),
-            '$title${isOptional ? ' (Optional)' : ''}',
+            '$title${isOptional ? ' (Optional)' : '*'}',
           ),
         ),
         TextFormField(

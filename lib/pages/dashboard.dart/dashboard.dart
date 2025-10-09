@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:promas/classes/project_class.dart';
+import 'package:promas/components/alert_dialogues/alert_placeholder.dart';
 import 'package:promas/components/buttons/main_button.dart';
+import 'package:promas/components/buttons/secondary_button.dart';
+import 'package:promas/components/sections/heading_section.dart';
 import 'package:promas/components/side_bar/main_side_bar.dart';
+import 'package:promas/components/text_fields/normal_textfield.dart';
 import 'package:promas/components/top_bar/main_top_bar.dart';
 import 'package:promas/components/top_bar/mobile_app_bar.dart';
 import 'package:promas/constants/formats.dart';
@@ -22,46 +26,54 @@ class _DashboardState extends State<Dashboard> {
 
   // final companyId = CompanyProvider().currentCompany!.id;
   final projectSearchController = TextEditingController();
+  final nameController = TextEditingController();
+  final descController = TextEditingController();
 
   List<ProjectClass> projects = [
-    ProjectClass(
-      uuid: 'No 1',
-      createdAt: DateTime.now(),
-      lastUpdate: DateTime.now(),
-      name: 'Stockall Application Development',
-      desc: 'An Inventory Management System',
-      level: 0,
-      employees: [],
-      companyId: CompanyProvider().currentCompany!.id,
-    ),
-    ProjectClass(
-      uuid: 'No 2',
-      createdAt: DateTime.now(),
-      lastUpdate: DateTime.now(),
-      name: 'Promas Project Management System',
-      desc:
-          'An Project Management System, designed for company staff relationship and management. Project Management...',
-      level: 0,
-      employees: [],
-      companyId: CompanyProvider().currentCompany!.id,
-    ),
-    ProjectClass(
-      uuid: 'No 3',
-      createdAt: DateTime.now(),
-      lastUpdate: DateTime.now(),
-      name: 'Social Media Platform',
-      desc:
-          'An Digital Management Platform where users can share posts and create social experiences.',
-      level: 0,
-      employees: [],
-      companyId: CompanyProvider().currentCompany!.id,
-    ),
+    // ProjectClass(
+    //   uuid: 'No 0',
+    //   createdAt: DateTime.now(),
+    //   lastUpdate: DateTime.now(),
+    //   name: 'Stockall Application Development',
+    //   desc: 'An Inventory Management System',
+    //   level: 0,
+    //   employees: [],
+    //   companyId: CompanyProvider().currentCompany!.id,
+    // ),
+    // ProjectClass(
+    //   uuid: 'No 1',
+    //   createdAt: DateTime.now(),
+    //   lastUpdate: DateTime.now(),
+    //   name: 'Promas Project Management System',
+    //   desc:
+    //       'An Project Management System, designed for company staff relationship and management. Project Management...',
+    //   level: 0,
+    //   employees: [],
+    //   companyId: CompanyProvider().currentCompany!.id,
+    // ),
+    // ProjectClass(
+    //   uuid: 'No 2',
+    //   createdAt: DateTime.now(),
+    //   lastUpdate: DateTime.now(),
+    //   name: 'Social Media Platform',
+    //   desc:
+    //       'An Digital Management Platform where users can share posts and create social experiences.',
+    //   level: 0,
+    //   employees: [],
+    //   companyId: CompanyProvider().currentCompany!.id,
+    // ),
   ];
 
   void addProject(ProjectClass project) {
+    print('Adding Project ${project.name} : ');
     setState(() {
       projects.add(project);
     });
+    print(
+      'Added Project ${project.name} : ${projects.length}',
+    );
+    nameController.clear();
+    descController.clear();
   }
 
   void deleteProject(ProjectClass project) {
@@ -188,7 +200,34 @@ class _DashboardState extends State<Dashboard> {
                                                         width:
                                                             200,
                                                         child: MainButton(
-                                                          action: () {},
+                                                          action: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (
+                                                                    context,
+                                                                  ) {
+                                                                    return AddProjectDialog(
+                                                                      addProject: () {
+                                                                        addProject(
+                                                                          ProjectClass(
+                                                                            createdAt: DateTime.now(),
+                                                                            lastUpdate: DateTime.now(),
+                                                                            name: nameController.text,
+                                                                            desc: descController.text,
+                                                                            level: 0,
+                                                                            employees: [],
+                                                                            companyId: CompanyProvider().currentCompany!.id,
+                                                                            uuid: '00 ${projects.length + 1}',
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      descController: descController,
+                                                                      nameController: nameController,
+                                                                    );
+                                                                  },
+                                                            );
+                                                          },
                                                           title: 'Create New Project',
                                                         ),
                                                       ),
@@ -243,6 +282,11 @@ class _DashboardState extends State<Dashboard> {
                                                                   (
                                                                     project,
                                                                   ) => ProjectTile(
+                                                                    deleteProject: () {
+                                                                      deleteProject(
+                                                                        project,
+                                                                      );
+                                                                    },
                                                                     project: project,
                                                                   ),
                                                                 )
@@ -334,6 +378,11 @@ class _DashboardState extends State<Dashboard> {
                                                               ) {
                                                                 if (projects.isNotEmpty) {
                                                                   return ProjectTile(
+                                                                    deleteProject: () {
+                                                                      deleteProject(
+                                                                        projects[0],
+                                                                      );
+                                                                    },
                                                                     project: projects[0],
                                                                   );
                                                                 } else {
@@ -354,6 +403,11 @@ class _DashboardState extends State<Dashboard> {
                                                                 if (projects.length >
                                                                     1) {
                                                                   return ProjectTile(
+                                                                    deleteProject: () {
+                                                                      deleteProject(
+                                                                        projects[1],
+                                                                      );
+                                                                    },
                                                                     project: projects[1],
                                                                   );
                                                                 } else {
@@ -376,6 +430,11 @@ class _DashboardState extends State<Dashboard> {
                                                                 if (projects.length >
                                                                     2) {
                                                                   return ProjectTile(
+                                                                    deleteProject: () {
+                                                                      deleteProject(
+                                                                        projects[2],
+                                                                      );
+                                                                    },
                                                                     project: projects[2],
                                                                   );
                                                                 } else {
@@ -390,7 +449,36 @@ class _DashboardState extends State<Dashboard> {
                                                                 }
                                                               },
                                                         ),
-                                                        AddProjectMainTile(),
+                                                        AddProjectMainTile(
+                                                          action: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (
+                                                                    context,
+                                                                  ) {
+                                                                    return AddProjectDialog(
+                                                                      addProject: () {
+                                                                        addProject(
+                                                                          ProjectClass(
+                                                                            createdAt: DateTime.now(),
+                                                                            lastUpdate: DateTime.now(),
+                                                                            name: nameController.text,
+                                                                            desc: descController.text,
+                                                                            level: 0,
+                                                                            employees: [],
+                                                                            companyId: CompanyProvider().currentCompany!.id,
+                                                                            uuid: '00 ${projects.length + 1}',
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      descController: descController,
+                                                                      nameController: nameController,
+                                                                    );
+                                                                  },
+                                                            );
+                                                          },
+                                                        ),
                                                       ],
                                                     ),
                                                   ),
@@ -426,8 +514,88 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
+class AddProjectDialog extends StatefulWidget {
+  final Function() addProject;
+  final TextEditingController nameController;
+  final TextEditingController descController;
+  const AddProjectDialog({
+    super.key,
+    required this.addProject,
+    required this.nameController,
+    required this.descController,
+  });
+
+  @override
+  State<AddProjectDialog> createState() =>
+      _AddProjectDialogState();
+}
+
+class _AddProjectDialogState
+    extends State<AddProjectDialog> {
+  final GlobalKey<FormState> _formKey =
+      GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    return AlertPlaceholder(
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 5,
+          children: [
+            HeadingSection(
+              title: 'Create New Project',
+              subText:
+                  'Fill The Form To Create New Project',
+            ),
+            SizedBox(height: 10),
+            NormalTextfield(
+              inputController: widget.nameController,
+              hintText: 'Enter Project Name',
+              title: 'Project Name',
+              isOptional: false,
+            ),
+            SizedBox(height: 3),
+            NormalTextfield(
+              inputController: widget.descController,
+              hintText: 'Enter Project Description',
+              title: 'Project Description',
+              isOptional: false,
+              numberOfLines: 3,
+            ),
+            SizedBox(height: 6),
+            MainButton(
+              action: () {
+                if (_formKey.currentState!.validate()) {
+                  widget.addProject();
+                  Navigator.of(context).pop();
+                }
+              },
+              title: 'Create Project',
+            ),
+            SizedBox(height: 4),
+            SecondaryButton(
+              title: 'Cancel',
+              action: () {
+                widget.nameController.clear();
+                widget.descController.clear();
+                Navigator.of(context).pop();
+              },
+            ),
+            SizedBox(height: 4),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class AddProjectMainTile extends StatelessWidget {
-  const AddProjectMainTile({super.key});
+  final Function() action;
+  const AddProjectMainTile({
+    super.key,
+    required this.action,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -453,7 +621,7 @@ class AddProjectMainTile extends StatelessWidget {
           ),
           child: InkWell(
             borderRadius: mainBorderRadius,
-            onTap: () {},
+            onTap: action,
             child: Container(
               width: 260,
               height: 125,
@@ -475,7 +643,12 @@ class AddProjectMainTile extends StatelessWidget {
 
 class ProjectTile extends StatelessWidget {
   final ProjectClass project;
-  const ProjectTile({super.key, required this.project});
+  final Function() deleteProject;
+  const ProjectTile({
+    super.key,
+    required this.project,
+    required this.deleteProject,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -502,7 +675,7 @@ class ProjectTile extends StatelessWidget {
           ),
           child: InkWell(
             borderRadius: mainBorderRadius,
-            onTap: () {},
+            onTap: deleteProject,
             child: Container(
               // width: 260,
               // height: 125,
@@ -538,7 +711,7 @@ class ProjectTile extends StatelessWidget {
                             fontSize: screen > mobileScreen
                                 ? 14
                                 : 12,
-                            color: theme.darkGrey(),
+                            color: theme.darkMediumGrey(),
                             fontWeight: FontWeight.bold,
                           ),
                           cutLongText(
@@ -570,7 +743,7 @@ class ProjectTile extends StatelessWidget {
                                     screen > mobileScreen
                                     ? 10
                                     : 8,
-                                color: theme.darkGrey(),
+                                color: theme.mediumGrey(),
                               ),
                               cutLongText(
                                 screen > mobileScreen

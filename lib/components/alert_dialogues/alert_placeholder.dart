@@ -17,7 +17,7 @@ class AlertPlaceholder extends StatelessWidget {
       backgroundColor: returnTheme(
         context,
         listen: false,
-      ).lightMediumGrey(),
+      ).lightGrey(),
       contentPadding: EdgeInsets.all(10),
       shape: OutlineInputBorder(
         borderRadius: mainBorderRadius,
