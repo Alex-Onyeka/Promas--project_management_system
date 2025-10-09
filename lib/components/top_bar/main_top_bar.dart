@@ -57,19 +57,26 @@ class MainTopBar extends StatelessWidget {
                       screenSize(context) < tabletScreen,
                   child: SizedBox(width: 20),
                 ),
-                Text(
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    color: returnTheme(context).darkGrey(),
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: returnTheme(
+                        context,
+                      ).darkGrey(),
+                    ),
+                    returnNav(context).pageName(),
                   ),
-                  'DASHBOARD',
                 ),
                 SizedBox(width: 20),
                 Visibility(
                   visible:
                       screenSize(context) >=
-                      tabletScreenBig,
+                          tabletScreenBig &&
+                      returnNav(context).currentPage != 2 &&
+                      returnNav(context).currentPage != 3,
                   child: SizedBox(
                     width:
                         screenSize(context) > tabletScreen

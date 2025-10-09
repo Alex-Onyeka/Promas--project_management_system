@@ -11,6 +11,8 @@ import 'package:promas/components/top_bar/mobile_app_bar.dart';
 import 'package:promas/constants/formats.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
+import 'package:promas/pages/employees/employees.dart';
+import 'package:promas/pages/projects/projects.dart';
 import 'package:promas/providers/company_provider.dart';
 
 class Dashboard extends StatefulWidget {
@@ -26,70 +28,6 @@ class _DashboardState extends State<Dashboard> {
 
   // final companyId = CompanyProvider().currentCompany!.id;
   final projectSearchController = TextEditingController();
-  final nameController = TextEditingController();
-  final descController = TextEditingController();
-
-  List<ProjectClass> projects = [
-    // ProjectClass(
-    //   uuid: 'No 0',
-    //   createdAt: DateTime.now(),
-    //   lastUpdate: DateTime.now(),
-    //   name: 'Stockall Application Development',
-    //   desc: 'An Inventory Management System',
-    //   level: 0,
-    //   employees: [],
-    //   companyId: CompanyProvider().currentCompany!.id,
-    // ),
-    // ProjectClass(
-    //   uuid: 'No 1',
-    //   createdAt: DateTime.now(),
-    //   lastUpdate: DateTime.now(),
-    //   name: 'Promas Project Management System',
-    //   desc:
-    //       'An Project Management System, designed for company staff relationship and management. Project Management...',
-    //   level: 0,
-    //   employees: [],
-    //   companyId: CompanyProvider().currentCompany!.id,
-    // ),
-    // ProjectClass(
-    //   uuid: 'No 2',
-    //   createdAt: DateTime.now(),
-    //   lastUpdate: DateTime.now(),
-    //   name: 'Social Media Platform',
-    //   desc:
-    //       'An Digital Management Platform where users can share posts and create social experiences.',
-    //   level: 0,
-    //   employees: [],
-    //   companyId: CompanyProvider().currentCompany!.id,
-    // ),
-  ];
-
-  void addProject(ProjectClass project) {
-    print('Adding Project ${project.name} : ');
-    setState(() {
-      projects.add(project);
-    });
-    print(
-      'Added Project ${project.name} : ${projects.length}',
-    );
-    nameController.clear();
-    descController.clear();
-  }
-
-  void deleteProject(ProjectClass project) {
-    setState(() {
-      projects.remove(project);
-    });
-  }
-
-  void updateProject(ProjectClass project) {
-    setState(() {
-      projects.removeWhere(
-        (pro) => pro.uuid! == project.uuid,
-      );
-      projects.add(project);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,360 +74,25 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    spacing: 2,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight:
-                                                  FontWeight
-                                                      .bold,
-                                              color: returnTheme(
-                                                context,
-                                              ).darkMediumGrey(),
-                                            ),
-                                            'Overview',
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 2),
-                                      SizedBox(
-                                        height: 300,
-                                        width:
-                                            double.infinity,
-                                        child: Stack(
-                                          children: [
-                                            Visibility(
-                                              visible: projects
-                                                  .isEmpty,
-                                              child: SizedBox(
-                                                height: double
-                                                    .infinity,
-                                                child: Center(
-                                                  child: Column(
-                                                    spacing:
-                                                        10,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.center,
-                                                    children: [
-                                                      Icon(
-                                                        size:
-                                                            35,
-                                                        color: returnTheme(
-                                                          context,
-                                                        ).darkGrey(),
-                                                        Icons.work_off_outlined,
-                                                      ),
-                                                      Text(
-                                                        style: TextStyle(
-                                                          fontSize: 13,
-                                                          color: returnTheme(
-                                                            context,
-                                                          ).darkMediumGrey(),
-                                                        ),
-                                                        'No Projects Created Yet',
-                                                      ),
-                                                      SizedBox(
-                                                        height:
-                                                            2,
-                                                      ),
-                                                      SizedBox(
-                                                        width:
-                                                            200,
-                                                        child: MainButton(
-                                                          action: () {
-                                                            showDialog(
-                                                              context: context,
-                                                              builder:
-                                                                  (
-                                                                    context,
-                                                                  ) {
-                                                                    return AddProjectDialog(
-                                                                      addProject: () {
-                                                                        addProject(
-                                                                          ProjectClass(
-                                                                            createdAt: DateTime.now(),
-                                                                            lastUpdate: DateTime.now(),
-                                                                            name: nameController.text,
-                                                                            desc: descController.text,
-                                                                            level: 0,
-                                                                            employees: [],
-                                                                            companyId: CompanyProvider().currentCompany!.id,
-                                                                            uuid: '00 ${projects.length + 1}',
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                      descController: descController,
-                                                                      nameController: nameController,
-                                                                    );
-                                                                  },
-                                                            );
-                                                          },
-                                                          title: 'Create New Project',
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height:
-                                                            55,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Visibility(
-                                              visible: projects
-                                                  .isNotEmpty,
-                                              child: Stack(
-                                                children: [
-                                                  Visibility(
-                                                    visible: projectSearchController
-                                                        .text
-                                                        .isNotEmpty,
-                                                    child: Stack(
-                                                      children: [
-                                                        Visibility(
-                                                          visible: projects
-                                                              .where(
-                                                                (
-                                                                  pro,
-                                                                ) => pro.name.toLowerCase().contains(
-                                                                  projectSearchController.text.toLowerCase(),
-                                                                ),
-                                                              )
-                                                              .isNotEmpty,
-                                                          child: GridView(
-                                                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                                              maxCrossAxisExtent: 300,
-                                                              mainAxisExtent: 130,
-                                                              // childAspectRatio:
-                                                              //     2,
-                                                              crossAxisSpacing: 10,
-                                                              mainAxisSpacing: 10,
-                                                            ),
-                                                            children: projects
-                                                                .where(
-                                                                  (
-                                                                    pro,
-                                                                  ) => pro.name.toLowerCase().contains(
-                                                                    projectSearchController.text.toLowerCase(),
-                                                                  ),
-                                                                )
-                                                                .map(
-                                                                  (
-                                                                    project,
-                                                                  ) => ProjectTile(
-                                                                    deleteProject: () {
-                                                                      deleteProject(
-                                                                        project,
-                                                                      );
-                                                                    },
-                                                                    project: project,
-                                                                  ),
-                                                                )
-                                                                .toList(),
-                                                          ),
-                                                        ),
-                                                        Visibility(
-                                                          visible: projects
-                                                              .where(
-                                                                (
-                                                                  pro,
-                                                                ) => pro.name.toLowerCase().contains(
-                                                                  projectSearchController.text.toLowerCase(),
-                                                                ),
-                                                              )
-                                                              .isEmpty,
-                                                          child: SizedBox(
-                                                            height: double.infinity,
-                                                            child: Center(
-                                                              child: Column(
-                                                                spacing: 10,
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  Icon(
-                                                                    size: 35,
-                                                                    color: returnTheme(
-                                                                      context,
-                                                                    ).darkGrey(),
-                                                                    Icons.work_off_outlined,
-                                                                  ),
-                                                                  Text(
-                                                                    style: TextStyle(
-                                                                      fontSize: 13,
-                                                                      color: returnTheme(
-                                                                        context,
-                                                                      ).darkMediumGrey(),
-                                                                    ),
-                                                                    'No Projects Found',
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 2,
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 200,
-                                                                    child: MainButton(
-                                                                      action: () {
-                                                                        setState(
-                                                                          () {
-                                                                            projectSearchController.clear();
-                                                                          },
-                                                                        );
-                                                                      },
-                                                                      title: 'Clear Search',
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 55,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Visibility(
-                                                    visible: projectSearchController
-                                                        .text
-                                                        .isEmpty,
-                                                    child: GridView(
-                                                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                                        maxCrossAxisExtent:
-                                                            300,
-                                                        mainAxisExtent:
-                                                            130,
-                                                        // childAspectRatio:
-                                                        //     2,
-                                                        crossAxisSpacing:
-                                                            10,
-                                                        mainAxisSpacing:
-                                                            10,
-                                                      ),
-                                                      children: [
-                                                        Builder(
-                                                          builder:
-                                                              (
-                                                                context,
-                                                              ) {
-                                                                if (projects.isNotEmpty) {
-                                                                  return ProjectTile(
-                                                                    deleteProject: () {
-                                                                      deleteProject(
-                                                                        projects[0],
-                                                                      );
-                                                                    },
-                                                                    project: projects[0],
-                                                                  );
-                                                                } else {
-                                                                  return Visibility(
-                                                                    visible: projects.isNotEmpty,
-                                                                    child: Container(
-                                                                      color: Colors.amber,
-                                                                    ),
-                                                                  );
-                                                                }
-                                                              },
-                                                        ),
-                                                        Builder(
-                                                          builder:
-                                                              (
-                                                                context,
-                                                              ) {
-                                                                if (projects.length >
-                                                                    1) {
-                                                                  return ProjectTile(
-                                                                    deleteProject: () {
-                                                                      deleteProject(
-                                                                        projects[1],
-                                                                      );
-                                                                    },
-                                                                    project: projects[1],
-                                                                  );
-                                                                } else {
-                                                                  return Visibility(
-                                                                    visible:
-                                                                        projects.length >
-                                                                        1,
-                                                                    child: Container(
-                                                                      color: Colors.amber,
-                                                                    ),
-                                                                  );
-                                                                }
-                                                              },
-                                                        ),
-                                                        Builder(
-                                                          builder:
-                                                              (
-                                                                context,
-                                                              ) {
-                                                                if (projects.length >
-                                                                    2) {
-                                                                  return ProjectTile(
-                                                                    deleteProject: () {
-                                                                      deleteProject(
-                                                                        projects[2],
-                                                                      );
-                                                                    },
-                                                                    project: projects[2],
-                                                                  );
-                                                                } else {
-                                                                  return Visibility(
-                                                                    visible:
-                                                                        projects.length >
-                                                                        2,
-                                                                    child: Container(
-                                                                      color: Colors.amber,
-                                                                    ),
-                                                                  );
-                                                                }
-                                                              },
-                                                        ),
-                                                        AddProjectMainTile(
-                                                          action: () {
-                                                            showDialog(
-                                                              context: context,
-                                                              builder:
-                                                                  (
-                                                                    context,
-                                                                  ) {
-                                                                    return AddProjectDialog(
-                                                                      addProject: () {
-                                                                        addProject(
-                                                                          ProjectClass(
-                                                                            createdAt: DateTime.now(),
-                                                                            lastUpdate: DateTime.now(),
-                                                                            name: nameController.text,
-                                                                            desc: descController.text,
-                                                                            level: 0,
-                                                                            employees: [],
-                                                                            companyId: CompanyProvider().currentCompany!.id,
-                                                                            uuid: '00 ${projects.length + 1}',
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                      descController: descController,
-                                                                      nameController: nameController,
-                                                                    );
-                                                                  },
-                                                            );
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  returnNav(
+                                            context,
+                                          ).currentPage ==
+                                          0
+                                      ? MainDashboard(
+                                          projectSearchController:
+                                              projectSearchController,
+                                        )
+                                      : returnNav(
+                                              context,
+                                            ).currentPage ==
+                                            1
+                                      ? Projects()
+                                      : returnNav(
+                                              context,
+                                            ).currentPage ==
+                                            2
+                                      ? Employees()
+                                      : Container(),
                                 ],
                               ),
                             ),
@@ -510,6 +113,454 @@ class _DashboardState extends State<Dashboard> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MainDashboard extends StatefulWidget {
+  final TextEditingController projectSearchController;
+  const MainDashboard({
+    super.key,
+    required this.projectSearchController,
+  });
+
+  @override
+  State<MainDashboard> createState() =>
+      _MainDashboardState();
+}
+
+class _MainDashboardState extends State<MainDashboard> {
+  final nameController = TextEditingController();
+  final descController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: 2,
+      children: [
+        Row(
+          children: [
+            Text(
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: returnTheme(
+                  context,
+                ).darkMediumGrey(),
+              ),
+              'Overview',
+            ),
+          ],
+        ),
+        SizedBox(height: 2),
+        SizedBox(
+          height: 300,
+          width: double.infinity,
+          child: Stack(
+            children: [
+              Visibility(
+                visible: returnProject(
+                  context,
+                ).projects.isEmpty,
+                child: SizedBox(
+                  height: double.infinity,
+                  child: Center(
+                    child: Column(
+                      spacing: 10,
+                      mainAxisAlignment:
+                          MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          size: 35,
+                          color: returnTheme(
+                            context,
+                          ).darkGrey(),
+                          Icons.work_off_outlined,
+                        ),
+                        Text(
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: returnTheme(
+                              context,
+                            ).darkMediumGrey(),
+                          ),
+                          'No Projects Created Yet',
+                        ),
+                        SizedBox(height: 2),
+                        SizedBox(
+                          width: 200,
+                          child: MainButton(
+                            action: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AddProjectDialog(
+                                    addProject: () {
+                                      returnProject(
+                                        context,
+                                        listen: false,
+                                      ).addProject(
+                                        ProjectClass(
+                                          createdAt:
+                                              DateTime.now(),
+                                          lastUpdate:
+                                              DateTime.now(),
+                                          name:
+                                              nameController
+                                                  .text,
+                                          desc:
+                                              descController
+                                                  .text,
+                                          level: 0,
+                                          employees: [],
+                                          companyId:
+                                              CompanyProvider()
+                                                  .currentCompany!
+                                                  .id,
+                                          uuid:
+                                              '00 ${returnProject(context, listen: false).projects.length + 1}',
+                                        ),
+                                      );
+                                    },
+                                    descController:
+                                        descController,
+                                    nameController:
+                                        nameController,
+                                  );
+                                },
+                              );
+                            },
+                            title: 'Create New Project',
+                          ),
+                        ),
+                        SizedBox(height: 55),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: returnProject(
+                  context,
+                  listen: false,
+                ).projects.isNotEmpty,
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: widget
+                          .projectSearchController
+                          .text
+                          .isNotEmpty,
+                      child: Stack(
+                        children: [
+                          Visibility(
+                            visible:
+                                returnProject(
+                                      context,
+                                      listen: false,
+                                    ).projects
+                                    .where(
+                                      (pro) => pro.name
+                                          .toLowerCase()
+                                          .contains(
+                                            widget
+                                                .projectSearchController
+                                                .text
+                                                .toLowerCase(),
+                                          ),
+                                    )
+                                    .isNotEmpty,
+                            child: GridView(
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 300,
+                                    mainAxisExtent: 130,
+                                    // childAspectRatio:
+                                    //     2,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
+                                  ),
+                              children:
+                                  returnProject(
+                                        context,
+                                        listen: false,
+                                      ).projects
+                                      .where(
+                                        (pro) => pro.name
+                                            .toLowerCase()
+                                            .contains(
+                                              widget
+                                                  .projectSearchController
+                                                  .text
+                                                  .toLowerCase(),
+                                            ),
+                                      )
+                                      .map(
+                                        (
+                                          project,
+                                        ) => ProjectTile(
+                                          deleteProject: () {
+                                            returnProject(
+                                              context,
+                                              listen: false,
+                                            ).deleteProject(
+                                              project,
+                                            );
+                                          },
+                                          project: project,
+                                        ),
+                                      )
+                                      .toList(),
+                            ),
+                          ),
+                          Visibility(
+                            visible:
+                                returnProject(
+                                      context,
+                                      listen: false,
+                                    ).projects
+                                    .where(
+                                      (pro) => pro.name
+                                          .toLowerCase()
+                                          .contains(
+                                            widget
+                                                .projectSearchController
+                                                .text
+                                                .toLowerCase(),
+                                          ),
+                                    )
+                                    .isEmpty,
+                            child: SizedBox(
+                              height: double.infinity,
+                              child: Center(
+                                child: Column(
+                                  spacing: 10,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .center,
+                                  children: [
+                                    Icon(
+                                      size: 35,
+                                      color: returnTheme(
+                                        context,
+                                      ).darkGrey(),
+                                      Icons
+                                          .work_off_outlined,
+                                    ),
+                                    Text(
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: returnTheme(
+                                          context,
+                                        ).darkMediumGrey(),
+                                      ),
+                                      'No Projects Found',
+                                    ),
+                                    SizedBox(height: 2),
+                                    SizedBox(
+                                      width: 200,
+                                      child: MainButton(
+                                        action: () {
+                                          setState(() {
+                                            widget
+                                                .projectSearchController
+                                                .clear();
+                                          });
+                                        },
+                                        title:
+                                            'Clear Search',
+                                      ),
+                                    ),
+                                    SizedBox(height: 55),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: widget
+                          .projectSearchController
+                          .text
+                          .isEmpty,
+                      child: GridView(
+                        gridDelegate:
+                            SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 300,
+                              mainAxisExtent: 130,
+                              // childAspectRatio:
+                              //     2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                            ),
+                        children: [
+                          Builder(
+                            builder: (context) {
+                              if (returnProject(
+                                context,
+                                listen: false,
+                              ).projects.isNotEmpty) {
+                                return ProjectTile(
+                                  deleteProject: () {
+                                    returnProject(
+                                      context,
+                                      listen: false,
+                                    ).deleteProject(
+                                      returnProject(
+                                        context,
+                                        listen: false,
+                                      ).projects[0],
+                                    );
+                                  },
+                                  project: returnProject(
+                                    context,
+                                    listen: false,
+                                  ).projects[0],
+                                );
+                              } else {
+                                return Visibility(
+                                  visible: returnProject(
+                                    context,
+                                    listen: false,
+                                  ).projects.isNotEmpty,
+                                  child: Container(
+                                    color: Colors.amber,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          Builder(
+                            builder: (context) {
+                              if (returnProject(
+                                    context,
+                                    listen: false,
+                                  ).projects.length >
+                                  1) {
+                                return ProjectTile(
+                                  deleteProject: () {
+                                    returnProject(
+                                      context,
+                                      listen: false,
+                                    ).deleteProject(
+                                      returnProject(
+                                        context,
+                                        listen: false,
+                                      ).projects[1],
+                                    );
+                                  },
+                                  project: returnProject(
+                                    context,
+                                    listen: false,
+                                  ).projects[1],
+                                );
+                              } else {
+                                return Visibility(
+                                  visible:
+                                      returnProject(
+                                        context,
+                                        listen: false,
+                                      ).projects.length >
+                                      1,
+                                  child: Container(
+                                    color: Colors.amber,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          Builder(
+                            builder: (context) {
+                              if (returnProject(
+                                    context,
+                                    listen: false,
+                                  ).projects.length >
+                                  2) {
+                                return ProjectTile(
+                                  deleteProject: () {
+                                    returnProject(
+                                      context,
+                                      listen: false,
+                                    ).deleteProject(
+                                      returnProject(
+                                        context,
+                                        listen: false,
+                                      ).projects[2],
+                                    );
+                                  },
+                                  project: returnProject(
+                                    context,
+                                    listen: false,
+                                  ).projects[2],
+                                );
+                              } else {
+                                return Visibility(
+                                  visible:
+                                      returnProject(
+                                        context,
+                                        listen: false,
+                                      ).projects.length >
+                                      2,
+                                  child: Container(
+                                    color: Colors.amber,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          AddProjectMainTile(
+                            action: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AddProjectDialog(
+                                    addProject: () {
+                                      returnProject(
+                                        context,
+                                        listen: false,
+                                      ).addProject(
+                                        ProjectClass(
+                                          createdAt:
+                                              DateTime.now(),
+                                          lastUpdate:
+                                              DateTime.now(),
+                                          name:
+                                              nameController
+                                                  .text,
+                                          desc:
+                                              descController
+                                                  .text,
+                                          level: 0,
+                                          employees: [],
+                                          companyId:
+                                              CompanyProvider()
+                                                  .currentCompany!
+                                                  .id,
+                                          uuid:
+                                              '00 ${returnProject(context, listen: false).projects.length + 1}',
+                                        ),
+                                      );
+                                    },
+                                    descController:
+                                        descController,
+                                    nameController:
+                                        nameController,
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

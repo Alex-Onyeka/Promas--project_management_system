@@ -13,12 +13,12 @@ class MainSideBar extends StatefulWidget {
 }
 
 class _MainSideBarState extends State<MainSideBar> {
-  int currentSelected = 0;
-  void selectNav(int index) {
-    setState(() {
-      currentSelected = index;
-    });
-  }
+  // int currentSelected = 0;
+  // void selectNav(int index) {
+  //   setState(() {
+  //     currentSelected = index;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -69,44 +69,66 @@ class _MainSideBarState extends State<MainSideBar> {
                 spacing: 15,
                 children: [
                   MenuListItem(
-                    currentSelected: currentSelected,
+                    currentSelected: returnNav(
+                      context,
+                    ).currentPage,
                     index: 0,
                     action: () {
-                      selectNav(0);
+                      returnNav(
+                        context,
+                        listen: false,
+                      ).navigate(0);
                     },
                     title: 'DashBoard',
                     icon:
                         Icons.dashboard_customize_outlined,
                   ),
                   MenuListItem(
-                    currentSelected: currentSelected,
+                    currentSelected: returnNav(
+                      context,
+                    ).currentPage,
                     index: 1,
                     action: () {
-                      selectNav(1);
+                      returnNav(
+                        context,
+                        listen: false,
+                      ).navigate(1);
                     },
                     title: 'Projects',
                     icon: Icons.work,
                   ),
                   MenuListItem(
-                    currentSelected: currentSelected,
+                    currentSelected: returnNav(
+                      context,
+                    ).currentPage,
                     index: 2,
                     action: () {
-                      selectNav(2);
+                      returnNav(
+                        context,
+                        listen: false,
+                      ).navigate(2);
                     },
                     title: 'Employees',
                     icon: Icons.people_outline_outlined,
                   ),
                   MenuListItem(
-                    currentSelected: currentSelected,
+                    currentSelected: returnNav(
+                      context,
+                    ).currentPage,
                     index: 3,
                     action: () {
-                      selectNav(3);
+                      returnNav(
+                        context,
+                        listen: false,
+                      ).navigate(3);
                     },
                     title: 'Requests',
                     icon: Icons.question_answer_outlined,
                   ),
                   MenuListItem(
-                    currentSelected: currentSelected,
+                    currentSelected: returnNav(
+                      context,
+                    ).currentPage,
                     index: 10,
                     action: () {
                       var safeContext = context;

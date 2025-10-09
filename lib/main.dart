@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:promas/pages/base_page.dart';
 import 'package:promas/providers/branch_provider.dart';
 import 'package:promas/providers/company_provider.dart';
+import 'package:promas/providers/nav_provider.dart';
 import 'package:promas/providers/project_provider.dart';
 import 'package:promas/providers/requests_provider.dart';
 import 'package:promas/providers/theme_provider.dart';
@@ -39,6 +40,9 @@ void main() async {
         ChangeNotifierProvider<BranchProvider>.value(
           value: BranchProvider(),
         ),
+        ChangeNotifierProvider<NavProvider>.value(
+          value: NavProvider(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -53,6 +57,13 @@ ThemeProvider returnTheme(
     context,
     listen: listen,
   );
+}
+
+NavProvider returnNav(
+  BuildContext context, {
+  bool listen = true,
+}) {
+  return Provider.of<NavProvider>(context, listen: listen);
 }
 
 RequestsProvider returnRequest(
