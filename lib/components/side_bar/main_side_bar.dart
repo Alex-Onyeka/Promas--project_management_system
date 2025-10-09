@@ -24,7 +24,9 @@ class _MainSideBarState extends State<MainSideBar> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 30),
-      width: 300,
+      width: screenSize(context) > tabletScreenSmall
+          ? 220
+          : 270,
       decoration: BoxDecoration(
         color: returnTheme(context).lightGrey(),
       ),
@@ -40,8 +42,8 @@ class _MainSideBarState extends State<MainSideBar> {
               children: [
                 Container(
                   clipBehavior: Clip.hardEdge,
-                  height: 25,
-                  width: 25,
+                  height: 22,
+                  width: 22,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                   ),
@@ -49,7 +51,7 @@ class _MainSideBarState extends State<MainSideBar> {
                 ),
                 Text(
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: returnTheme(
                       context,
@@ -62,72 +64,75 @@ class _MainSideBarState extends State<MainSideBar> {
           ),
           SizedBox(height: 20),
           Expanded(
-            child: Column(
-              spacing: 15,
-              children: [
-                MenuListItem(
-                  currentSelected: currentSelected,
-                  index: 0,
-                  action: () {
-                    selectNav(0);
-                  },
-                  title: 'DashBoard',
-                  icon: Icons.dashboard_customize_outlined,
-                ),
-                MenuListItem(
-                  currentSelected: currentSelected,
-                  index: 1,
-                  action: () {
-                    selectNav(1);
-                  },
-                  title: 'Projects',
-                  icon: Icons.work,
-                ),
-                MenuListItem(
-                  currentSelected: currentSelected,
-                  index: 2,
-                  action: () {
-                    selectNav(2);
-                  },
-                  title: 'Employees',
-                  icon: Icons.people_outline_outlined,
-                ),
-                MenuListItem(
-                  currentSelected: currentSelected,
-                  index: 3,
-                  action: () {
-                    selectNav(3);
-                  },
-                  title: 'Requests',
-                  icon: Icons.question_answer_outlined,
-                ),
-                MenuListItem(
-                  currentSelected: currentSelected,
-                  index: 10,
-                  action: () {
-                    var safeContext = context;
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return ConfirmAlert(
-                          subText:
-                              'Are you sure you want to Log out?',
-                          title: 'Logout?',
-                          action: () async {
-                            await AuthService().signOut(
-                              context: safeContext,
-                            );
-                          },
-                          buttonText: 'Proceed',
-                        );
-                      },
-                    );
-                  },
-                  title: 'Log Out',
-                  icon: Icons.logout,
-                  color: Colors.redAccent,
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: 15,
+                children: [
+                  MenuListItem(
+                    currentSelected: currentSelected,
+                    index: 0,
+                    action: () {
+                      selectNav(0);
+                    },
+                    title: 'DashBoard',
+                    icon:
+                        Icons.dashboard_customize_outlined,
+                  ),
+                  MenuListItem(
+                    currentSelected: currentSelected,
+                    index: 1,
+                    action: () {
+                      selectNav(1);
+                    },
+                    title: 'Projects',
+                    icon: Icons.work,
+                  ),
+                  MenuListItem(
+                    currentSelected: currentSelected,
+                    index: 2,
+                    action: () {
+                      selectNav(2);
+                    },
+                    title: 'Employees',
+                    icon: Icons.people_outline_outlined,
+                  ),
+                  MenuListItem(
+                    currentSelected: currentSelected,
+                    index: 3,
+                    action: () {
+                      selectNav(3);
+                    },
+                    title: 'Requests',
+                    icon: Icons.question_answer_outlined,
+                  ),
+                  MenuListItem(
+                    currentSelected: currentSelected,
+                    index: 10,
+                    action: () {
+                      var safeContext = context;
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ConfirmAlert(
+                            subText:
+                                'Are you sure you want to Log out?',
+                            title: 'Logout?',
+                            action: () async {
+                              await AuthService().signOut(
+                                context: safeContext,
+                              );
+                            },
+                            buttonText: 'Proceed',
+                          );
+                        },
+                      );
+                    },
+                    title: 'Log Out',
+                    icon: Icons.logout,
+                    color: Colors.redAccent,
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(height: 20),
@@ -243,13 +248,13 @@ class _MenuListItemState extends State<MenuListItem> {
       if (widget.currentSelected == widget.index) {
         return const Color.fromARGB(55, 255, 255, 255);
       } else {
-        return const Color.fromARGB(17, 255, 255, 255);
+        return const Color.fromARGB(0, 255, 255, 255);
       }
     } else {
       if (widget.currentSelected == widget.index) {
         return Colors.white;
       } else {
-        return const Color.fromARGB(150, 255, 255, 255);
+        return const Color.fromARGB(0, 255, 255, 255);
       }
     }
   }

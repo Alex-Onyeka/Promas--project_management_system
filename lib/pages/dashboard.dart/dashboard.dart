@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/side_bar/main_side_bar.dart';
 import 'package:promas/components/top_bar/main_top_bar.dart';
 import 'package:promas/components/top_bar/mobile_app_bar.dart';
 import 'package:promas/constants/formats.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
+import 'package:promas/providers/company_provider.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -16,6 +18,66 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>();
+
+  // final companyId = CompanyProvider().currentCompany!.id;
+  final projectSearchController = TextEditingController();
+
+  List<ProjectClass> projects = [
+    ProjectClass(
+      uuid: 'No 1',
+      createdAt: DateTime.now(),
+      lastUpdate: DateTime.now(),
+      name: 'Stockall Application Development',
+      desc: 'An Inventory Management System',
+      level: 0,
+      employees: [],
+      companyId: CompanyProvider().currentCompany!.id,
+    ),
+    ProjectClass(
+      uuid: 'No 2',
+      createdAt: DateTime.now(),
+      lastUpdate: DateTime.now(),
+      name: 'Promas Project Management System',
+      desc:
+          'An Project Management System, designed for company staff relationship and management. Project Management...',
+      level: 0,
+      employees: [],
+      companyId: CompanyProvider().currentCompany!.id,
+    ),
+    ProjectClass(
+      uuid: 'No 3',
+      createdAt: DateTime.now(),
+      lastUpdate: DateTime.now(),
+      name: 'Social Media Platform',
+      desc:
+          'An Digital Management Platform where users can share posts and create social experiences.',
+      level: 0,
+      employees: [],
+      companyId: CompanyProvider().currentCompany!.id,
+    ),
+  ];
+
+  void addProject(ProjectClass project) {
+    setState(() {
+      projects.add(project);
+    });
+  }
+
+  void deleteProject(ProjectClass project) {
+    setState(() {
+      projects.remove(project);
+    });
+  }
+
+  void updateProject(ProjectClass project) {
+    setState(() {
+      projects.removeWhere(
+        (pro) => pro.uuid! == project.uuid,
+      );
+      projects.add(project);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +100,11 @@ class _DashboardState extends State<Dashboard> {
                   visible:
                       screenSize(context) > mobileScreen,
                   child: MainTopBar(
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    searchController:
+                        projectSearchController,
                     globalKey: _scaffoldKey,
                   ),
                 ),
@@ -48,48 +115,206 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Column(
-                            children: [
-                              Column(
-                                spacing: 5,
+                          padding: const EdgeInsets.all(15),
+                          child: SizedBox(
+                            height: double.infinity,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.start,
                                 children: [
-                                  Row(
+                                  Column(
+                                    spacing: 2,
                                     children: [
-                                      Text(
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight:
-                                              FontWeight
-                                                  .bold,
-                                          color: returnTheme(
-                                            context,
-                                          ).darkMediumGrey(),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight:
+                                                  FontWeight
+                                                      .bold,
+                                              color: returnTheme(
+                                                context,
+                                              ).darkMediumGrey(),
+                                            ),
+                                            'Overview',
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 2),
+                                      SizedBox(
+                                        // height: 300,
+                                        width:
+                                            double.infinity,
+                                        child: Stack(
+                                          children: [
+                                            Visibility(
+                                              visible: projects
+                                                  .isEmpty,
+                                              child: Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .center,
+                                                  children: [
+                                                    Text(
+                                                      'No Projects Created Yet',
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible: projects
+                                                  .isNotEmpty,
+                                              child: Stack(
+                                                children: [
+                                                  Visibility(
+                                                    visible: projectSearchController
+                                                        .text
+                                                        .isEmpty,
+                                                    child: Wrap(
+                                                      crossAxisAlignment:
+                                                          WrapCrossAlignment.start,
+                                                      runSpacing:
+                                                          15,
+                                                      spacing:
+                                                          15,
+                                                      runAlignment:
+                                                          WrapAlignment.start,
+                                                      children: [
+                                                        Builder(
+                                                          builder:
+                                                              (
+                                                                context,
+                                                              ) {
+                                                                if (projects.isNotEmpty) {
+                                                                  return ProjectTile(
+                                                                    project: projects[0],
+                                                                  );
+                                                                } else {
+                                                                  return Visibility(
+                                                                    visible: projects.isNotEmpty,
+                                                                    child: Container(
+                                                                      color: Colors.amber,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
+                                                        ),
+                                                        Builder(
+                                                          builder:
+                                                              (
+                                                                context,
+                                                              ) {
+                                                                if (projects.length >
+                                                                    1) {
+                                                                  return ProjectTile(
+                                                                    project: projects[1],
+                                                                  );
+                                                                } else {
+                                                                  return Visibility(
+                                                                    visible:
+                                                                        projects.length >
+                                                                        1,
+                                                                    child: Container(
+                                                                      color: Colors.amber,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
+                                                        ),
+                                                        Builder(
+                                                          builder:
+                                                              (
+                                                                context,
+                                                              ) {
+                                                                if (projects.length >
+                                                                    2) {
+                                                                  return ProjectTile(
+                                                                    project: projects[2],
+                                                                  );
+                                                                } else {
+                                                                  return Visibility(
+                                                                    visible:
+                                                                        projects.length >
+                                                                        2,
+                                                                    child: Container(
+                                                                      color: Colors.amber,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
+                                                        ),
+                                                        Builder(
+                                                          builder:
+                                                              (
+                                                                context,
+                                                              ) {
+                                                                if (projects.length >
+                                                                    3) {
+                                                                  return ProjectTile(
+                                                                    project: projects[3],
+                                                                  );
+                                                                } else {
+                                                                  return Visibility(
+                                                                    visible:
+                                                                        projects.length >
+                                                                        3,
+                                                                    child: Container(
+                                                                      color: Colors.amber,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
+                                                        ),
+                                                        AddProjectMainTile(),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Visibility(
+                                                    visible: projectSearchController
+                                                        .text
+                                                        .isNotEmpty,
+                                                    child: Wrap(
+                                                      crossAxisAlignment:
+                                                          WrapCrossAlignment.start,
+                                                      runSpacing:
+                                                          15,
+                                                      spacing:
+                                                          15,
+                                                      runAlignment:
+                                                          WrapAlignment.start,
+                                                      children: projects
+                                                          .where(
+                                                            (
+                                                              pro,
+                                                            ) => pro.name.toLowerCase().contains(
+                                                              projectSearchController.text.toLowerCase(),
+                                                            ),
+                                                          )
+                                                          .map(
+                                                            (
+                                                              project,
+                                                            ) => ProjectTile(
+                                                              project: project,
+                                                            ),
+                                                          )
+                                                          .toList(),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        'Overview',
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 10),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment
-                                              .start,
-                                      runSpacing: 15,
-                                      spacing: 15,
-                                      runAlignment:
-                                          WrapAlignment
-                                              .start,
-                                      children: [
-                                        ProjectTile(),
-                                      ],
-                                    ),
-                                  ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -111,8 +336,8 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
-class ProjectTile extends StatelessWidget {
-  const ProjectTile({super.key});
+class AddProjectMainTile extends StatelessWidget {
+  const AddProjectMainTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -134,66 +359,114 @@ class ProjectTile extends StatelessWidget {
         child: Ink(
           decoration: BoxDecoration(
             borderRadius: mainBorderRadius,
-            boxShadow: [
-              BoxShadow(
-                color: const Color.fromARGB(10, 0, 0, 0),
-                blurRadius: 10,
-                spreadRadius: 10,
-              ),
-            ],
             color: returnTheme(context).white(),
           ),
           child: InkWell(
             borderRadius: mainBorderRadius,
             onTap: () {},
             child: Container(
-              width: 300,
-              height: 180,
-              padding: EdgeInsets.fromLTRB(15, 20, 20, 20),
+              width: 260,
+              height: 125,
+              padding: EdgeInsets.fromLTRB(5, 15, 15, 15),
+              child: Center(
+                child: Icon(
+                  size: 35,
+                  color: theme.tertiaryColor(),
+                  Icons.add,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProjectTile extends StatelessWidget {
+  final ProjectClass project;
+  const ProjectTile({super.key, required this.project});
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = returnTheme(context);
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: mainBorderRadius,
+        boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(10, 0, 0, 0),
+            blurRadius: 10,
+            spreadRadius: 10,
+          ),
+        ],
+        color: returnTheme(context).white(),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: mainBorderRadius,
+            color: returnTheme(context).white(),
+          ),
+          child: InkWell(
+            borderRadius: mainBorderRadius,
+            onTap: () {},
+            child: Container(
+              width: 260,
+              height: 125,
+              padding: EdgeInsets.fromLTRB(5, 15, 15, 15),
               child: Column(
                 crossAxisAlignment:
                     CrossAxisAlignment.start,
                 children: [
                   Row(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.center,
                     children: [
                       Container(
-                        padding: EdgeInsets.all(7),
+                        padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: theme.lightMediumGrey(),
                         ),
                         child: Icon(
-                          size: 14,
+                          size: 13,
                           color: theme.darkMediumGrey(),
                           Icons.workspace_premium_rounded,
                         ),
                       ),
                       SizedBox(width: 10),
-                      Text(
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: theme.darkGrey(),
-                          fontWeight: FontWeight.bold,
+                      Flexible(
+                        child: Text(
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: theme.darkGrey(),
+                            fontWeight: FontWeight.bold,
+                          ),
+                          cutLongText(20, project.name),
                         ),
-                        'Project Name',
                       ),
                     ],
                   ),
                   SizedBox(height: 5),
                   Expanded(
                     child: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(
-                              left: 40.0,
+                              left: 15.0,
                             ),
                             child: Text(
                               style: TextStyle(
-                                fontSize: 11,
+                                fontSize: 10,
                                 color: theme.darkGrey(),
                               ),
-                              'Project Description is the way of Life and Beans',
+                              cutLongText(80, project.desc),
+                              // 'Project Description is the way of Life and Beans',
                             ),
                           ),
                         ),
@@ -201,82 +474,90 @@ class ProjectTile extends StatelessWidget {
                           thickness: 0.5,
                           color: theme.lightMediumGrey(),
                         ),
-                        Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment
-                                  .spaceBetween,
-                          children: [
-                            Row(
-                              spacing: 5,
-                              children: [
-                                // Container(
-                                //   padding: EdgeInsets.all(5),
-                                //   decoration: BoxDecoration(
-                                //     borderRadius:
-                                //         BorderRadius.circular(3),
-                                //     color: theme.darkGrey(),
-                                //   ),
-                                //   child: Text(
-                                //     style: TextStyle(
-                                //       fontSize: 8,
-                                //       fontWeight: FontWeight.bold,
-                                //       color: theme.white(),
-                                //     ),
-                                //     'Active Staffs:',
-                                //   ),
-                                // ),
-                                Text(
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    color: theme
-                                        .darkMediumGrey(),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 15.0,
+                          ),
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment
+                                    .spaceBetween,
+                            children: [
+                              Row(
+                                spacing: 5,
+                                children: [
+                                  Row(
+                                    spacing: 5,
+                                    children: [
+                                      Text(
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          color: theme
+                                              .darkMediumGrey(),
+                                        ),
+                                        'Staffs:',
+                                      ),
+                                      Text(
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          fontWeight:
+                                              FontWeight
+                                                  .bold,
+                                          color: theme
+                                              .darkMediumGrey(),
+                                        ),
+                                        project
+                                            .employees
+                                            .length
+                                            .toString(),
+                                      ),
+                                    ],
                                   ),
-                                  'Active Staffs:',
-                                ),
-                                Text(
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    fontWeight:
-                                        FontWeight.bold,
-                                    color: theme
-                                        .darkMediumGrey(),
+                                  Container(
+                                    height: 13,
+                                    width: 1,
+                                    color: returnTheme(
+                                      context,
+                                    ).lightMediumGrey(),
                                   ),
-                                  '2',
-                                ),
-                              ],
-                            ),
-                            Row(
-                              spacing: 5,
-                              children: [
-                                Text(
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    color: theme
-                                        .darkMediumGrey(),
+                                  Row(
+                                    spacing: 5,
+                                    children: [
+                                      Text(
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          color: theme
+                                              .darkMediumGrey(),
+                                        ),
+                                        'Updated:',
+                                      ),
+                                      Text(
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          fontWeight:
+                                              FontWeight
+                                                  .bold,
+                                          color: theme
+                                              .darkMediumGrey(),
+                                        ),
+                                        formatShortDateTwo(
+                                          project
+                                              .lastUpdate,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  'Last Update:',
-                                ),
-                                Text(
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    fontWeight:
-                                        FontWeight.bold,
-                                    color: theme
-                                        .darkMediumGrey(),
-                                  ),
-                                  formatShortDateTwo(
-                                    DateTime.now(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Icon(
-                              size: 16,
-                              color: theme.darkMediumGrey(),
-                              Icons
-                                  .arrow_forward_ios_rounded,
-                            ),
-                          ],
+                                ],
+                              ),
+                              Icon(
+                                size: 14,
+                                color: theme
+                                    .darkMediumGrey(),
+                                Icons
+                                    .arrow_forward_ios_rounded,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -303,101 +584,129 @@ class _RightSideBarState extends State<RightSideBar> {
   Widget build(BuildContext context) {
     return Container(
       width: screenSize(context) > mobileScreen
-          ? 200
+          ? 170
           : null,
-      padding: EdgeInsets.all(15),
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(
+            color: const Color.fromARGB(24, 148, 148, 148),
+          ),
+        ),
+      ),
       child: Column(
-        spacing: 10,
+        spacing: 8,
         children: [
-          Stack(
-            children: [
-              Container(
-                height: 100,
-                width: double.infinity,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: returnTheme(
-                    context,
-                  ).tertiaryLight(),
-                ),
-                child: Column(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      style: TextStyle(
-                        height: 0,
-                        fontSize: 30,
-                        color: Colors.grey.shade900,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: 8,
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        height: 90,
+                        width: double.infinity,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(5),
+                          color: returnTheme(
+                            context,
+                          ).tertiaryLight(),
+                        ),
+                        child: Column(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              style: TextStyle(
+                                height: 0,
+                                fontSize: 25,
+                                color: Colors.grey.shade900,
+                              ),
+                              formatTime(DateTime.now()),
+                            ),
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                              spacing: 5,
+                              children: [
+                                Icon(
+                                  size: 13,
+                                  returnGreetingIcon(),
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    textAlign:
+                                        TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: Colors
+                                          .grey
+                                          .shade900,
+                                    ),
+                                    returnGreetingText(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      formatTime(DateTime.now()),
+                      Align(
+                        alignment: Alignment(1.1, 1.5),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {});
+                          },
+                          icon: Icon(
+                            size: 15,
+                            Icons.refresh,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 90,
+                    width: double.infinity,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        5,
+                      ),
+                      color: returnTheme(
+                        context,
+                      ).secondaryLight(),
                     ),
-                    Row(
+                    child: Column(
                       mainAxisAlignment:
                           MainAxisAlignment.center,
-                      spacing: 5,
                       children: [
-                        Icon(
-                          size: 15,
-                          returnGreetingIcon(),
+                        Text(
+                          style: TextStyle(
+                            height: 0,
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                          formatShortDate(DateTime.now()),
                         ),
                         Flexible(
                           child: Text(
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 9,
-                              color: Colors.grey.shade900,
+                              fontSize: 8,
+                              color: Colors.white,
                             ),
-                            returnGreetingText(),
+                            formatFullDate(DateTime.now()),
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment(1, 1),
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {});
-                  },
-                  icon: Icon(size: 18, Icons.refresh),
-                ),
-              ),
-            ],
-          ),
-          Container(
-            height: 100,
-            width: double.infinity,
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: returnTheme(context).secondaryLight(),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  style: TextStyle(
-                    height: 0,
-                    fontSize: 25,
-                    color: Colors.white,
                   ),
-                  formatShortDate(DateTime.now()),
-                ),
-                Flexible(
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: Colors.white,
-                    ),
-                    formatFullDate(DateTime.now()),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

@@ -5,8 +5,15 @@ import 'package:promas/main.dart';
 import 'package:promas/providers/user_provider.dart';
 
 class MainTopBar extends StatelessWidget {
+  final TextEditingController searchController;
   final GlobalKey<ScaffoldState> globalKey;
-  const MainTopBar({super.key, required this.globalKey});
+  final Function(String value)? onChanged;
+  const MainTopBar({
+    super.key,
+    required this.globalKey,
+    required this.searchController,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +76,11 @@ class MainTopBar extends StatelessWidget {
                         ? 350
                         : 300,
                     child: NormalTextfield(
-                      inputController: SearchController(),
-                      hintText: 'Search Project',
+                      inputController: searchController,
+                      hintText: 'Search Project Name',
                       title: '',
                       isOptional: true,
-                      onChanged: (value) {},
+                      onChanged: onChanged,
                       showTitle: false,
                     ),
                   ),

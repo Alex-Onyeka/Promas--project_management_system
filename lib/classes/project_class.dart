@@ -1,6 +1,6 @@
 class ProjectClass {
-  final String uuid;
-  final DateTime createdAt;
+  final String? uuid;
+  final DateTime? createdAt;
   final String name;
   final String desc;
   final double level;
@@ -9,7 +9,7 @@ class ProjectClass {
   DateTime lastUpdate;
 
   ProjectClass({
-    required this.uuid,
+    this.uuid,
     required this.createdAt,
     required this.lastUpdate,
     required this.name,
@@ -37,7 +37,7 @@ class ProjectClass {
   Map<String, dynamic> toJson() {
     return {
       // 'uuid': uuid,
-      'created_at': createdAt.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
       'last_update': lastUpdate.toIso8601String(),
       'name': name,
       'desc': desc,

@@ -73,56 +73,39 @@ String formatTime(DateTime date) {
 }
 
 String returnGreetingText() {
-  String? name =
-      UserProvider().currentUser!.name.split(' ').length > 1
-      ? UserProvider().currentUser!.name.split(' ').first
-      : UserProvider().currentUser!.name;
-  // String? name = UserProvider().currentUser!.name;
-  // name = name.length > 10 ? name.substring(0,)
-  if (formatTime(DateTime.now()).split(' ')[1] == 'AM') {
+  final now = DateTime.now();
+  final hour = now.hour; // 0–23
+  final user = UserProvider().currentUser;
+  final name = user != null && user.name.isNotEmpty
+      ? (user.name.split(' ').length > 1
+            ? user.name.split(' ').first
+            : user.name)
+      : 'User';
+
+  if (hour < 12) {
     return 'Good Morning $name';
+  } else if (hour < 17) {
+    return 'Good Afternoon $name';
   } else {
-    if (int.parse(
-          formatTime(
-            DateTime.now(),
-          ).split(' ')[0].split(':').first,
-        ) <
-        4) {
-      return 'Good Afternoon $name';
-    } else {
-      return 'Good Evening $name';
-    }
+    return 'Good Evening $name';
   }
 }
 
 IconData returnGreetingIcon() {
-  if (formatTime(DateTime.now()).split(' ')[1] == 'AM') {
-    if (int.parse(
-              formatTime(
-                DateTime.now(),
-              ).split(' ')[0].split(':').first,
-            ) >=
-            6 &&
-        int.parse(
-              formatTime(
-                DateTime.now(),
-              ).split(' ')[0].split(':').first,
-            ) <
-            12) {
-      return Icons.sunny;
-    } else {
-      return Icons.nightlight;
-    }
+  final now = DateTime.now();
+  final hour = now.hour;
+
+  if (hour < 17) {
+    return Icons.sunny;
   } else {
-    if (int.parse(
-          formatTime(
-            DateTime.now(),
-          ).split(' ')[0].split(':').first,
-        ) <
-        4) {
-      return Icons.sunny;
-    } else {
-      return Icons.nightlight;
-    }
+    return Icons.nightlight;
+  }
+}
+
+String cutLongText(int count, String text) {
+  if (text.length > count) {
+    return '${text.substring(0, count)}...';
+  } else {
+    return text;
   }
 }
