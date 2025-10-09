@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promas/classes/project_class.dart';
+import 'package:promas/components/buttons/main_button.dart';
 import 'package:promas/components/side_bar/main_side_bar.dart';
 import 'package:promas/components/top_bar/main_top_bar.dart';
 import 'package:promas/components/top_bar/mobile_app_bar.dart';
@@ -144,45 +145,194 @@ class _DashboardState extends State<Dashboard> {
                                       ),
                                       SizedBox(height: 2),
                                       SizedBox(
-                                        // height: 300,
+                                        // decoration: BoxDecoration(
+                                        //   border: Border.all(
+                                        //     color: Colors
+                                        //         .grey
+                                        //         .shade400,
+                                        //   ),
+                                        // ),
+                                        height: 300,
                                         width:
                                             double.infinity,
                                         child: Stack(
                                           children: [
                                             Visibility(
                                               visible: projects
-                                                  .isEmpty,
-                                              child: Center(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .center,
-                                                  children: [
-                                                    Text(
-                                                      'No Projects Created Yet',
-                                                    ),
-                                                  ],
+                                                  .isNotEmpty,
+                                              child: SizedBox(
+                                                height: double
+                                                    .infinity,
+                                                child: Center(
+                                                  child: Column(
+                                                    spacing:
+                                                        10,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    children: [
+                                                      Icon(
+                                                        size:
+                                                            35,
+                                                        color: returnTheme(
+                                                          context,
+                                                        ).darkGrey(),
+                                                        Icons.work_off_outlined,
+                                                      ),
+                                                      Text(
+                                                        style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: returnTheme(
+                                                            context,
+                                                          ).darkMediumGrey(),
+                                                        ),
+                                                        'No Projects Created Yet',
+                                                      ),
+                                                      SizedBox(
+                                                        height:
+                                                            2,
+                                                      ),
+                                                      SizedBox(
+                                                        width:
+                                                            200,
+                                                        child: MainButton(
+                                                          action: () {},
+                                                          title: 'Create New Project',
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height:
+                                                            55,
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                             Visibility(
                                               visible: projects
-                                                  .isNotEmpty,
+                                                  .isEmpty,
                                               child: Stack(
                                                 children: [
                                                   Visibility(
                                                     visible: projectSearchController
                                                         .text
+                                                        .isNotEmpty,
+                                                    child: Stack(
+                                                      children: [
+                                                        Visibility(
+                                                          visible: projects
+                                                              .where(
+                                                                (
+                                                                  pro,
+                                                                ) => pro.name.toLowerCase().contains(
+                                                                  projectSearchController.text.toLowerCase(),
+                                                                ),
+                                                              )
+                                                              .isNotEmpty,
+                                                          child: GridView(
+                                                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                                              maxCrossAxisExtent: 300,
+                                                              mainAxisExtent: 130,
+                                                              // childAspectRatio:
+                                                              //     2,
+                                                              crossAxisSpacing: 10,
+                                                              mainAxisSpacing: 10,
+                                                            ),
+                                                            children: projects
+                                                                .where(
+                                                                  (
+                                                                    pro,
+                                                                  ) => pro.name.toLowerCase().contains(
+                                                                    projectSearchController.text.toLowerCase(),
+                                                                  ),
+                                                                )
+                                                                .map(
+                                                                  (
+                                                                    project,
+                                                                  ) => ProjectTile(
+                                                                    project: project,
+                                                                  ),
+                                                                )
+                                                                .toList(),
+                                                          ),
+                                                        ),
+                                                        Visibility(
+                                                          visible: projects
+                                                              .where(
+                                                                (
+                                                                  pro,
+                                                                ) => pro.name.toLowerCase().contains(
+                                                                  projectSearchController.text.toLowerCase(),
+                                                                ),
+                                                              )
+                                                              .isEmpty,
+                                                          child: SizedBox(
+                                                            height: double.infinity,
+                                                            child: Center(
+                                                              child: Column(
+                                                                spacing: 10,
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  Icon(
+                                                                    size: 35,
+                                                                    color: returnTheme(
+                                                                      context,
+                                                                    ).darkGrey(),
+                                                                    Icons.work_off_outlined,
+                                                                  ),
+                                                                  Text(
+                                                                    style: TextStyle(
+                                                                      fontSize: 13,
+                                                                      color: returnTheme(
+                                                                        context,
+                                                                      ).darkMediumGrey(),
+                                                                    ),
+                                                                    'No Projects Found',
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 2,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 200,
+                                                                    child: MainButton(
+                                                                      action: () {
+                                                                        setState(
+                                                                          () {
+                                                                            projectSearchController.clear();
+                                                                          },
+                                                                        );
+                                                                      },
+                                                                      title: 'Clear Search',
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 55,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Visibility(
+                                                    visible: projectSearchController
+                                                        .text
                                                         .isEmpty,
-                                                    child: Wrap(
-                                                      crossAxisAlignment:
-                                                          WrapCrossAlignment.start,
-                                                      runSpacing:
-                                                          15,
-                                                      spacing:
-                                                          15,
-                                                      runAlignment:
-                                                          WrapAlignment.start,
+                                                    child: GridView(
+                                                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                                        maxCrossAxisExtent:
+                                                            300,
+                                                        mainAxisExtent:
+                                                            130,
+                                                        // childAspectRatio:
+                                                        //     2,
+                                                        crossAxisSpacing:
+                                                            10,
+                                                        mainAxisSpacing:
+                                                            10,
+                                                      ),
                                                       children: [
                                                         Builder(
                                                           builder:
@@ -225,83 +375,30 @@ class _DashboardState extends State<Dashboard> {
                                                                 }
                                                               },
                                                         ),
-                                                        Builder(
-                                                          builder:
-                                                              (
-                                                                context,
-                                                              ) {
-                                                                if (projects.length >
-                                                                    2) {
-                                                                  return ProjectTile(
-                                                                    project: projects[2],
-                                                                  );
-                                                                } else {
-                                                                  return Visibility(
-                                                                    visible:
-                                                                        projects.length >
-                                                                        2,
-                                                                    child: Container(
-                                                                      color: Colors.amber,
-                                                                    ),
-                                                                  );
-                                                                }
-                                                              },
-                                                        ),
-                                                        Builder(
-                                                          builder:
-                                                              (
-                                                                context,
-                                                              ) {
-                                                                if (projects.length >
-                                                                    3) {
-                                                                  return ProjectTile(
-                                                                    project: projects[3],
-                                                                  );
-                                                                } else {
-                                                                  return Visibility(
-                                                                    visible:
-                                                                        projects.length >
-                                                                        3,
-                                                                    child: Container(
-                                                                      color: Colors.amber,
-                                                                    ),
-                                                                  );
-                                                                }
-                                                              },
-                                                        ),
+                                                        // Builder(
+                                                        //   builder:
+                                                        //       (
+                                                        //         context,
+                                                        //       ) {
+                                                        //         if (projects.length >
+                                                        //             2) {
+                                                        //           return ProjectTile(
+                                                        //             project: projects[2],
+                                                        //           );
+                                                        //         } else {
+                                                        //           return Visibility(
+                                                        //             visible:
+                                                        //                 projects.length >
+                                                        //                 2,
+                                                        //             child: Container(
+                                                        //               color: Colors.amber,
+                                                        //             ),
+                                                        //           );
+                                                        //         }
+                                                        //       },
+                                                        // ),
                                                         AddProjectMainTile(),
                                                       ],
-                                                    ),
-                                                  ),
-                                                  Visibility(
-                                                    visible: projectSearchController
-                                                        .text
-                                                        .isNotEmpty,
-                                                    child: Wrap(
-                                                      crossAxisAlignment:
-                                                          WrapCrossAlignment.start,
-                                                      runSpacing:
-                                                          15,
-                                                      spacing:
-                                                          15,
-                                                      runAlignment:
-                                                          WrapAlignment.start,
-                                                      children: projects
-                                                          .where(
-                                                            (
-                                                              pro,
-                                                            ) => pro.name.toLowerCase().contains(
-                                                              projectSearchController.text.toLowerCase(),
-                                                            ),
-                                                          )
-                                                          .map(
-                                                            (
-                                                              project,
-                                                            ) => ProjectTile(
-                                                              project: project,
-                                                            ),
-                                                          )
-                                                          .toList(),
                                                     ),
                                                   ),
                                                 ],
@@ -390,6 +487,7 @@ class ProjectTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = returnTheme(context);
+    var screen = screenSize(context);
     return Container(
       decoration: BoxDecoration(
         borderRadius: mainBorderRadius,
@@ -413,9 +511,9 @@ class ProjectTile extends StatelessWidget {
             borderRadius: mainBorderRadius,
             onTap: () {},
             child: Container(
-              width: 260,
-              height: 125,
-              padding: EdgeInsets.fromLTRB(5, 15, 15, 15),
+              // width: 260,
+              // height: 125,
+              padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
               child: Column(
                 crossAxisAlignment:
                     CrossAxisAlignment.start,
@@ -425,26 +523,35 @@ class ProjectTile extends StatelessWidget {
                         CrossAxisAlignment.center,
                     children: [
                       Container(
-                        padding: EdgeInsets.all(6),
+                        padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: theme.lightMediumGrey(),
                         ),
                         child: Icon(
-                          size: 13,
+                          size: 12,
                           color: theme.darkMediumGrey(),
                           Icons.workspace_premium_rounded,
                         ),
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(
+                        width: screen > mobileScreen
+                            ? 10
+                            : 8,
+                      ),
                       Flexible(
                         child: Text(
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: screen > mobileScreen
+                                ? 14
+                                : 12,
                             color: theme.darkGrey(),
                             fontWeight: FontWeight.bold,
                           ),
-                          cutLongText(20, project.name),
+                          cutLongText(
+                            screen > mobileScreen ? 20 : 16,
+                            project.name,
+                          ),
                         ),
                       ),
                     ],
@@ -457,15 +564,27 @@ class ProjectTile extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 15.0,
-                            ),
+                            padding: screen > mobileScreen
+                                ? const EdgeInsets.only(
+                                    left: 15.0,
+                                  )
+                                : const EdgeInsets.only(
+                                    left: 10,
+                                  ),
                             child: Text(
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize:
+                                    screen > mobileScreen
+                                    ? 10
+                                    : 8,
                                 color: theme.darkGrey(),
                               ),
-                              cutLongText(80, project.desc),
+                              cutLongText(
+                                screen > mobileScreen
+                                    ? 80
+                                    : 70,
+                                project.desc,
+                              ),
                               // 'Project Description is the way of Life and Beans',
                             ),
                           ),
@@ -475,9 +594,13 @@ class ProjectTile extends StatelessWidget {
                           color: theme.lightMediumGrey(),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15.0,
-                          ),
+                          padding: screen > mobileScreen
+                              ? const EdgeInsets.only(
+                                  left: 15.0,
+                                )
+                              : const EdgeInsets.only(
+                                  left: 10,
+                                ),
                           child: Row(
                             mainAxisAlignment:
                                 MainAxisAlignment
@@ -491,7 +614,11 @@ class ProjectTile extends StatelessWidget {
                                     children: [
                                       Text(
                                         style: TextStyle(
-                                          fontSize: 8,
+                                          fontSize:
+                                              screen >
+                                                  mobileScreen
+                                              ? 8
+                                              : 6,
                                           color: theme
                                               .darkMediumGrey(),
                                         ),
@@ -499,7 +626,11 @@ class ProjectTile extends StatelessWidget {
                                       ),
                                       Text(
                                         style: TextStyle(
-                                          fontSize: 8,
+                                          fontSize:
+                                              screen >
+                                                  mobileScreen
+                                              ? 8
+                                              : 7,
                                           fontWeight:
                                               FontWeight
                                                   .bold,
@@ -525,7 +656,11 @@ class ProjectTile extends StatelessWidget {
                                     children: [
                                       Text(
                                         style: TextStyle(
-                                          fontSize: 8,
+                                          fontSize:
+                                              screen >
+                                                  mobileScreen
+                                              ? 8
+                                              : 6,
                                           color: theme
                                               .darkMediumGrey(),
                                         ),
@@ -533,7 +668,11 @@ class ProjectTile extends StatelessWidget {
                                       ),
                                       Text(
                                         style: TextStyle(
-                                          fontSize: 8,
+                                          fontSize:
+                                              screen >
+                                                  mobileScreen
+                                              ? 8
+                                              : 7,
                                           fontWeight:
                                               FontWeight
                                                   .bold,
@@ -550,7 +689,9 @@ class ProjectTile extends StatelessWidget {
                                 ],
                               ),
                               Icon(
-                                size: 14,
+                                size: screen > mobileScreen
+                                    ? 14
+                                    : 12,
                                 color: theme
                                     .darkMediumGrey(),
                                 Icons
