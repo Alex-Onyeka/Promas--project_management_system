@@ -36,53 +36,55 @@ class ErrorAlert extends StatelessWidget {
           horizontal: 15,
         ),
         // color: Colors.grey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 5,
-          children: [
-            // SizedBox(height: 10),
-            Text(
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.redAccent,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 5,
+            children: [
+              // SizedBox(height: 10),
+              Text(
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.redAccent,
+                ),
+                title ?? 'Error',
               ),
-              title ?? 'Error',
-            ),
-            Container(
-              height: 2,
-              width: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color.fromARGB(
-                  151,
-                  255,
-                  82,
-                  82,
+              Container(
+                height: 2,
+                width: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color.fromARGB(
+                    151,
+                    255,
+                    82,
+                    82,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 5),
-            Text(
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.normal,
-                color: returnTheme(
-                  context,
-                  listen: false,
-                ).darkMediumGrey(),
+              SizedBox(height: 5),
+              Text(
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.normal,
+                  color: returnTheme(
+                    context,
+                    listen: false,
+                  ).darkMediumGrey(),
+                ),
+                message,
               ),
-              message,
-            ),
-            SizedBox(height: 10),
-            SecondaryButton(
-              title: 'Cancel',
-              action: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+              SizedBox(height: 10),
+              SecondaryButton(
+                title: 'Cancel',
+                action: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

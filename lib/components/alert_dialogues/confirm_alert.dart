@@ -44,43 +44,46 @@ class _ConfirmAlertState extends State<ConfirmAlert> {
           vertical: 25,
           horizontal: 15,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 5,
-          children: [
-            HeadingSection(
-              subText: widget.subText,
-              title: widget.title ?? 'Proceed With Action?',
-            ),
-            SizedBox(height: 10),
-            Column(
-              spacing: 7,
-              children: [
-                MainButton(
-                  action: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    widget.action();
-                    await Future.delayed(
-                      Duration(seconds: 2),
-                    );
-                    if (context.mounted) {
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 5,
+            children: [
+              HeadingSection(
+                subText: widget.subText,
+                title:
+                    widget.title ?? 'Proceed With Action?',
+              ),
+              SizedBox(height: 10),
+              Column(
+                spacing: 7,
+                children: [
+                  MainButton(
+                    action: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      widget.action();
+                      await Future.delayed(
+                        Duration(seconds: 2),
+                      );
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    title: widget.buttonText,
+                    loadingWidget: isLoading ? true : null,
+                  ),
+                  SecondaryButton(
+                    title: 'Cancel',
+                    action: () {
                       Navigator.of(context).pop();
-                    }
-                  },
-                  title: widget.buttonText,
-                  loadingWidget: isLoading ? true : null,
-                ),
-                SecondaryButton(
-                  title: 'Cancel',
-                  action: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          ],
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

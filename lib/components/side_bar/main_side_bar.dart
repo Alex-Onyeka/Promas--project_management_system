@@ -17,6 +17,9 @@ class _MainSideBarState extends State<MainSideBar> {
   void navigateNow(int index) {
     if (widget.isMain) {
       returnNav(context, listen: false).navigate(index);
+      screenSize(context) <= tabletScreen
+          ? Navigator.of(context).pop()
+          : {};
     } else {
       returnNav(context, listen: false).navigate(index);
       Navigator.of(context).pop();
