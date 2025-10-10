@@ -6,13 +6,17 @@ import 'package:promas/providers/user_provider.dart';
 
 class MainTopBar extends StatelessWidget {
   final TextEditingController searchController;
+  final bool? isVisible;
   final GlobalKey<ScaffoldState> globalKey;
+  final String? pageName;
   final Function(String value)? onChanged;
   const MainTopBar({
     super.key,
     required this.globalKey,
     required this.searchController,
     this.onChanged,
+    this.pageName,
+    this.isVisible,
   });
 
   @override
@@ -67,16 +71,20 @@ class MainTopBar extends StatelessWidget {
                         context,
                       ).darkGrey(),
                     ),
-                    returnNav(context).pageName(),
+                    pageName ??
+                        returnNav(context).pageName(),
                   ),
                 ),
                 SizedBox(width: 20),
                 Visibility(
                   visible:
+                      isVisible ??
                       screenSize(context) >=
-                          tabletScreenBig &&
-                      returnNav(context).currentPage != 2 &&
-                      returnNav(context).currentPage != 3,
+                              tabletScreenBig &&
+                          returnNav(context).currentPage !=
+                              2 &&
+                          returnNav(context).currentPage !=
+                              3,
                   child: SizedBox(
                     width:
                         screenSize(context) > tabletScreen

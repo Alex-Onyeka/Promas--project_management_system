@@ -15,7 +15,7 @@ class ProjectProvider extends ChangeNotifier {
 
   // List<ProjectClass> projects = [];
   void clearCache() {
-    projects.clear();
+    mainProjects.clear();
     notifyListeners();
   }
 
@@ -116,7 +116,7 @@ class ProjectProvider extends ChangeNotifier {
   //   await getAllProjectsByCompany();
   // }
 
-  List<ProjectClass> projects = [
+  List<ProjectClass> mainProjects = [
     // ProjectClass(
     //   uuid: 'No 0',
     //   createdAt: DateTime.now(),
@@ -151,25 +151,35 @@ class ProjectProvider extends ChangeNotifier {
     // ),
   ];
 
+  List<ProjectClass> projects() {
+    if (mainProjects.length >= 4) {
+      return mainProjects.sublist(0, 4);
+    } else {
+      return mainProjects;
+    }
+  }
+
   void addProject(ProjectClass project) {
     print('Adding Project ${project.name} : ');
-    projects.add(project);
+    mainProjects.add(project);
     print(
-      'Added Project ${project.name} : ${projects.length}',
+      'Added Project ${project.name} : ${mainProjects.length}',
     );
     notifyListeners();
   }
 
   void deleteProject(ProjectClass project) {
-    projects.removeWhere((pro) => pro.uuid == project.uuid);
+    mainProjects.removeWhere(
+      (pro) => pro.uuid == project.uuid,
+    );
     notifyListeners();
   }
 
   void updateProject(ProjectClass project) {
-    projects.removeWhere(
+    mainProjects.removeWhere(
       (pro) => pro.uuid! == project.uuid,
     );
-    projects.add(project);
+    mainProjects.add(project);
     notifyListeners();
   }
 }

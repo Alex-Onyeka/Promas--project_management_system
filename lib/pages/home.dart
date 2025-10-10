@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:promas/classes/company_class.dart';
 import 'package:promas/classes/user_class.dart';
 import 'package:promas/pages/company/company_setup.dart';
-import 'package:promas/pages/dashboard.dart/dashboard.dart';
+import 'package:promas/pages/landing_page/landing_page.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/user_provider.dart';
 
@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
             if (CompanyProvider().currentCompany == null) {
               return CompanySetup();
             } else {
-              return Dashboard();
+              return LandingPage();
             }
           }
         },

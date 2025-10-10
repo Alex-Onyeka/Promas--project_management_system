@@ -6,19 +6,25 @@ import 'package:promas/main.dart';
 import 'package:promas/services/auth_service.dart';
 
 class MainSideBar extends StatefulWidget {
-  const MainSideBar({super.key});
+  final bool isMain;
+  const MainSideBar({super.key, required this.isMain});
 
   @override
   State<MainSideBar> createState() => _MainSideBarState();
 }
 
 class _MainSideBarState extends State<MainSideBar> {
-  // int currentSelected = 0;
-  // void selectNav(int index) {
-  //   setState(() {
-  //     currentSelected = index;
-  //   });
-  // }
+  void navigateNow(int index) {
+    if (widget.isMain) {
+      returnNav(context, listen: false).navigate(index);
+    } else {
+      returnNav(context, listen: false).navigate(index);
+      Navigator.of(context).pop();
+      screenSize(context) <= tabletScreen
+          ? Navigator.of(context).pop()
+          : {};
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +80,7 @@ class _MainSideBarState extends State<MainSideBar> {
                     ).currentPage,
                     index: 0,
                     action: () {
-                      returnNav(
-                        context,
-                        listen: false,
-                      ).navigate(0);
+                      navigateNow(0);
                     },
                     title: 'DashBoard',
                     icon:
@@ -89,10 +92,7 @@ class _MainSideBarState extends State<MainSideBar> {
                     ).currentPage,
                     index: 1,
                     action: () {
-                      returnNav(
-                        context,
-                        listen: false,
-                      ).navigate(1);
+                      navigateNow(1);
                     },
                     title: 'Projects',
                     icon: Icons.work,
@@ -103,10 +103,7 @@ class _MainSideBarState extends State<MainSideBar> {
                     ).currentPage,
                     index: 2,
                     action: () {
-                      returnNav(
-                        context,
-                        listen: false,
-                      ).navigate(2);
+                      navigateNow(2);
                     },
                     title: 'Employees',
                     icon: Icons.people_outline_outlined,
@@ -117,10 +114,7 @@ class _MainSideBarState extends State<MainSideBar> {
                     ).currentPage,
                     index: 3,
                     action: () {
-                      returnNav(
-                        context,
-                        listen: false,
-                      ).navigate(3);
+                      navigateNow(3);
                     },
                     title: 'Requests',
                     icon: Icons.question_answer_outlined,

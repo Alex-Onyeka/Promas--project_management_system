@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:promas/providers/user_provider.dart';
 
-String formateDate(DateTime date) {
-  final formattedDate = DateFormat(
-    'dd - MMM - yyyy',
-  ).format(date);
+String formateDate(DateTime? date) {
+  final formattedDate = date == null
+      ? 'Not Set'
+      : DateFormat('dd - MMM - yyyy').format(date);
   return formattedDate;
+}
+
+String calcPercentage(double number) {
+  return number == 0
+      ? '0%'
+      : '${(100 / number).toStringAsFixed(0)}%';
 }
 
 String formatShortDate(DateTime date) {
@@ -67,8 +73,10 @@ String formatFullDate(DateTime date) {
   return '$weekday - ${date.day}$suffix - $month - $year';
 }
 
-String formatTime(DateTime date) {
-  final formattedTime = DateFormat('h:mm a').format(date);
+String formatTime(DateTime? date) {
+  final formattedTime = date == null
+      ? 'Not Set'
+      : DateFormat('h:mm a').format(date);
   return formattedTime;
 }
 
