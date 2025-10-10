@@ -1,24 +1,24 @@
 class BranchClass {
-  final String uuid;
-  final DateTime createdAt;
-  final String? name;
-  final String? desc;
-  final String? projectId;
-  final double? level;
-  final List<String>? employees;
-  final int? companyId;
-  DateTime lastUpdate;
+  final String? uuid;
+  DateTime? createdAt;
+  final String name;
+  String? desc;
+  final String projectId;
+  final double level;
+  final List<String> employees;
+  final int companyId;
+  DateTime? lastUpdate;
 
   BranchClass({
-    required this.uuid,
-    required this.createdAt,
-    required this.lastUpdate,
-    this.name,
+    this.uuid,
+    this.createdAt,
+    this.lastUpdate,
+    required this.name,
     this.desc,
-    this.projectId,
-    this.level,
-    this.employees,
-    this.companyId,
+    required this.projectId,
+    required this.level,
+    required this.employees,
+    required this.companyId,
   });
 
   factory BranchClass.fromJson(Map<String, dynamic> json) {
@@ -29,12 +29,8 @@ class BranchClass {
       name: json['name'],
       desc: json['desc'],
       projectId: json['project_id'],
-      level: (json['level'] != null)
-          ? (json['level'] as num).toDouble()
-          : null,
-      employees: (json['employees'] != null)
-          ? List<String>.from(json['employees'])
-          : null,
+      level: (json['level']) as double,
+      employees: List<String>.from(json['employees']),
       companyId: json['company_id'],
     );
   }
@@ -42,8 +38,8 @@ class BranchClass {
   Map<String, dynamic> toJson() {
     return {
       // 'uuid': uuid,
-      'created_at': createdAt.toIso8601String(),
-      'last_update': lastUpdate.toIso8601String(),
+      // 'created_at': createdAt.toIso8601String(),
+      'last_update': lastUpdate?.toIso8601String(),
       'name': name,
       'desc': desc,
       'project_id': projectId,

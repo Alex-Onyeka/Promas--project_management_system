@@ -12,10 +12,10 @@ double tabletScreen = 850;
 double tabletScreenBig = 1150;
 
 var mainBorderRadius = BorderRadius.only(
-  bottomLeft: Radius.circular(10),
+  bottomLeft: Radius.circular(8),
   bottomRight: Radius.circular(0),
-  topLeft: Radius.circular(10),
-  topRight: Radius.circular(10),
+  topLeft: Radius.circular(8),
+  topRight: Radius.circular(8),
 );
 
 String appName = 'Promas';

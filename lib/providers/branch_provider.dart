@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promas/classes/branch_class.dart';
+import 'package:promas/classes/user_class.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,6 +14,29 @@ class BranchProvider extends ChangeNotifier {
   final String _table = 'branch';
 
   List<BranchClass> branches = [];
+
+  void addBranchTemp(BranchClass branch) {
+    branches.add(branch);
+    print(branches.length);
+    notifyListeners();
+  }
+
+  List<UserClass> selectedStaffs = [];
+
+  void selectNewStaff(UserClass staff) {
+    selectedStaffs.add(staff);
+    notifyListeners();
+  }
+
+  void removeSelectedStaff(UserClass staff) {
+    selectedStaffs.remove(staff);
+    notifyListeners();
+  }
+
+  void clearSelectedStaffs() {
+    selectedStaffs.clear();
+    notifyListeners();
+  }
 
   void clearCache() {
     branches.clear();

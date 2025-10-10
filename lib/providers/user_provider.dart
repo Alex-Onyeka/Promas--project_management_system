@@ -32,7 +32,18 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  List<UserClass> users = [];
+  List<UserClass> users = [
+    UserClass(
+      name: 'Alex',
+      email: 'alex@gmail.com',
+      isAdmin: false,
+    ),
+    UserClass(
+      name: 'Benjamin',
+      email: 'olnygrmii22@gmail.com',
+      isAdmin: false,
+    ),
+  ];
   UserClass? currentUser;
 
   void clearCache() {
@@ -92,7 +103,9 @@ class UserProvider extends ChangeNotifier {
           .map((json) => UserClass.fromJson(json))
           .toList();
 
-      users = usersTemp;
+      users = usersTemp
+          .where((us) => us.id != currentUser?.id)
+          .toList();
       print('Users Gotten Success');
       notifyListeners();
       return users;

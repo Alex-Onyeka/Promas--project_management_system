@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
 import 'package:promas/components/buttons/main_button.dart';
+import 'package:promas/components/main_floating_action_button.dart';
 import 'package:promas/components/tiles/project_tile.dart';
 import 'package:promas/main.dart';
 import 'package:promas/pages/projects/project_page.dart';
@@ -59,34 +60,10 @@ class _DashboardState extends State<Dashboard> {
         visible: returnProject(
           context,
         ).mainProjects.isNotEmpty,
-        child: FloatingActionButton.extended(
-          backgroundColor: returnTheme(context).darkGrey(),
-          onPressed: () {
+        child: MainFloatingActionButton(
+          action: () {
             createProject();
           },
-          label: Row(
-            spacing: 5,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                color: returnTheme(
-                  context,
-                ).containerColor(),
-                size: 18,
-                Icons.add,
-              ),
-              Text(
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: returnTheme(
-                    context,
-                  ).containerColor(),
-                ),
-                'Create Project',
-              ),
-            ],
-          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -117,44 +94,10 @@ class _DashboardState extends State<Dashboard> {
                     visible: returnProject(
                       context,
                     ).projects().isEmpty,
-                    child: SizedBox(
-                      height: double.infinity,
-                      child: Center(
-                        child: Column(
-                          spacing: 10,
-                          mainAxisAlignment:
-                              MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              size: 35,
-                              color: returnTheme(
-                                context,
-                              ).darkGrey(),
-                              Icons.work_off_outlined,
-                            ),
-                            Text(
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: returnTheme(
-                                  context,
-                                ).darkMediumGrey(),
-                              ),
-                              'No Projects Created Yet',
-                            ),
-                            SizedBox(height: 2),
-                            SizedBox(
-                              width: 200,
-                              child: MainButton(
-                                action: () {
-                                  createProject();
-                                },
-                                title: 'Create New Project',
-                              ),
-                            ),
-                            SizedBox(height: 55),
-                          ],
-                        ),
-                      ),
+                    child: EmptyWidgetMain(
+                      action: () {
+                        createProject();
+                      },
                     ),
                   ),
                   Visibility(
@@ -352,6 +295,49 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EmptyWidgetMain extends StatelessWidget {
+  final Function() action;
+  const EmptyWidgetMain({super.key, required this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      // height: double.infinity,
+      child: Center(
+        child: Column(
+          spacing: 10,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              size: 35,
+              color: returnTheme(context).darkGrey(),
+              Icons.work_off_outlined,
+            ),
+            Text(
+              style: TextStyle(
+                fontSize: 13,
+                color: returnTheme(
+                  context,
+                ).darkMediumGrey(),
+              ),
+              'No Projects Created Yet',
+            ),
+            SizedBox(height: 2),
+            SizedBox(
+              width: 200,
+              child: MainButton(
+                action: action,
+                title: 'Create New Project',
+              ),
+            ),
+            SizedBox(height: 55),
           ],
         ),
       ),
