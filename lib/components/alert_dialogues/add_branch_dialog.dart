@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promas/classes/branch_class.dart';
 import 'package:promas/components/alert_dialogues/alert_placeholder.dart';
 import 'package:promas/components/alert_dialogues/select_staff_dialog.dart';
 import 'package:promas/components/buttons/main_button.dart';
@@ -11,11 +12,14 @@ class AddBranchDialog extends StatefulWidget {
   final Function() addBranch;
   final TextEditingController nameController;
   final TextEditingController descController;
+  // final bool? isEdit;
+  final BranchClass? branch;
   const AddBranchDialog({
     super.key,
     required this.addBranch,
     required this.nameController,
     required this.descController,
+    this.branch,
   });
 
   @override
@@ -26,6 +30,32 @@ class AddBranchDialog extends StatefulWidget {
 class _AddBranchDialogState extends State<AddBranchDialog> {
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.branch != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.nameController.text = widget.branch!.name;
+        widget.descController.text =
+            widget.branch!.desc ?? '';
+        // List<UserClass> users = [];
+        for (var user in returnUser(
+          context,
+          listen: false,
+        ).users) {
+          if (widget.branch!.employees.contains(user.id)) {
+            returnBranch(
+              context,
+              listen: false,
+            ).selectedStaffs.add(user);
+          }
+        }
+      });
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var branchPr = returnBranch(context);
@@ -38,9 +68,11 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
             spacing: 5,
             children: [
               HeadingSection(
-                title: 'Create New Branch',
+                title: widget.branch != null
+                    ? 'Edit Branch'
+                    : 'Create New Branch',
                 subText:
-                    'Fill The Form To Create New Branch',
+                    'Fill The Form To ${widget.branch != null ? 'Update Branch' : 'Create New Branch'}',
               ),
               SizedBox(height: 10),
               NormalTextfield(
@@ -263,7 +295,9 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                     Navigator.of(context).pop();
                   }
                 },
-                title: 'Create Branch',
+                title: widget.branch != null
+                    ? 'Update Branch'
+                    : 'Create Branch',
               ),
               SizedBox(height: 4),
               SecondaryButton(
@@ -271,6 +305,10 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                 action: () {
                   widget.nameController.clear();
                   widget.descController.clear();
+                  returnBranch(
+                    context,
+                    listen: false,
+                  ).clearSelectedStaffs();
                   Navigator.of(context).pop();
                 },
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
 import 'package:promas/components/buttons/main_button.dart';
+import 'package:promas/components/empty_widgets/empty_widget_main.dart';
 import 'package:promas/components/main_floating_action_button.dart';
 import 'package:promas/components/tiles/project_tile.dart';
 import 'package:promas/main.dart';
@@ -95,6 +96,8 @@ class _DashboardState extends State<Dashboard> {
                       context,
                     ).projects().isEmpty,
                     child: EmptyWidgetMain(
+                      buttonText: 'Create New Project',
+                      title: 'No Projects Created Yet',
                       action: () {
                         createProject();
                       },
@@ -295,49 +298,6 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class EmptyWidgetMain extends StatelessWidget {
-  final Function() action;
-  const EmptyWidgetMain({super.key, required this.action});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      // height: double.infinity,
-      child: Center(
-        child: Column(
-          spacing: 10,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              size: 35,
-              color: returnTheme(context).darkGrey(),
-              Icons.work_off_outlined,
-            ),
-            Text(
-              style: TextStyle(
-                fontSize: 13,
-                color: returnTheme(
-                  context,
-                ).darkMediumGrey(),
-              ),
-              'No Projects Created Yet',
-            ),
-            SizedBox(height: 2),
-            SizedBox(
-              width: 200,
-              child: MainButton(
-                action: action,
-                title: 'Create New Project',
-              ),
-            ),
-            SizedBox(height: 55),
           ],
         ),
       ),

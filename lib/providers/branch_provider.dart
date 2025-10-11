@@ -15,8 +15,43 @@ class BranchProvider extends ChangeNotifier {
 
   List<BranchClass> branches = [];
 
+  void addStaffToBranch(
+    BranchClass branch,
+    List<String> userIds,
+  ) {
+    branch.employees.addAll(userIds);
+    notifyListeners();
+  }
+
+  void removeStaffFromBranch(
+    BranchClass branch,
+    UserClass user,
+  ) {
+    branch.employees.remove(user.id);
+    notifyListeners();
+  }
+
   void addBranchTemp(BranchClass branch) {
     branches.add(branch);
+    print(branches.length);
+    notifyListeners();
+  }
+
+  void updateBranchTemp(BranchClass branch) {
+    var edit = branches
+        .where((br) => br.uuid == branch.uuid)
+        .toList();
+    edit.first.name = branch.name;
+    edit.first.desc = branch.desc;
+    edit.first.employees = branch.employees;
+    edit.first.level = branch.level;
+    edit.first.lastUpdate = branch.lastUpdate;
+    print(branches.length);
+    notifyListeners();
+  }
+
+  void deleteBranchTemp(BranchClass branch) {
+    branches.remove(branch);
     print(branches.length);
     notifyListeners();
   }

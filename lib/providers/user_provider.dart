@@ -34,11 +34,15 @@ class UserProvider extends ChangeNotifier {
 
   List<UserClass> users = [
     UserClass(
+      id: 'No 1',
+      companyId: CompanyProvider().currentCompany?.id,
       name: 'Alex',
       email: 'alex@gmail.com',
       isAdmin: false,
     ),
     UserClass(
+      companyId: CompanyProvider().currentCompany?.id,
+      id: 'No 2',
       name: 'Benjamin',
       email: 'olnygrmii22@gmail.com',
       isAdmin: false,

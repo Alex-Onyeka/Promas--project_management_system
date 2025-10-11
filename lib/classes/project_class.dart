@@ -1,11 +1,11 @@
 class ProjectClass {
   final String? uuid;
   final DateTime? createdAt;
-  final String name;
-  final String desc;
-  final double level;
+  String name;
+  String desc;
+  double level;
   final int? companyId;
-  final List<String> employees;
+  List<String> employees;
   DateTime lastUpdate;
 
   ProjectClass({

@@ -125,7 +125,7 @@ class ProjectTile extends StatelessWidget {
                         Padding(
                           padding: screen > mobileScreen
                               ? const EdgeInsets.only(
-                                  left: 15.0,
+                                  left: 10.0,
                                 )
                               : const EdgeInsets.only(
                                   left: 10,
@@ -136,10 +136,10 @@ class ProjectTile extends StatelessWidget {
                                     .spaceBetween,
                             children: [
                               Row(
-                                spacing: 5,
+                                spacing: 4,
                                 children: [
                                   Row(
-                                    spacing: 5,
+                                    spacing: 3,
                                     children: [
                                       Text(
                                         style: TextStyle(
@@ -151,14 +151,14 @@ class ProjectTile extends StatelessWidget {
                                           color: theme
                                               .darkMediumGrey(),
                                         ),
-                                        'Staffs:',
+                                        'Level:',
                                       ),
                                       Text(
                                         style: TextStyle(
                                           fontSize:
                                               screen >
                                                   mobileScreen
-                                              ? 8
+                                              ? 9
                                               : 7,
                                           fontWeight:
                                               FontWeight
@@ -166,10 +166,26 @@ class ProjectTile extends StatelessWidget {
                                           color: theme
                                               .darkMediumGrey(),
                                         ),
-                                        project
-                                            .employees
-                                            .length
-                                            .toString(),
+                                        calcPercentage(
+                                          returnBranch(
+                                                context,
+                                              ).branches
+                                              .where(
+                                                (branch) =>
+                                                    branch
+                                                        .projectId ==
+                                                    project
+                                                        .uuid,
+                                              )
+                                              .toList()
+                                              .map(
+                                                (
+                                                  branch,
+                                                ) => branch
+                                                    .level,
+                                              )
+                                              .toList(),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -181,7 +197,7 @@ class ProjectTile extends StatelessWidget {
                                     ).lightMediumGrey(),
                                   ),
                                   Row(
-                                    spacing: 5,
+                                    spacing: 3,
                                     children: [
                                       Text(
                                         style: TextStyle(
@@ -200,7 +216,7 @@ class ProjectTile extends StatelessWidget {
                                           fontSize:
                                               screen >
                                                   mobileScreen
-                                              ? 8
+                                              ? 9
                                               : 7,
                                           fontWeight:
                                               FontWeight

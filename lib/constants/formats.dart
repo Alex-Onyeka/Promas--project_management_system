@@ -9,10 +9,20 @@ String formateDate(DateTime? date) {
   return formattedDate;
 }
 
-String calcPercentage(double number) {
+String calcPercentageSingle(double number) {
   return number == 0
       ? '0%'
-      : '${(100 / number).toStringAsFixed(0)}%';
+      : '${((number / 100) * 100).toStringAsFixed(0)}%';
+}
+
+String calcPercentage(List<double> numbers) {
+  double total = numbers.fold(
+    0,
+    (sum, value) => sum + value,
+  );
+  var val = total / numbers.length;
+  var perc = (val / 100) * 100;
+  return '${perc.toStringAsFixed(0)}%';
 }
 
 String formatShortDate(DateTime date) {

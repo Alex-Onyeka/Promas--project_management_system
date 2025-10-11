@@ -1,11 +1,11 @@
 class BranchClass {
   final String? uuid;
   DateTime? createdAt;
-  final String name;
+  String name;
   String? desc;
   final String projectId;
-  final double level;
-  final List<String> employees;
+  double level;
+  List<String> employees;
   final int companyId;
   DateTime? lastUpdate;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promas/classes/branch_class.dart';
 import 'package:promas/components/alert_dialogues/alert_placeholder.dart';
 import 'package:promas/components/buttons/main_button.dart';
 import 'package:promas/components/buttons/secondary_button.dart';
@@ -8,10 +9,11 @@ import 'package:promas/main.dart';
 
 class SelectStaffDialog extends StatefulWidget {
   final Function() selectStaff;
-
+  final BranchClass? branch;
   const SelectStaffDialog({
     super.key,
     required this.selectStaff,
+    this.branch,
   });
 
   @override
@@ -211,6 +213,22 @@ class _SelectStaffDialogState
                     context,
                     listen: false,
                   ).selectedStaffs.isNotEmpty) {
+                    if (widget.branch != null) {
+                      returnBranch(
+                        context,
+                        listen: false,
+                      ).addStaffToBranch(
+                        widget.branch!,
+                        returnBranch(context, listen: false)
+                            .selectedStaffs
+                            .map((staff) => staff.id!)
+                            .toList(),
+                      );
+                      returnBranch(
+                        context,
+                        listen: false,
+                      ).clearSelectedStaffs();
+                    }
                     nameController.clear();
                     Navigator.of(context).pop();
                   }

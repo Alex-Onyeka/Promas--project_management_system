@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/alert_placeholder.dart';
 import 'package:promas/components/buttons/main_button.dart';
 import 'package:promas/components/buttons/secondary_button.dart';
@@ -9,11 +10,13 @@ class AddProjectDialog extends StatefulWidget {
   final Function() addProject;
   final TextEditingController nameController;
   final TextEditingController descController;
+  final ProjectClass? project;
   const AddProjectDialog({
     super.key,
     required this.addProject,
     required this.nameController,
     required this.descController,
+    this.project,
   });
 
   @override
@@ -26,6 +29,17 @@ class _AddProjectDialogState
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>();
   @override
+  void initState() {
+    super.initState();
+    if (widget.project != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.nameController.text = widget.project!.name;
+        widget.descController.text = widget.project!.desc;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertPlaceholder(
       content: Form(
@@ -36,9 +50,11 @@ class _AddProjectDialogState
             spacing: 5,
             children: [
               HeadingSection(
-                title: 'Create New Project',
+                title: widget.project != null
+                    ? 'Update Project'
+                    : 'Create New Project',
                 subText:
-                    'Fill The Form To Create New Project',
+                    'Fill The Form To ${widget.project != null ? 'Update Project' : 'Create New Project'}',
               ),
               SizedBox(height: 10),
               NormalTextfield(
@@ -65,7 +81,9 @@ class _AddProjectDialogState
                     Navigator.of(context).pop();
                   }
                 },
-                title: 'Create Project',
+                title: widget.project != null
+                    ? 'Update Project'
+                    : 'Create Project',
               ),
               SizedBox(height: 4),
               SecondaryButton(

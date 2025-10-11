@@ -176,10 +176,14 @@ class ProjectProvider extends ChangeNotifier {
   }
 
   void updateProject(ProjectClass project) {
-    mainProjects.removeWhere(
-      (pro) => pro.uuid! == project.uuid,
-    );
-    mainProjects.add(project);
+    var edit = mainProjects
+        .where((pro) => pro.uuid == project.uuid)
+        .toList();
+    edit.first.name = project.name;
+    edit.first.desc = project.desc;
+    edit.first.lastUpdate = project.lastUpdate;
+    edit.first.level = project.level;
+    edit.first.employees = project.employees;
     notifyListeners();
   }
 }
