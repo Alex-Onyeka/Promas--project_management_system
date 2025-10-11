@@ -29,6 +29,8 @@ class _MainSideBarState extends State<MainSideBar> {
     }
   }
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -133,10 +135,14 @@ class _MainSideBarState extends State<MainSideBar> {
                         context: context,
                         builder: (context) {
                           return ConfirmAlert(
+                            isLoading: isLoading,
                             subText:
                                 'Are you sure you want to Log out?',
                             title: 'Logout?',
                             action: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
                               await AuthService().signOut(
                                 context: safeContext,
                               );

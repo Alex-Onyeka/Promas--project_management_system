@@ -3,9 +3,7 @@ class ProjectClass {
   final DateTime? createdAt;
   String name;
   String desc;
-  double level;
   final int? companyId;
-  List<String> employees;
   DateTime lastUpdate;
 
   ProjectClass({
@@ -14,9 +12,7 @@ class ProjectClass {
     required this.lastUpdate,
     required this.name,
     required this.desc,
-    required this.level,
     this.companyId,
-    required this.employees,
   });
 
   /// From JSON (Supabase → Dart)
@@ -27,9 +23,7 @@ class ProjectClass {
       lastUpdate: DateTime.parse(json['last_update']),
       name: json['name'] ?? '',
       desc: json['desc'] ?? '',
-      level: (json['level'] as num?)?.toDouble() ?? 0.0,
       companyId: json['company_id'],
-      employees: json['employees'],
     );
   }
 
@@ -41,9 +35,7 @@ class ProjectClass {
       'last_update': lastUpdate.toIso8601String(),
       'name': name,
       'desc': desc,
-      'level': level,
       'company_id': companyId,
-      'employees': employees,
     };
   }
 

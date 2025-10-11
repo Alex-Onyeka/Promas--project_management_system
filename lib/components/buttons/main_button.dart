@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:promas/constants/general_constants.dart';
 
-class MainButton extends StatelessWidget {
+class MainButton extends StatefulWidget {
   final Function() action;
   final String title;
   final bool? showShadow;
@@ -14,6 +14,12 @@ class MainButton extends StatelessWidget {
     this.loadingWidget,
   });
 
+  @override
+  State<MainButton> createState() => _MainButtonState();
+}
+
+class _MainButtonState extends State<MainButton> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -31,22 +37,27 @@ class MainButton extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color:
-                    showShadow != null &&
-                        showShadow == false
+                    widget.showShadow != null &&
+                        widget.showShadow == false
                     ? Colors.transparent
                     : Color.fromARGB(71, 33, 149, 243),
                 blurRadius: 20,
                 offset: Offset(0, 10),
                 spreadRadius:
-                    showShadow != null &&
-                        showShadow == false
+                    widget.showShadow != null &&
+                        widget.showShadow == false
                     ? 0
                     : 10,
               ),
             ],
           ),
           child: InkWell(
-            onTap: action,
+            onTap: () {
+              setState(() {
+                isLoading = true;
+              });
+              widget.action();
+            },
             child: Container(
               width: screenSize(context) > mobileScreen
                   ? 300
@@ -63,15 +74,15 @@ class MainButton extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     color:
-                        showShadow != null &&
-                            showShadow == false
+                        widget.showShadow != null &&
+                            widget.showShadow == false
                         ? Colors.transparent
                         : Color.fromARGB(71, 33, 149, 243),
                     blurRadius: 20,
                     offset: Offset(0, 10),
                     spreadRadius:
-                        showShadow != null &&
-                            showShadow == false
+                        widget.showShadow != null &&
+                            widget.showShadow == false
                         ? 0
                         : 10,
                   ),
@@ -81,7 +92,11 @@ class MainButton extends StatelessWidget {
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: loadingWidget == null,
+                      visible: !isLoading,
+                      // widget.loadingWidget == null ||
+                      // (widget.loadingWidget != null &&
+                      //     widget.loadingWidget ==
+                      //         false),
                       child: Text(
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -89,11 +104,13 @@ class MainButton extends StatelessWidget {
                           fontWeight: FontWeight.normal,
                           color: Colors.white,
                         ),
-                        title,
+                        widget.title,
                       ),
                     ),
                     Visibility(
-                      visible: loadingWidget != null,
+                      visible: isLoading,
+                      // widget.loadingWidget != null &&
+                      // widget.loadingWidget == true,
                       child: Center(
                         child: SizedBox(
                           height: 20,

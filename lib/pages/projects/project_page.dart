@@ -5,6 +5,7 @@ import 'package:promas/components/alert_dialogues/add_branch_dialog.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
 import 'package:promas/components/alert_dialogues/confirm_alert.dart';
 import 'package:promas/components/alert_dialogues/select_staff_dialog.dart';
+import 'package:promas/components/alert_dialogues/update_level_dialog.dart';
 import 'package:promas/components/empty_widgets/empty_widget_alt.dart';
 import 'package:promas/components/main_divider.dart';
 import 'package:promas/components/side_bar/main_side_bar.dart';
@@ -14,7 +15,7 @@ import 'package:promas/components/top_bar/mobile_app_bar.dart';
 import 'package:promas/constants/formats.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
-import 'package:promas/providers/company_provider.dart';
+import 'package:promas/providers/user_provider.dart';
 
 class ProjectPage extends StatefulWidget {
   final ProjectClass project;
@@ -32,6 +33,14 @@ class _ProjectPageState extends State<ProjectPage> {
   final projectSearchController = TextEditingController();
   final nameController = TextEditingController();
   final descController = TextEditingController();
+  bool isLoading = false;
+
+  void toggleLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+    print('Loading is now $isLoading');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -237,23 +246,6 @@ class _ProjectPageState extends State<ProjectPage> {
                                                     return AddProjectDialog(
                                                       project:
                                                           widget.project,
-                                                      addProject: () {
-                                                        returnProject(
-                                                          context,
-                                                          listen: false,
-                                                        ).updateProject(
-                                                          ProjectClass(
-                                                            uuid: widget.project.uuid,
-                                                            createdAt: widget.project.createdAt,
-                                                            lastUpdate: DateTime.now(),
-                                                            name: nameController.text,
-                                                            desc: descController.text,
-                                                            level: widget.project.level,
-                                                            companyId: widget.project.companyId,
-                                                            employees: [],
-                                                          ),
-                                                        );
-                                                      },
                                                       nameController:
                                                           nameController,
                                                       descController:
@@ -313,18 +305,35 @@ class _ProjectPageState extends State<ProjectPage> {
                                                       context,
                                                   builder: (context) {
                                                     return ConfirmAlert(
+                                                      isLoading:
+                                                          isLoading,
                                                       buttonText:
-                                                          'Delete Project',
-                                                      action: () {
-                                                        returnProject(
+                                                          isLoading
+                                                          ? 'Deleting...'
+                                                          : 'Delete Project',
+                                                      action: () async {
+                                                        toggleLoading();
+                                                        await returnProject(
                                                           context,
                                                           listen: false,
                                                         ).deleteProject(
-                                                          widget.project,
+                                                          widget.project.uuid!,
                                                         );
-                                                        Navigator.of(
-                                                          context,
-                                                        ).pop();
+                                                        if (context.mounted) {
+                                                          print(
+                                                            'Context is Mounted',
+                                                          );
+                                                          Navigator.of(
+                                                            context,
+                                                          ).pop();
+                                                          Navigator.of(
+                                                            context,
+                                                          ).pop();
+                                                        } else {
+                                                          print(
+                                                            'Context is Not Mounted',
+                                                          );
+                                                        }
                                                       },
                                                       subText:
                                                           'Are you sure you want to delete this project?',
@@ -514,14 +523,19 @@ class _ProjectPageState extends State<ProjectPage> {
                                                         ),
                                                       ),
                                                       Expanded(
-                                                        child: Text(
-                                                          style: TextStyle(
-                                                            fontSize: 11,
-                                                            color: returnTheme(
-                                                              context,
-                                                            ).mediumGrey(),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.symmetric(
+                                                            horizontal: 20.0,
                                                           ),
-                                                          'Level',
+                                                          child: Text(
+                                                            style: TextStyle(
+                                                              fontSize: 11,
+                                                              color: returnTheme(
+                                                                context,
+                                                              ).mediumGrey(),
+                                                            ),
+                                                            'Level',
+                                                          ),
                                                         ),
                                                       ),
                                                       Opacity(
@@ -629,6 +643,13 @@ class BranchListTile extends StatefulWidget {
 
 class _BranchListTileState extends State<BranchListTile> {
   bool isOpen = false;
+  bool isLoading = false;
+  void toggleLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -654,7 +675,7 @@ class _BranchListTileState extends State<BranchListTile> {
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: 15,
+                      // vertical: 15,
                       horizontal: 15,
                     ),
                     child: Row(
@@ -673,16 +694,60 @@ class _BranchListTileState extends State<BranchListTile> {
                           ),
                         ),
                         Expanded(
-                          child: Text(
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: returnTheme(
-                                context,
-                              ).darkGrey(),
-                            ),
-                            calcPercentageSingle(
-                              widget.branch.level,
-                            ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment:
+                                MainAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  updateBranch(
+                                    branch: widget.branch,
+                                    context: context,
+                                    setState: () {
+                                      setState(() {
+                                        widget.action();
+                                      });
+                                    },
+                                  );
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(
+                                        horizontal: 20.0,
+                                        vertical: 15,
+                                      ),
+                                  child: Row(
+                                    spacing: 3,
+                                    mainAxisSize:
+                                        MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color:
+                                              returnTheme(
+                                                context,
+                                              ).darkGrey(),
+                                        ),
+                                        calcPercentageSingle(
+                                          widget
+                                              .branch
+                                              .level,
+                                        ),
+                                      ),
+                                      Icon(
+                                        size: 18,
+                                        color: returnTheme(
+                                          context,
+                                        ).mediumGrey(),
+                                        Icons.edit_outlined,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Icon(
@@ -717,14 +782,164 @@ class _BranchListTileState extends State<BranchListTile> {
                         visible: widget.branch.desc != null,
                         child: Row(
                           children: [
-                            Text(
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: returnTheme(
-                                  context,
-                                ).darkMediumGrey(),
+                            Column(
+                              spacing: 2,
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  style: TextStyle(
+                                    fontSize: 9,
+                                    color: returnTheme(
+                                      context,
+                                    ).mediumGrey(),
+                                  ),
+                                  'Branch Description:',
+                                ),
+                                Text(
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: returnTheme(
+                                      context,
+                                    ).darkMediumGrey(),
+                                  ),
+                                  widget.branch.desc ?? '',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 0.0,
+                        ),
+                        child: Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment.end,
+                          spacing: 0,
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                await createBranch(
+                                  branch: widget.branch,
+                                  context: context,
+                                  descController:
+                                      widget.descController,
+                                  nameController:
+                                      widget.nameController,
+                                  projectId: widget
+                                      .branch
+                                      .projectId,
+                                );
+                                widget.action();
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(
+                                      horizontal: 6.0,
+                                      vertical: 6,
+                                    ),
+                                child: Row(
+                                  mainAxisSize:
+                                      MainAxisSize.min,
+                                  spacing: 3,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .center,
+                                  children: [
+                                    Icon(
+                                      size: 18,
+                                      color: returnTheme(
+                                        context,
+                                      ).mediumGrey(),
+                                      Icons.edit_outlined,
+                                    ),
+                                    Text(
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: returnTheme(
+                                          context,
+                                        ).mediumGrey(),
+                                      ),
+                                      'Edit',
+                                    ),
+                                  ],
+                                ),
                               ),
-                              widget.branch.desc ?? '',
+                            ),
+                            InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ConfirmAlert(
+                                      isLoading: isLoading,
+                                      buttonText: 'Delete',
+                                      action: () async {
+                                        toggleLoading();
+                                        setState(() {});
+                                        await returnBranch(
+                                          context,
+                                          listen: false,
+                                        ).deleteBranch(
+                                          widget
+                                              .branch
+                                              .uuid!,
+                                        );
+                                        Navigator.of(
+                                          context,
+                                        ).pop();
+                                      },
+                                      subText:
+                                          'Are you sure you want to delete this Branch?',
+                                      title:
+                                          'Delete Branch?',
+                                    );
+                                  },
+                                );
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(
+                                      horizontal: 6.0,
+                                      vertical: 6,
+                                    ),
+                                child: Row(
+                                  mainAxisSize:
+                                      MainAxisSize.min,
+                                  spacing: 3,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .center,
+                                  children: [
+                                    Icon(
+                                      size: 18,
+                                      color:
+                                          const Color.fromARGB(
+                                            255,
+                                            255,
+                                            92,
+                                            92,
+                                          ),
+                                      Icons.delete_outlined,
+                                    ),
+                                    Text(
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color:
+                                            const Color.fromARGB(
+                                              255,
+                                              255,
+                                              92,
+                                              92,
+                                            ),
+                                      ),
+                                      'Delete ',
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -945,44 +1160,57 @@ class _BranchListTileState extends State<BranchListTile> {
                                                             ),
                                                           ],
                                                         ),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            showDialog(
-                                                              context: context,
-                                                              builder:
-                                                                  (
-                                                                    context,
-                                                                  ) {
-                                                                    return ConfirmAlert(
-                                                                      buttonText: 'Remove Staff',
-                                                                      action: () {
-                                                                        returnBranch(
-                                                                          context,
-                                                                          listen: false,
-                                                                        ).removeStaffFromBranch(
-                                                                          widget.branch,
-                                                                          use,
-                                                                        );
-                                                                      },
-                                                                      subText: 'Are you sure you want to remove this staff from the Branch?',
-                                                                      title: 'Remove Staff?',
-                                                                    );
-                                                                  },
-                                                            );
-                                                          },
-                                                          child: Container(
-                                                            padding: EdgeInsets.all(
-                                                              8,
-                                                            ),
-                                                            decoration: BoxDecoration(
-                                                              shape: BoxShape.circle,
-                                                            ),
-                                                            child: Icon(
-                                                              size: 18,
-                                                              color: returnTheme(
-                                                                context,
-                                                              ).mediumGrey(),
-                                                              Icons.clear,
+                                                        Visibility(
+                                                          visible:
+                                                              UserProvider().currentUser!.isAdmin ==
+                                                              true,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              showDialog(
+                                                                context: context,
+                                                                builder:
+                                                                    (
+                                                                      context,
+                                                                    ) {
+                                                                      return ConfirmAlert(
+                                                                        isLoading: isLoading,
+                                                                        buttonText: 'Remove Staff',
+                                                                        action: () async {
+                                                                          // toggleLoading();
+                                                                          await returnBranch(
+                                                                            context,
+                                                                            listen: false,
+                                                                          ).removeStaffFromBranch(
+                                                                            widget.branch.uuid!,
+                                                                            use.id!,
+                                                                          );
+                                                                          // toggleLoading();
+                                                                          if (context.mounted) {
+                                                                            Navigator.of(
+                                                                              context,
+                                                                            ).pop();
+                                                                          }
+                                                                        },
+                                                                        subText: 'Are you sure you want to remove this staff from the Branch?',
+                                                                        title: 'Remove Staff?',
+                                                                      );
+                                                                    },
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              padding: EdgeInsets.all(
+                                                                8,
+                                                              ),
+                                                              decoration: BoxDecoration(
+                                                                shape: BoxShape.circle,
+                                                              ),
+                                                              child: Icon(
+                                                                size: 18,
+                                                                color: returnTheme(
+                                                                  context,
+                                                                ).mediumGrey(),
+                                                                Icons.clear,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
@@ -1009,10 +1237,10 @@ class _BranchListTileState extends State<BranchListTile> {
                                     decoration: BoxDecoration(
                                       color:
                                           const Color.fromARGB(
-                                            18,
-                                            66,
-                                            66,
-                                            66,
+                                            33,
+                                            146,
+                                            146,
+                                            146,
                                           ),
                                     ),
                                     child: Center(
@@ -1057,10 +1285,10 @@ class _BranchListTileState extends State<BranchListTile> {
                                     decoration: BoxDecoration(
                                       color:
                                           const Color.fromARGB(
-                                            18,
-                                            66,
-                                            66,
-                                            66,
+                                            33,
+                                            146,
+                                            146,
+                                            146,
                                           ),
                                     ),
                                     child: Center(
@@ -1098,150 +1326,6 @@ class _BranchListTileState extends State<BranchListTile> {
                                         ],
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(
-                                        top: 15.0,
-                                      ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .end,
-                                    spacing: 5,
-                                    children: [
-                                      InkWell(
-                                        onTap: () async {
-                                          await createBranch(
-                                            branch: widget
-                                                .branch,
-                                            context:
-                                                context,
-                                            descController:
-                                                widget
-                                                    .descController,
-                                            nameController:
-                                                widget
-                                                    .nameController,
-                                            projectId: widget
-                                                .branch
-                                                .projectId,
-                                          );
-                                          widget.action();
-                                        },
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(
-                                                horizontal:
-                                                    8.0,
-                                                vertical: 6,
-                                              ),
-                                          child: Row(
-                                            mainAxisSize:
-                                                MainAxisSize
-                                                    .min,
-                                            spacing: 5,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
-                                            children: [
-                                              Icon(
-                                                size: 18,
-                                                color: returnTheme(
-                                                  context,
-                                                ).mediumGrey(),
-                                                Icons
-                                                    .edit_outlined,
-                                              ),
-                                              Text(
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      11,
-                                                  color: returnTheme(
-                                                    context,
-                                                  ).mediumGrey(),
-                                                ),
-                                                'Edit Branch',
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          showDialog(
-                                            context:
-                                                context,
-                                            builder: (context) {
-                                              return ConfirmAlert(
-                                                buttonText:
-                                                    'Delete Branch',
-                                                action: () {
-                                                  returnBranch(
-                                                    context,
-                                                    listen:
-                                                        false,
-                                                  ).deleteBranchTemp(
-                                                    widget
-                                                        .branch,
-                                                  );
-                                                },
-                                                subText:
-                                                    'Are you sure you want to delete this Branch?',
-                                                title:
-                                                    'Delete Branch?',
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(
-                                                horizontal:
-                                                    8.0,
-                                                vertical: 6,
-                                              ),
-                                          child: Row(
-                                            mainAxisSize:
-                                                MainAxisSize
-                                                    .min,
-                                            spacing: 5,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
-                                            children: [
-                                              Icon(
-                                                size: 18,
-                                                color:
-                                                    const Color.fromARGB(
-                                                      255,
-                                                      255,
-                                                      92,
-                                                      92,
-                                                    ),
-                                                Icons
-                                                    .delete_outlined,
-                                              ),
-                                              Text(
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      11,
-                                                  color:
-                                                      const Color.fromARGB(
-                                                        255,
-                                                        255,
-                                                        92,
-                                                        92,
-                                                      ),
-                                                ),
-                                                'Delete Branch',
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
                                   ),
                                 ),
                               ],
@@ -1327,57 +1411,8 @@ Future<void> createBranch({
     context: context,
     builder: (contxt) {
       return AddBranchDialog(
+        projectId: projectId,
         branch: branch,
-        addBranch: () {
-          if (branch == null) {
-            print('Creating Branch');
-            returnBranch(
-              context,
-              listen: false,
-            ).addBranchTemp(
-              BranchClass(
-                uuid:
-                    'No ${returnBranch(context, listen: false).branches.length + 1}',
-                name: nameController.text.trim(),
-                projectId: projectId,
-                createdAt: DateTime.now(),
-                lastUpdate: DateTime.now(),
-                level: 0,
-                desc: descController.text,
-                employees:
-                    returnBranch(context, listen: false)
-                        .selectedStaffs
-                        .map((staf) => staf.id ?? '')
-                        .toList(),
-                companyId:
-                    CompanyProvider().currentCompany!.id!,
-              ),
-            );
-          } else {
-            print('Updating Branch');
-            returnBranch(
-              context,
-              listen: false,
-            ).updateBranchTemp(
-              BranchClass(
-                uuid: branch.uuid,
-                name: nameController.text.trim(),
-                projectId: projectId,
-                createdAt: branch.createdAt,
-                lastUpdate: DateTime.now(),
-                level: branch.level + 10,
-                desc: descController.text.trim(),
-                employees:
-                    returnBranch(context, listen: false)
-                        .selectedStaffs
-                        .map((staf) => staf.id ?? '')
-                        .toList(),
-                companyId:
-                    CompanyProvider().currentCompany!.id!,
-              ),
-            );
-          }
-        },
         nameController: nameController,
         descController: descController,
       );
@@ -1388,4 +1423,22 @@ Future<void> createBranch({
       listen: false,
     ).clearSelectedStaffs();
   });
+}
+
+void updateBranch({
+  required BranchClass branch,
+  required BuildContext context,
+  required Function() setState,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return UpdateLevelDialog(
+        updateBranch: () {
+          setState();
+        },
+        branch: branch,
+      );
+    },
+  );
 }

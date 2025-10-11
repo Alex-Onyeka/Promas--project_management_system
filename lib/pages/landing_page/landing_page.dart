@@ -8,6 +8,7 @@ import 'package:promas/main.dart';
 import 'package:promas/pages/dashboard.dart/dashboard.dart';
 import 'package:promas/pages/employees/employees.dart';
 import 'package:promas/pages/projects/projects.dart';
+import 'package:promas/pages/requests/requests.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -20,8 +21,12 @@ class _LandingPageState extends State<LandingPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>();
 
-  // final companyId = CompanyProvider().currentCompany!.id;
   final projectSearchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +81,16 @@ class _LandingPageState extends State<LandingPage> {
                                         context,
                                       ).currentPage ==
                                       1
-                                ? Projects()
+                                ? Projects(
+                                    projectSearchController:
+                                        projectSearchController,
+                                  )
                                 : returnNav(
                                         context,
                                       ).currentPage ==
                                       2
                                 ? Employees()
-                                : Container(),
+                                : Requests(),
                           ),
                         ),
                       ),

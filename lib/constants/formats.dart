@@ -16,13 +16,21 @@ String calcPercentageSingle(double number) {
 }
 
 String calcPercentage(List<double> numbers) {
-  double total = numbers.fold(
-    0,
-    (sum, value) => sum + value,
-  );
+  double total = numbers.isEmpty
+      ? 0
+      : numbers.fold(0, (sum, value) => sum + value);
   var val = total / numbers.length;
   var perc = (val / 100) * 100;
-  return '${perc.toStringAsFixed(0)}%';
+  return '${perc.isNaN ? '0' : perc.toStringAsFixed(0)}%';
+}
+
+double calcPercentageNumber(List<double> numbers) {
+  double total = numbers.isEmpty
+      ? 0
+      : numbers.fold(0, (sum, value) => sum + value);
+  var val = total / numbers.length;
+  var perc = (val / 100) * 100;
+  return perc;
 }
 
 String formatShortDate(DateTime date) {

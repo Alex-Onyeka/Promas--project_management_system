@@ -16,6 +16,7 @@ class ErrorAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      insetPadding: EdgeInsets.symmetric(horizontal: 15),
       backgroundColor: returnTheme(
         context,
         listen: false,

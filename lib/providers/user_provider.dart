@@ -156,7 +156,9 @@ class UserProvider extends ChangeNotifier {
           .single();
       print('User Update Success');
       try {
-        await RequestsProvider().deleteRequest(userId);
+        await RequestsProvider().declineOrAcceptRequest(
+          userId,
+        );
         await getAllCompanyUsers();
       } catch (e) {
         print('Getting all Users Error: ${e.toString()}');
@@ -170,7 +172,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   /// Remove User To A Company
-  Future<UserClass?> removeUserToCompany(
+  Future<UserClass?> removeUserFromCompany(
     String userId,
   ) async {
     try {

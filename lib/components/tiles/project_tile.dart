@@ -153,39 +153,75 @@ class ProjectTile extends StatelessWidget {
                                         ),
                                         'Level:',
                                       ),
-                                      Text(
-                                        style: TextStyle(
-                                          fontSize:
-                                              screen >
-                                                  mobileScreen
-                                              ? 9
-                                              : 7,
-                                          fontWeight:
-                                              FontWeight
-                                                  .bold,
-                                          color: theme
-                                              .darkMediumGrey(),
-                                        ),
-                                        calcPercentage(
-                                          returnBranch(
-                                                context,
-                                              ).branches
-                                              .where(
-                                                (branch) =>
-                                                    branch
-                                                        .projectId ==
-                                                    project
-                                                        .uuid,
-                                              )
-                                              .toList()
-                                              .map(
-                                                (
-                                                  branch,
-                                                ) => branch
-                                                    .level,
-                                              )
-                                              .toList(),
-                                        ),
+                                      Builder(
+                                        builder: (context) {
+                                          if (calcPercentageNumber(
+                                                returnBranch(
+                                                      context,
+                                                    )
+                                                    .branches
+                                                    .where(
+                                                      (
+                                                        branch,
+                                                      ) =>
+                                                          branch.projectId ==
+                                                          project.uuid,
+                                                    )
+                                                    .toList()
+                                                    .map(
+                                                      (
+                                                        branch,
+                                                      ) => branch
+                                                          .level,
+                                                    )
+                                                    .toList(),
+                                              ) ==
+                                              100) {
+                                            return Icon(
+                                              size: 15,
+                                              color: Colors
+                                                  .green,
+                                              Icons
+                                                  .check_box_outlined,
+                                            );
+                                          } else {
+                                            return Text(
+                                              style: TextStyle(
+                                                fontSize:
+                                                    screen >
+                                                        mobileScreen
+                                                    ? 9
+                                                    : 7,
+                                                fontWeight:
+                                                    FontWeight
+                                                        .bold,
+                                                color: theme
+                                                    .darkMediumGrey(),
+                                              ),
+                                              calcPercentage(
+                                                returnBranch(
+                                                      context,
+                                                    )
+                                                    .branches
+                                                    .where(
+                                                      (
+                                                        branch,
+                                                      ) =>
+                                                          branch.projectId ==
+                                                          project.uuid,
+                                                    )
+                                                    .toList()
+                                                    .map(
+                                                      (
+                                                        branch,
+                                                      ) => branch
+                                                          .level,
+                                                    )
+                                                    .toList(),
+                                              ),
+                                            );
+                                          }
+                                        },
                                       ),
                                     ],
                                   ),

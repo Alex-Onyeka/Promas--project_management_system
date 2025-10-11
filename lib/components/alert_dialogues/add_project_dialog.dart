@@ -5,15 +5,15 @@ import 'package:promas/components/buttons/main_button.dart';
 import 'package:promas/components/buttons/secondary_button.dart';
 import 'package:promas/components/sections/heading_section.dart';
 import 'package:promas/components/text_fields/normal_textfield.dart';
+import 'package:promas/main.dart';
+import 'package:promas/providers/company_provider.dart';
 
 class AddProjectDialog extends StatefulWidget {
-  final Function() addProject;
   final TextEditingController nameController;
   final TextEditingController descController;
   final ProjectClass? project;
   const AddProjectDialog({
     super.key,
-    required this.addProject,
     required this.nameController,
     required this.descController,
     this.project,
@@ -37,6 +37,14 @@ class _AddProjectDialogState
         widget.descController.text = widget.project!.desc;
       });
     }
+  }
+
+  bool isLoading = false;
+
+  void toggleLoading(bool value) {
+    setState(() {
+      isLoading = value;
+    });
   }
 
   @override
@@ -73,17 +81,51 @@ class _AddProjectDialogState
               ),
               SizedBox(height: 6),
               MainButton(
-                action: () {
+                action: () async {
                   if (_formKey.currentState!.validate()) {
-                    widget.addProject();
+                    toggleLoading(true);
+                    if (widget.project == null) {
+                      await returnProject(
+                        context,
+                        listen: false,
+                      ).createProject(
+                        ProjectClass(
+                          createdAt: DateTime.now(),
+                          lastUpdate: DateTime.now(),
+                          name: widget.nameController.text,
+                          desc: widget.descController.text,
+                          companyId: CompanyProvider()
+                              .currentCompany!
+                              .id,
+                        ),
+                      );
+                    } else {
+                      await returnProject(
+                        context,
+                        listen: false,
+                      ).updateProject(
+                        widget.project!.uuid!,
+                        ProjectClass(
+                          createdAt: DateTime.now(),
+                          lastUpdate: DateTime.now(),
+                          name: widget.nameController.text,
+                          desc: widget.descController.text,
+                          companyId: CompanyProvider()
+                              .currentCompany!
+                              .id,
+                        ),
+                      );
+                    }
                     widget.nameController.clear();
                     widget.descController.clear();
+                    toggleLoading(false);
                     Navigator.of(context).pop();
                   }
                 },
                 title: widget.project != null
                     ? 'Update Project'
                     : 'Create Project',
+                loadingWidget: isLoading,
               ),
               SizedBox(height: 4),
               SecondaryButton(

@@ -103,9 +103,12 @@ AppBar appBar({required BuildContext context}) {
                           context,
                         ).darkGrey(),
                       ),
-                      returnRequest(
-                        context,
-                      ).requests.length.toString(),
+                      returnRequest(context).requests
+                          .where(
+                            (req) => req.userId != null,
+                          )
+                          .length
+                          .toString(),
                     ),
                   ),
                 ),

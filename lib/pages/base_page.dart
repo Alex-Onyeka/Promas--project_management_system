@@ -19,30 +19,5 @@ class _BasePageState extends State<BasePage> {
     } else {
       return AuthBase();
     }
-    // return Scaffold(
-    //   body: StreamBuilder(
-    //     stream: AuthService().authStateChanges,
-    //     builder: (context, asyncSnapshot) {
-    //       if (asyncSnapshot.connectionState ==
-    //           ConnectionState.waiting) {
-    //         return Center(
-    //           child: CircularProgressIndicator(),
-    //         );
-    //       } else if (asyncSnapshot.hasError ||
-    //           asyncSnapshot.data == null) {
-    //         return Center(child: Text('An Error Occured'));
-    //       } else {
-    //         var data = asyncSnapshot.data;
-    //         if (data!.session != null) {
-    //           // return Home();
-    //           return Container();
-    //         } else {
-    //           // return AuthBase();
-    //           return Container();
-    //         }
-    //       }
-    //     },
-    //   ),
-    // );
   }
 }

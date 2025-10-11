@@ -471,6 +471,14 @@ class _CompanyTileState extends State<CompanyTile> {
                                 await RequestsProvider()
                                     .createRequest(
                                       RequestClass(
+                                        userEmail:
+                                            UserProvider()
+                                                .currentUser!
+                                                .email,
+                                        userName:
+                                            UserProvider()
+                                                .currentUser!
+                                                .name,
                                         userId: AuthService()
                                             .currentUser!
                                             .id,

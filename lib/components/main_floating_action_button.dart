@@ -37,7 +37,7 @@ class MainFloatingActionButton extends StatelessWidget {
             },
             child: Container(
               padding: EdgeInsets.symmetric(
-                vertical: 8,
+                vertical: 10,
                 horizontal: 10,
               ),
               child: Row(
@@ -53,7 +53,7 @@ class MainFloatingActionButton extends StatelessWidget {
                   ),
                   Text(
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: returnTheme(
                         context,

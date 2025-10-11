@@ -7,18 +7,18 @@ import 'package:promas/components/buttons/secondary_button.dart';
 import 'package:promas/components/sections/heading_section.dart';
 import 'package:promas/components/text_fields/normal_textfield.dart';
 import 'package:promas/main.dart';
+import 'package:promas/providers/company_provider.dart';
 
 class AddBranchDialog extends StatefulWidget {
-  final Function() addBranch;
   final TextEditingController nameController;
   final TextEditingController descController;
-  // final bool? isEdit;
   final BranchClass? branch;
+  final String projectId;
   const AddBranchDialog({
     super.key,
-    required this.addBranch,
     required this.nameController,
     required this.descController,
+    required this.projectId,
     this.branch,
   });
 
@@ -54,6 +54,13 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
       });
       setState(() {});
     }
+  }
+
+  bool isLoading = false;
+  void toggleLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
   }
 
   @override
@@ -287,9 +294,72 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
               ),
               SizedBox(height: 10),
               MainButton(
-                action: () {
+                loadingWidget: isLoading,
+                action: () async {
                   if (_formKey.currentState!.validate()) {
-                    widget.addBranch();
+                    toggleLoading();
+                    if (widget.branch == null) {
+                      print('Creating Branch');
+                      await returnBranch(
+                        context,
+                        listen: false,
+                      ).createBranch(
+                        BranchClass(
+                          name: widget.nameController.text
+                              .trim(),
+                          projectId: widget.projectId,
+                          createdAt: DateTime.now(),
+                          lastUpdate: DateTime.now(),
+                          level: 0,
+                          desc: widget.descController.text,
+                          employees:
+                              returnBranch(
+                                    context,
+                                    listen: false,
+                                  ).selectedStaffs
+                                  .map(
+                                    (staf) => staf.id ?? '',
+                                  )
+                                  .toList(),
+                          companyId: CompanyProvider()
+                              .currentCompany!
+                              .id!,
+                        ),
+                      );
+                    } else {
+                      print('Updating Branch');
+                      await returnBranch(
+                        context,
+                        listen: false,
+                      ).updateBranch(
+                        widget.branch!.uuid!,
+                        BranchClass(
+                          uuid: widget.branch!.uuid,
+                          name: widget.nameController.text
+                              .trim(),
+                          projectId: widget.projectId,
+                          createdAt:
+                              widget.branch!.createdAt,
+                          lastUpdate: DateTime.now(),
+                          level: widget.branch!.level,
+                          desc: widget.descController.text
+                              .trim(),
+                          employees:
+                              returnBranch(
+                                    context,
+                                    listen: false,
+                                  ).selectedStaffs
+                                  .map(
+                                    (staf) => staf.id ?? '',
+                                  )
+                                  .toList(),
+                          companyId: CompanyProvider()
+                              .currentCompany!
+                              .id!,
+                        ),
+                      );
+                    }
+
                     widget.nameController.clear();
                     widget.descController.clear();
                     Navigator.of(context).pop();

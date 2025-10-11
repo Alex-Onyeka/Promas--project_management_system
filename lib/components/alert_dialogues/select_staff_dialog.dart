@@ -28,6 +28,7 @@ class _SelectStaffDialogState
   final TextEditingController nameController =
       TextEditingController();
   // List<UserClass> users = [];
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return AlertPlaceholder(
@@ -208,17 +209,21 @@ class _SelectStaffDialogState
               ),
               SizedBox(height: 6),
               MainButton(
-                action: () {
+                loadingWidget: isLoading,
+                action: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
                   if (returnBranch(
                     context,
                     listen: false,
                   ).selectedStaffs.isNotEmpty) {
                     if (widget.branch != null) {
-                      returnBranch(
+                      await returnBranch(
                         context,
                         listen: false,
                       ).addStaffToBranch(
-                        widget.branch!,
+                        widget.branch!.uuid!,
                         returnBranch(context, listen: false)
                             .selectedStaffs
                             .map((staff) => staff.id!)
@@ -240,6 +245,10 @@ class _SelectStaffDialogState
                 title: 'Cancel',
                 action: () {
                   nameController.clear();
+                  returnBranch(
+                    context,
+                    listen: false,
+                  ).clearSelectedStaffs();
                   Navigator.of(context).pop();
                 },
               ),

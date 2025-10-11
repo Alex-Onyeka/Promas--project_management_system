@@ -13,7 +13,11 @@ class MainDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Divider(
       height: height,
-      color: color ?? const Color.fromARGB(24, 97, 97, 97),
+      color: color ?? greyNeutral(),
     );
   }
+}
+
+Color greyNeutral() {
+  return const Color.fromARGB(83, 141, 141, 141);
 }

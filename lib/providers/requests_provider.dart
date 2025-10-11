@@ -89,6 +89,8 @@ class RequestsProvider extends ChangeNotifier {
     }
   }
 
+  bool isLoaded = false;
+
   Future<List<RequestClass>> getRequestsByCompany() async {
     try {
       final response = await _client
@@ -102,6 +104,7 @@ class RequestsProvider extends ChangeNotifier {
       requests = (response as List)
           .map((json) => RequestClass.fromJson(json))
           .toList();
+      isLoaded = true;
       notifyListeners();
       print('Requests Gotten: ${requests.length}');
       return requests;
@@ -112,10 +115,35 @@ class RequestsProvider extends ChangeNotifier {
   }
 
   /// Delete Request
+  Future<void> declineOrAcceptRequest(String userId) async {
+    try {
+      await _client
+          .from(_table)
+          .update({'user_id': null})
+          .eq('user_id', userId);
+      var req = requests
+          .where((req) => req.userId == userId)
+          .first;
+      req.userId = null;
+      print('Request Declined Successfully');
+      notifyListeners();
+    } catch (e) {
+      print('Decline Failed: ${e.toString()}');
+    }
+  }
+
+  /// Delete Request
   Future<void> deleteRequest(String userId) async {
-    await _client
-        .from(_table)
-        .delete()
-        .eq('user_id', userId);
+    try {
+      await _client
+          .from(_table)
+          .delete()
+          .eq('user_id', userId);
+      requests.removeWhere((req) => req.userId == userId);
+      print('Request Deleted Successfully');
+      notifyListeners();
+    } catch (e) {
+      print('Delete Failed: ${e.toString()}');
+    }
   }
 }

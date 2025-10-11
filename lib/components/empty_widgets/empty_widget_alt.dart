@@ -6,11 +6,15 @@ class EmptyWidgetAlt extends StatelessWidget {
   final Function() action;
   final String title;
   final String buttonText;
+  final IconData? icon;
+  final bool? showButton;
   const EmptyWidgetAlt({
     super.key,
     required this.action,
     required this.title,
     required this.buttonText,
+    this.icon,
+    this.showButton,
   });
 
   @override
@@ -29,7 +33,7 @@ class EmptyWidgetAlt extends StatelessWidget {
                 color: returnTheme(
                   context,
                 ).darkMediumGrey(),
-                Icons.work_off_outlined,
+                icon ?? Icons.work_off_outlined,
               ),
               Text(
                 style: TextStyle(
@@ -41,32 +45,35 @@ class EmptyWidgetAlt extends StatelessWidget {
                 title,
               ),
               SizedBox(height: 2),
-              SizedBox(
-                width: 200,
-                child: InkWell(
-                  onTap: action,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: mainBorderRadius,
-                      border: Border.all(
-                        color: const Color.fromARGB(
-                          59,
-                          66,
-                          66,
-                          66,
+              Visibility(
+                visible: showButton ?? true,
+                child: SizedBox(
+                  width: 200,
+                  child: InkWell(
+                    onTap: action,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: mainBorderRadius,
+                        border: Border.all(
+                          color: const Color.fromARGB(
+                            59,
+                            66,
+                            66,
+                            66,
+                          ),
                         ),
                       ),
-                    ),
-                    padding: EdgeInsets.all(12),
-                    child: Center(
-                      child: Text(
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: returnTheme(
-                            context,
-                          ).darkMediumGrey(),
+                      padding: EdgeInsets.all(12),
+                      child: Center(
+                        child: Text(
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: returnTheme(
+                              context,
+                            ).darkMediumGrey(),
+                          ),
+                          buttonText,
                         ),
-                        buttonText,
                       ),
                     ),
                   ),

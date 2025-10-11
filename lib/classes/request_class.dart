@@ -1,14 +1,18 @@
 class RequestClass {
   final int? id;
   final DateTime? createdAt;
-  final String userId;
+  String? userId;
   final int companyId;
+  final String userName;
+  final String userEmail;
 
   RequestClass({
     this.id,
     this.createdAt,
-    required this.userId,
+    this.userId,
     required this.companyId,
+    required this.userName,
+    required this.userEmail,
   });
 
   factory RequestClass.fromJson(Map<String, dynamic> json) {
@@ -17,10 +21,17 @@ class RequestClass {
       createdAt: DateTime.parse(json['created_at']),
       userId: json['user_id'],
       companyId: json['company_id'],
+      userName: json['user_name'],
+      userEmail: json['user_email'],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'user_id': userId, 'company_id': companyId};
+    return {
+      'user_id': userId,
+      'company_id': companyId,
+      'user_email': userEmail,
+      'user_name': userName,
+    };
   }
 }

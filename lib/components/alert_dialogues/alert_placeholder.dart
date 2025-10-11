@@ -14,6 +14,7 @@ class AlertPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      insetPadding: EdgeInsets.symmetric(horizontal: 15),
       backgroundColor: returnTheme(
         context,
         listen: false,
@@ -29,7 +30,7 @@ class AlertPlaceholder extends StatelessWidget {
       content: Container(
         width: screenSize(context) >= mobileScreen
             ? 500
-            : null,
+            : screenSize(context),
         padding: EdgeInsets.symmetric(
           vertical: 25,
           horizontal: 15,

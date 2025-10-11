@@ -10,12 +10,14 @@ class ConfirmAlert extends StatefulWidget {
   final Function() action;
   final String subText;
   final String? title;
+  final bool? isLoading;
   const ConfirmAlert({
     super.key,
     required this.buttonText,
     required this.action,
     required this.subText,
     this.title,
+    this.isLoading,
   });
 
   @override
@@ -23,10 +25,15 @@ class ConfirmAlert extends StatefulWidget {
 }
 
 class _ConfirmAlertState extends State<ConfirmAlert> {
-  bool isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      insetPadding: EdgeInsets.symmetric(horizontal: 15),
       backgroundColor: returnTheme(
         context,
         listen: false,
@@ -59,20 +66,11 @@ class _ConfirmAlertState extends State<ConfirmAlert> {
                 spacing: 7,
                 children: [
                   MainButton(
-                    action: () async {
-                      setState(() {
-                        isLoading = true;
-                      });
+                    action: () {
                       widget.action();
-                      await Future.delayed(
-                        Duration(seconds: 2),
-                      );
-                      if (context.mounted) {
-                        Navigator.of(context).pop();
-                      }
                     },
                     title: widget.buttonText,
-                    loadingWidget: isLoading ? true : null,
+                    loadingWidget: widget.isLoading,
                   ),
                   SecondaryButton(
                     title: 'Cancel',
