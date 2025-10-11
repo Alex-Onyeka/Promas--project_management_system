@@ -10,10 +10,12 @@ class MainTopBar extends StatelessWidget {
   final GlobalKey<ScaffoldState> globalKey;
   final String? pageName;
   final Function(String value)? onChanged;
+  final bool isMain;
   const MainTopBar({
     super.key,
     required this.globalKey,
     required this.searchController,
+    required this.isMain,
     this.onChanged,
     this.pageName,
     this.isVisible,
@@ -168,7 +170,26 @@ class MainTopBar extends StatelessWidget {
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      if (isMain) {
+                        returnNav(
+                          context,
+                          listen: false,
+                        ).navigate(3);
+                        screenSize(context) <= tabletScreen
+                            ? Navigator.of(context).pop()
+                            : {};
+                      } else {
+                        returnNav(
+                          context,
+                          listen: false,
+                        ).navigate(3);
+                        Navigator.of(context).pop();
+                        screenSize(context) <= tabletScreen
+                            ? Navigator.of(context).pop()
+                            : {};
+                      }
+                    },
                     child: Stack(
                       alignment: Alignment(1.5, -0.3),
                       children: [

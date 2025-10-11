@@ -48,7 +48,7 @@ class _ProjectPageState extends State<ProjectPage> {
       key: _scaffoldKey,
       appBar: screenSize(context) > mobileScreen
           ? null
-          : appBar(context: context),
+          : appBar(context: context, isMain: false),
       drawer: MainSideBar(isMain: false),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -64,6 +64,7 @@ class _ProjectPageState extends State<ProjectPage> {
                   visible:
                       screenSize(context) > mobileScreen,
                   child: MainTopBar(
+                    isMain: false,
                     pageName: 'Project Page',
                     isVisible: false,
                     onChanged: (value) {

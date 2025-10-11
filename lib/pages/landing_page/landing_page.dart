@@ -34,7 +34,7 @@ class _LandingPageState extends State<LandingPage> {
       key: _scaffoldKey,
       appBar: screenSize(context) > mobileScreen
           ? null
-          : appBar(context: context),
+          : appBar(context: context, isMain: true),
       drawer: MainSideBar(isMain: true),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -50,6 +50,7 @@ class _LandingPageState extends State<LandingPage> {
                   visible:
                       screenSize(context) > mobileScreen,
                   child: MainTopBar(
+                    isMain: true,
                     onChanged: (value) {
                       setState(() {});
                     },

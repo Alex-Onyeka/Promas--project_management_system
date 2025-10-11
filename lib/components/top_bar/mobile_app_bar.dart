@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
 import 'package:promas/providers/user_provider.dart';
 
-AppBar appBar({required BuildContext context}) {
+AppBar appBar({
+  required BuildContext context,
+  required bool isMain,
+}) {
   return AppBar(
     titleSpacing: 0,
     iconTheme: IconThemeData(
@@ -62,7 +66,26 @@ AppBar appBar({required BuildContext context}) {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              if (isMain) {
+                returnNav(
+                  context,
+                  listen: false,
+                ).navigate(3);
+                screenSize(context) <= tabletScreen
+                    ? Navigator.of(context).pop()
+                    : {};
+              } else {
+                returnNav(
+                  context,
+                  listen: false,
+                ).navigate(3);
+                Navigator.of(context).pop();
+                screenSize(context) <= tabletScreen
+                    ? Navigator.of(context).pop()
+                    : {};
+              }
+            },
             child: Stack(
               alignment: Alignment(1.5, -0.3),
               children: [
