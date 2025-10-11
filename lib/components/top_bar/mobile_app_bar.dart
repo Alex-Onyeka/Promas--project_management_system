@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
 import 'package:promas/providers/user_provider.dart';
 
@@ -72,18 +71,18 @@ AppBar appBar({
                   context,
                   listen: false,
                 ).navigate(3);
-                screenSize(context) <= tabletScreen
-                    ? Navigator.of(context).pop()
-                    : {};
+                // screenSize(context) <= tabletScreen
+                //     ? Navigator.of(context).pop()
+                //     : {};
               } else {
                 returnNav(
                   context,
                   listen: false,
                 ).navigate(3);
                 Navigator.of(context).pop();
-                screenSize(context) <= tabletScreen
-                    ? Navigator.of(context).pop()
-                    : {};
+                // screenSize(context) <= tabletScreen
+                //     ? Navigator.of(context).pop()
+                //     : {};
               }
             },
             child: Stack(

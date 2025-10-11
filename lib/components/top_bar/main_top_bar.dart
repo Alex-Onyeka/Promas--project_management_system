@@ -176,18 +176,12 @@ class MainTopBar extends StatelessWidget {
                           context,
                           listen: false,
                         ).navigate(3);
-                        screenSize(context) <= tabletScreen
-                            ? Navigator.of(context).pop()
-                            : {};
                       } else {
                         returnNav(
                           context,
                           listen: false,
                         ).navigate(3);
                         Navigator.of(context).pop();
-                        screenSize(context) <= tabletScreen
-                            ? Navigator.of(context).pop()
-                            : {};
                       }
                     },
                     child: Stack(

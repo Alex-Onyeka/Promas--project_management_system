@@ -7,6 +7,8 @@ import 'package:promas/components/tiles/project_tile.dart';
 import 'package:promas/constants/formats.dart';
 import 'package:promas/main.dart';
 import 'package:promas/pages/projects/project_page.dart';
+import 'package:promas/providers/branch_provider.dart';
+import 'package:promas/providers/project_provider.dart';
 
 class Projects extends StatefulWidget {
   final TextEditingController projectSearchController;
@@ -41,6 +43,31 @@ class _ProjectsState extends State<Projects> {
 
   final nameController = TextEditingController();
   final descController = TextEditingController();
+
+  Future<void> getAllProjectss() async {
+    await ProjectProvider().getAllProjectsByCompany();
+  }
+
+  Future<void> getAllBranches() async {
+    await BranchProvider().getBranchesByCompany();
+  }
+
+  Future<void> initFuncs() async {
+    await getAllProjectss();
+    await getAllBranches();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await initFuncs();
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

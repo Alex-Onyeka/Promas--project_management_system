@@ -29,6 +29,9 @@ class _RequestsState extends State<Requests> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await initFuncs();
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 

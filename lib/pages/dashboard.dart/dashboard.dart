@@ -55,25 +55,20 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<void> initFuncs() async {
-    setState(() {
-      isLoadingData = true;
-    });
     await getAllUsers();
     await getAllProjectss();
     await getAllBranches();
     await getAllRequests();
   }
 
-  bool isLoadingData = false;
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await initFuncs();
-      setState(() {
-        isLoadingData = false;
-      });
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
