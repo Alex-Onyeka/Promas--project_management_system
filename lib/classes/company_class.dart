@@ -1,8 +1,8 @@
 class CompanyClass {
   final int? id;
   final DateTime? createdAt;
-  final String name;
-  final String desc;
+  String name;
+  String desc;
   final String? email;
 
   CompanyClass({

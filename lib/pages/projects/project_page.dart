@@ -44,6 +44,15 @@ class _ProjectPageState extends State<ProjectPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<BranchClass> branchIn = returnBranch(context)
+        .branches
+        .where(
+          (bra) => bra.projectId == widget.project.uuid,
+        )
+        .toList();
+    branchIn.sort(
+      (a, b) => b.lastUpdate!.compareTo(a.lastUpdate!),
+    );
     return Scaffold(
       key: _scaffoldKey,
       appBar: screenSize(context) > mobileScreen
@@ -189,18 +198,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                         text:
                                             'Progress Level',
                                         title: calcPercentage(
-                                          returnBranch(
-                                                context,
-                                                listen:
-                                                    false,
-                                              ).branches
-                                              .where(
-                                                (bra) =>
-                                                    bra.projectId ==
-                                                    widget
-                                                        .project
-                                                        .uuid,
-                                              )
+                                          branchIn
                                               .toList()
                                               .map(
                                                 (bra) => bra
@@ -405,29 +403,17 @@ class _ProjectPageState extends State<ProjectPage> {
                                                 .spaceBetween,
                                         spacing: 5,
                                         children: [
-                                          InkWell(
-                                            onTap: () {
-                                              print(
-                                                returnBranch(
-                                                  context,
-                                                  listen:
-                                                      false,
-                                                ).branches.length,
-                                              );
-                                            },
-                                            child: Text(
-                                              style: TextStyle(
-                                                fontSize:
-                                                    11,
-                                                fontWeight:
-                                                    FontWeight
-                                                        .bold,
-                                                color: returnTheme(
-                                                  context,
-                                                ).darkGrey(),
-                                              ),
-                                              'BRANCHES',
+                                          Text(
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight:
+                                                  FontWeight
+                                                      .bold,
+                                              color: returnTheme(
+                                                context,
+                                              ).darkGrey(),
                                             ),
+                                            'BRANCHES',
                                           ),
                                           InkWell(
                                             onTap: () async {
@@ -484,17 +470,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                       ),
                                       Builder(
                                         builder: (context) {
-                                          if (returnBranch(
-                                                context,
-                                              ).branches
-                                              .where(
-                                                (branch) =>
-                                                    branch
-                                                        .projectId ==
-                                                    widget
-                                                        .project
-                                                        .uuid,
-                                              )
+                                          if (branchIn
                                               .isNotEmpty) {
                                             return Column(
                                               children: [
@@ -550,15 +526,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                                   ),
                                                 ),
                                                 Column(
-                                                  children: returnBranch(context)
-                                                      .branches
-                                                      .where(
-                                                        (
-                                                          branch,
-                                                        ) =>
-                                                            branch.projectId ==
-                                                            widget.project.uuid,
-                                                      )
+                                                  children: branchIn
                                                       .map(
                                                         (
                                                           branch,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
 import 'package:promas/components/buttons/main_button.dart';
 import 'package:promas/components/empty_widgets/empty_widget_main.dart';
@@ -74,11 +75,16 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    List<ProjectClass> projectsIn = returnProject(
+      context,
+    ).projects();
+
+    projectsIn.sort(
+      (a, b) => b.createdAt!.compareTo(a.createdAt!),
+    );
     return Scaffold(
       floatingActionButton: Visibility(
-        visible: returnProject(
-          context,
-        ).projectsMain.isNotEmpty,
+        visible: projectsIn.isNotEmpty,
         child: MainFloatingActionButton(
           action: () async {
             await createProject();
@@ -122,9 +128,7 @@ class _DashboardState extends State<Dashboard> {
                     child: Stack(
                       children: [
                         Visibility(
-                          visible: returnProject(
-                            context,
-                          ).projects().isEmpty,
+                          visible: projectsIn.isEmpty,
                           child: EmptyWidgetMain(
                             buttonText:
                                 'Create New Project',
@@ -136,10 +140,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         Visibility(
-                          visible: returnProject(
-                            context,
-                            listen: false,
-                          ).projects().isNotEmpty,
+                          visible: projectsIn.isNotEmpty,
                           child: Stack(
                             children: [
                               Visibility(
@@ -150,25 +151,19 @@ class _DashboardState extends State<Dashboard> {
                                 child: Stack(
                                   children: [
                                     Visibility(
-                                      visible:
-                                          returnProject(
-                                                context,
-                                                listen:
-                                                    false,
-                                              )
-                                              .projects()
-                                              .where(
-                                                (pro) => pro
-                                                    .name
-                                                    .toLowerCase()
-                                                    .contains(
-                                                      widget
-                                                          .projectSearchController
-                                                          .text
-                                                          .toLowerCase(),
-                                                    ),
-                                              )
-                                              .isNotEmpty,
+                                      visible: projectsIn
+                                          .where(
+                                            (pro) => pro
+                                                .name
+                                                .toLowerCase()
+                                                .contains(
+                                                  widget
+                                                      .projectSearchController
+                                                      .text
+                                                      .toLowerCase(),
+                                                ),
+                                          )
+                                          .isNotEmpty,
                                       child: GridView(
                                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                                           maxCrossAxisExtent:
@@ -182,63 +177,53 @@ class _DashboardState extends State<Dashboard> {
                                           mainAxisSpacing:
                                               10,
                                         ),
-                                        children:
-                                            returnProject(
-                                                  context,
-                                                  listen:
-                                                      false,
-                                                )
-                                                .projects()
-                                                .where(
-                                                  (
-                                                    pro,
-                                                  ) => pro
-                                                      .name
-                                                      .toLowerCase()
-                                                      .contains(
-                                                        widget.projectSearchController.text.toLowerCase(),
-                                                      ),
-                                                )
-                                                .map(
-                                                  (
-                                                    project,
-                                                  ) => ProjectTile(
-                                                    viewProject: () async {
-                                                      await returnProject(
-                                                        context,
-                                                        listen:
-                                                            false,
-                                                      ).deleteProject(
-                                                        project.uuid!,
-                                                      );
-                                                    },
-                                                    project:
-                                                        project,
+                                        children: projectsIn
+                                            .where(
+                                              (pro) => pro
+                                                  .name
+                                                  .toLowerCase()
+                                                  .contains(
+                                                    widget
+                                                        .projectSearchController
+                                                        .text
+                                                        .toLowerCase(),
                                                   ),
-                                                )
-                                                .toList(),
+                                            )
+                                            .map(
+                                              (
+                                                project,
+                                              ) => ProjectTile(
+                                                viewProject: () async {
+                                                  await returnProject(
+                                                    context,
+                                                    listen:
+                                                        false,
+                                                  ).deleteProject(
+                                                    project
+                                                        .uuid!,
+                                                  );
+                                                },
+                                                project:
+                                                    project,
+                                              ),
+                                            )
+                                            .toList(),
                                       ),
                                     ),
                                     Visibility(
-                                      visible:
-                                          returnProject(
-                                                context,
-                                                listen:
-                                                    false,
-                                              )
-                                              .projects()
-                                              .where(
-                                                (pro) => pro
-                                                    .name
-                                                    .toLowerCase()
-                                                    .contains(
-                                                      widget
-                                                          .projectSearchController
-                                                          .text
-                                                          .toLowerCase(),
-                                                    ),
-                                              )
-                                              .isEmpty,
+                                      visible: projectsIn
+                                          .where(
+                                            (pro) => pro
+                                                .name
+                                                .toLowerCase()
+                                                .contains(
+                                                  widget
+                                                      .projectSearchController
+                                                      .text
+                                                      .toLowerCase(),
+                                                ),
+                                          )
+                                          .isEmpty,
                                       child: SizedBox(
                                         height:
                                             double.infinity,
@@ -312,8 +297,7 @@ class _DashboardState extends State<Dashboard> {
                                             10,
                                         mainAxisSpacing: 10,
                                       ),
-                                  children: returnProject(context)
-                                      .projects()
+                                  children: projectsIn
                                       .map(
                                         (
                                           pro,

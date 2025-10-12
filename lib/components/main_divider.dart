@@ -19,5 +19,5 @@ class MainDivider extends StatelessWidget {
 }
 
 Color greyNeutral() {
-  return const Color.fromARGB(83, 141, 141, 141);
+  return const Color.fromARGB(59, 148, 148, 148);
 }

@@ -104,15 +104,22 @@ class CompanyProvider extends ChangeNotifier {
     int id,
     CompanyClass company,
   ) async {
-    final response = await _client
-        .from(_table)
-        .update(company.toJson())
-        .eq('id', id)
-        .select()
-        .single();
-    await getMyCompany();
-
-    return CompanyClass.fromJson(response);
+    try {
+      final response = await _client
+          .from(_table)
+          .update(company.toJson())
+          .eq('id', id)
+          .select()
+          .single();
+      currentCompany = CompanyClass.fromJson(response);
+      notifyListeners();
+      await getMyCompany();
+      print('Company Updated Successfully');
+      return CompanyClass.fromJson(response);
+    } catch (e) {
+      print('Company Updated Failed: ${e.toString()}');
+      return null;
+    }
   }
 
   /// Delete a company

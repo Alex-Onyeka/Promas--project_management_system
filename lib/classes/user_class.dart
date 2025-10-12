@@ -1,10 +1,10 @@
 class UserClass {
   final String? id;
   final DateTime? createdAt;
-  final String name;
-  final String email;
-  final bool isAdmin;
-  final String? jobTitle;
+  String name;
+  String email;
+  bool isAdmin;
+  String? jobTitle;
   int? companyId;
 
   UserClass({

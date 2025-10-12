@@ -13,50 +13,74 @@ AppBar appBar({
     ),
     backgroundColor: returnTheme(context).white(),
     foregroundColor: Colors.transparent,
-    title: Row(
-      spacing: 10,
-      children: [
-        Container(
-          height: 30,
-          width: 30,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: returnTheme(context).darkMediumGrey(),
+    title: Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          if (isMain) {
+            returnNav(context, listen: false).navigate(4);
+          } else {
+            returnNav(context, listen: false).navigate(4);
+            Navigator.of(context).pop();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 5.0,
+            vertical: 5,
           ),
-          child: Icon(
-            size: 18,
-            color: returnTheme(context).lightGrey(),
-            Icons.person,
+          child: Row(
+            spacing: 10,
+            children: [
+              Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: returnTheme(
+                    context,
+                  ).darkMediumGrey(),
+                ),
+                child: Icon(
+                  size: 18,
+                  color: returnTheme(context).lightGrey(),
+                  Icons.person,
+                ),
+              ),
+              Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    style: TextStyle(
+                      color: returnTheme(
+                        context,
+                      ).darkGrey(),
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    UserProvider().currentUser?.name ??
+                        'No User Found..',
+                  ),
+                  Text(
+                    style: TextStyle(
+                      color: returnTheme(
+                        context,
+                      ).darkMediumGrey(),
+                      fontSize: 9,
+                    ),
+                    UserProvider().currentUser!.isAdmin
+                        ? 'Admin'
+                        : UserProvider().currentUser!.email,
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              style: TextStyle(
-                color: returnTheme(context).darkGrey(),
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-              ),
-              UserProvider().currentUser?.name ??
-                  'No User Found..',
-            ),
-            Text(
-              style: TextStyle(
-                color: returnTheme(
-                  context,
-                ).darkMediumGrey(),
-                fontSize: 10,
-              ),
-              UserProvider().currentUser!.isAdmin
-                  ? 'Admin'
-                  : UserProvider().currentUser!.email,
-            ),
-          ],
-        ),
-      ],
+      ),
     ),
     centerTitle: true,
     actions: [
@@ -71,18 +95,12 @@ AppBar appBar({
                   context,
                   listen: false,
                 ).navigate(3);
-                // screenSize(context) <= tabletScreen
-                //     ? Navigator.of(context).pop()
-                //     : {};
               } else {
                 returnNav(
                   context,
                   listen: false,
                 ).navigate(3);
                 Navigator.of(context).pop();
-                // screenSize(context) <= tabletScreen
-                //     ? Navigator.of(context).pop()
-                //     : {};
               }
             },
             child: Stack(

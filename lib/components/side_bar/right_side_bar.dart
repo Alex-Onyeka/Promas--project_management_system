@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:promas/constants/formats.dart';
 import 'package:promas/constants/general_constants.dart';
@@ -11,6 +13,25 @@ class RightSideBar extends StatefulWidget {
 }
 
 class _RightSideBarState extends State<RightSideBar> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _timer = Timer.periodic(const Duration(seconds: 10), (
+      timer,
+    ) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

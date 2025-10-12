@@ -32,22 +32,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  List<UserClass> users = [
-    UserClass(
-      id: 'No 1',
-      companyId: CompanyProvider().currentCompany?.id,
-      name: 'Alex',
-      email: 'alex@gmail.com',
-      isAdmin: false,
-    ),
-    UserClass(
-      companyId: CompanyProvider().currentCompany?.id,
-      id: 'No 2',
-      name: 'Benjamin',
-      email: 'olnygrmii22@gmail.com',
-      isAdmin: false,
-    ),
-  ];
+  List<UserClass> users = [];
   UserClass? currentUser;
 
   void clearCache() {
@@ -129,6 +114,15 @@ class UserProvider extends ChangeNotifier {
           .select()
           .single();
       print('User Update Success');
+      var us = users
+          .where((us) => us.id == user.id)
+          .toList()
+          .first;
+      us.name = user.name;
+      us.email = user.email;
+      us.jobTitle = user.jobTitle;
+      us.isAdmin = user.isAdmin;
+      notifyListeners();
       try {
         await getAllCompanyUsers();
       } catch (e) {
@@ -182,6 +176,8 @@ class UserProvider extends ChangeNotifier {
           .eq('id', userId)
           .select()
           .single();
+      users.removeWhere((user) => user.id == userId);
+      notifyListeners();
       print('User Update Success');
       try {
         await getAllCompanyUsers();
@@ -209,6 +205,12 @@ class UserProvider extends ChangeNotifier {
           .select()
           .single();
       print('User Update Success');
+      users
+              .where((user) => user.id == userId)
+              .first
+              .isAdmin =
+          isAdmin;
+      notifyListeners();
       try {
         await getAllCompanyUsers();
       } catch (e) {

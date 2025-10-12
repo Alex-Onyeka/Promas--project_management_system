@@ -9,6 +9,7 @@ import 'package:promas/pages/dashboard.dart/dashboard.dart';
 import 'package:promas/pages/employees/employees.dart';
 import 'package:promas/pages/projects/projects.dart';
 import 'package:promas/pages/requests/requests.dart';
+import 'package:promas/pages/user_page/user_page.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -91,7 +92,12 @@ class _LandingPageState extends State<LandingPage> {
                                       ).currentPage ==
                                       2
                                 ? Employees()
-                                : Requests(),
+                                : returnNav(
+                                        context,
+                                      ).currentPage ==
+                                      3
+                                ? Requests()
+                                : UserPage(),
                           ),
                         ),
                       ),

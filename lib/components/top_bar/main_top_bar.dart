@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:promas/components/text_fields/normal_textfield.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
-import 'package:promas/providers/user_provider.dart';
 
 class MainTopBar extends StatelessWidget {
   final TextEditingController searchController;
@@ -86,7 +85,9 @@ class MainTopBar extends StatelessWidget {
                           returnNav(context).currentPage !=
                               2 &&
                           returnNav(context).currentPage !=
-                              3,
+                              3 &&
+                          returnNav(context).currentPage !=
+                              4,
                   child: SizedBox(
                     width:
                         screenSize(context) > tabletScreen
@@ -107,64 +108,90 @@ class MainTopBar extends StatelessWidget {
             Row(
               spacing: 5,
               children: [
-                Row(
-                  spacing: 10,
-                  children: [
-                    Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.end,
-                      mainAxisAlignment:
-                          MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          style: TextStyle(
-                            color: returnTheme(
-                              context,
-                            ).darkGrey(),
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          UserProvider()
-                                  .currentUser
-                                  ?.name ??
-                              'No User Found..',
-                        ),
-                        Text(
-                          style: TextStyle(
-                            color: returnTheme(
-                              context,
-                            ).darkMediumGrey(),
-                            fontSize: 10,
-                          ),
-                          UserProvider()
-                                  .currentUser!
-                                  .isAdmin
-                              ? 'Admin'
-                              : UserProvider()
-                                    .currentUser!
-                                    .email,
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: returnTheme(
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      if (isMain) {
+                        returnNav(
                           context,
-                        ).darkMediumGrey(),
-                      ),
-                      child: Icon(
-                        size: 18,
-                        color: returnTheme(
+                          listen: false,
+                        ).navigate(4);
+                      } else {
+                        returnNav(
                           context,
-                        ).lightGrey(),
-                        Icons.person,
+                          listen: false,
+                        ).navigate(4);
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 5,
+                      ),
+                      child: Row(
+                        spacing: 10,
+                        children: [
+                          Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.end,
+                            mainAxisAlignment:
+                                MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                style: TextStyle(
+                                  color: returnTheme(
+                                    context,
+                                  ).darkGrey(),
+                                  fontSize: 13,
+                                  fontWeight:
+                                      FontWeight.bold,
+                                ),
+                                returnUser(
+                                      context,
+                                    ).currentUser?.name ??
+                                    'No User Found..',
+                              ),
+                              Text(
+                                style: TextStyle(
+                                  color: returnTheme(
+                                    context,
+                                  ).darkMediumGrey(),
+                                  fontSize: 10,
+                                ),
+                                returnUser(
+                                      context,
+                                    ).currentUser!.isAdmin
+                                    ? 'Admin'
+                                    : returnUser(
+                                        context,
+                                      ).currentUser!.email,
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: returnTheme(
+                                context,
+                              ).darkMediumGrey(),
+                            ),
+                            child: Icon(
+                              size: 18,
+                              color: returnTheme(
+                                context,
+                              ).lightGrey(),
+                              Icons.person,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
                 SizedBox(width: 15),
                 Material(
