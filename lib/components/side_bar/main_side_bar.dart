@@ -77,7 +77,7 @@ class _MainSideBarState extends State<MainSideBar> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                spacing: 15,
+                spacing: 0,
                 children: [
                   MenuListItem(
                     currentSelected: returnNav(
@@ -102,27 +102,37 @@ class _MainSideBarState extends State<MainSideBar> {
                     title: 'Projects',
                     icon: Icons.work,
                   ),
-                  MenuListItem(
-                    currentSelected: returnNav(
+                  Visibility(
+                    visible: returnUser(
                       context,
-                    ).currentPage,
-                    index: 2,
-                    action: () {
-                      navigateNow(2);
-                    },
-                    title: 'Employees',
-                    icon: Icons.people_outline_outlined,
+                    ).currentUser!.isAdmin,
+                    child: MenuListItem(
+                      currentSelected: returnNav(
+                        context,
+                      ).currentPage,
+                      index: 2,
+                      action: () {
+                        navigateNow(2);
+                      },
+                      title: 'Employees',
+                      icon: Icons.people_outline_outlined,
+                    ),
                   ),
-                  MenuListItem(
-                    currentSelected: returnNav(
+                  Visibility(
+                    visible: returnUser(
                       context,
-                    ).currentPage,
-                    index: 3,
-                    action: () {
-                      navigateNow(3);
-                    },
-                    title: 'Requests',
-                    icon: Icons.question_answer_outlined,
+                    ).currentUser!.isAdmin,
+                    child: MenuListItem(
+                      currentSelected: returnNav(
+                        context,
+                      ).currentPage,
+                      index: 3,
+                      action: () {
+                        navigateNow(3);
+                      },
+                      title: 'Requests',
+                      icon: Icons.question_answer_outlined,
+                    ),
                   ),
                   MenuListItem(
                     currentSelected: returnNav(
@@ -297,47 +307,52 @@ class _MenuListItemState extends State<MenuListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Ink(
-        decoration: BoxDecoration(color: backGroundColor()),
-        child: InkWell(
-          onTap: widget.action,
-          child: SizedBox(
-            height: 48,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20.0,
-              ),
-              child: Row(
-                spacing: 10,
-                children: [
-                  Icon(
-                    size:
-                        widget.currentSelected ==
-                            widget.index
-                        ? 22
-                        : 20,
-                    color:
-                        widget.color ??
-                        returnTheme(context).darkGrey(),
-                    widget.icon,
-                  ),
-                  Text(
-                    style: TextStyle(
-                      fontSize:
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7.0),
+      child: Material(
+        color: Colors.transparent,
+        child: Ink(
+          decoration: BoxDecoration(
+            color: backGroundColor(),
+          ),
+          child: InkWell(
+            onTap: widget.action,
+            child: SizedBox(
+              height: 48,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    Icon(
+                      size:
                           widget.currentSelected ==
                               widget.index
-                          ? 11.5
-                          : 10.8,
-                      fontWeight: FontWeight.normal,
-                      color: returnTheme(
-                        context,
-                      ).darkMediumGrey(),
+                          ? 22
+                          : 20,
+                      color:
+                          widget.color ??
+                          returnTheme(context).darkGrey(),
+                      widget.icon,
                     ),
-                    widget.title,
-                  ),
-                ],
+                    Text(
+                      style: TextStyle(
+                        fontSize:
+                            widget.currentSelected ==
+                                widget.index
+                            ? 11.5
+                            : 10.8,
+                        fontWeight: FontWeight.normal,
+                        color: returnTheme(
+                          context,
+                        ).darkMediumGrey(),
+                      ),
+                      widget.title,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

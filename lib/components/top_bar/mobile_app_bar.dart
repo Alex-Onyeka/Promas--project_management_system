@@ -84,75 +84,78 @@ AppBar appBar({
     ),
     centerTitle: true,
     actions: [
-      Padding(
-        padding: const EdgeInsets.only(right: 25.0),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              if (isMain) {
-                returnNav(
-                  context,
-                  listen: false,
-                ).navigate(3);
-              } else {
-                returnNav(
-                  context,
-                  listen: false,
-                ).navigate(3);
-                Navigator.of(context).pop();
-              }
-            },
-            child: Stack(
-              alignment: Alignment(1.5, -0.3),
-              children: [
-                Center(
-                  child: Container(
-                    height: 30,
-                    width: 30,
+      Visibility(
+        visible: returnUser(context).currentUser!.isAdmin,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 25.0),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                if (isMain) {
+                  returnNav(
+                    context,
+                    listen: false,
+                  ).navigate(3);
+                } else {
+                  returnNav(
+                    context,
+                    listen: false,
+                  ).navigate(3);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Stack(
+                alignment: Alignment(1.5, -0.3),
+                children: [
+                  Center(
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: returnTheme(
+                          context,
+                        ).lightMediumGrey(),
+                      ),
+                      child: Icon(
+                        size: 18,
+                        color: returnTheme(
+                          context,
+                        ).darkMediumGrey(),
+                        Icons.notifications_rounded,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 15,
+                    width: 15,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: returnTheme(
                         context,
-                      ).lightMediumGrey(),
+                      ).tertiaryColor(),
                     ),
-                    child: Icon(
-                      size: 18,
-                      color: returnTheme(
-                        context,
-                      ).darkMediumGrey(),
-                      Icons.notifications_rounded,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 15,
-                  width: 15,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: returnTheme(
-                      context,
-                    ).tertiaryColor(),
-                  ),
-                  child: Center(
-                    child: Text(
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 9,
-                        color: returnTheme(
-                          context,
-                        ).darkGrey(),
+                    child: Center(
+                      child: Text(
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 9,
+                          color: returnTheme(
+                            context,
+                          ).darkGrey(),
+                        ),
+                        returnRequest(context).requests
+                            .where(
+                              (req) => req.userId != null,
+                            )
+                            .length
+                            .toString(),
                       ),
-                      returnRequest(context).requests
-                          .where(
-                            (req) => req.userId != null,
-                          )
-                          .length
-                          .toString(),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

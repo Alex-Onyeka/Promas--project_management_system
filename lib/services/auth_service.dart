@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promas/classes/user_class.dart';
+import 'package:promas/main.dart';
 import 'package:promas/pages/base_page.dart';
 import 'package:promas/providers/branch_provider.dart';
 import 'package:promas/providers/company_provider.dart';
@@ -85,10 +86,9 @@ class AuthService {
   Future<void> signOut({
     required BuildContext context,
   }) async {
-    UserProvider().clearCache();
-    CompanyProvider().clearChache();
     ProjectProvider().clearCache();
     BranchProvider().clearCache();
+    returnNav(context, listen: false).navigate(0);
     await _client.auth.signOut();
     if (context.mounted) {
       Navigator.pushReplacement(
@@ -99,6 +99,8 @@ class AuthService {
           },
         ),
       );
+      UserProvider().clearCache();
+      CompanyProvider().clearChache();
     }
   }
 

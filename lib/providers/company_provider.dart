@@ -61,17 +61,17 @@ class CompanyProvider extends ChangeNotifier {
   /// Read/Get Current Company by id
   Future<CompanyClass?> getMyCompany() async {
     try {
+      var user = await UserProvider().getCurrentUser();
       final response = await _client
           .from(_table)
           .select()
-          .eq(
-            'id',
-            UserProvider().currentUser?.companyId ?? 0,
-          )
+          .eq('id', user?.companyId ?? 0)
           .maybeSingle();
 
       if (response == null) {
         print('Company Not Gotten');
+        currentCompany = null;
+        notifyListeners();
         return null;
       }
       CompanyClass companyTemp = CompanyClass.fromJson(

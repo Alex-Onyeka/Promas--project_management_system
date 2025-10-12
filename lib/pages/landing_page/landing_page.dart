@@ -5,6 +5,7 @@ import 'package:promas/components/top_bar/main_top_bar.dart';
 import 'package:promas/components/top_bar/mobile_app_bar.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
+import 'package:promas/pages/company/company_setup.dart';
 import 'package:promas/pages/dashboard.dart/dashboard.dart';
 import 'package:promas/pages/employees/employees.dart';
 import 'package:promas/pages/projects/projects.dart';
@@ -31,90 +32,105 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: screenSize(context) > mobileScreen
-          ? null
-          : appBar(context: context, isMain: true),
-      drawer: MainSideBar(isMain: true),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Visibility(
-            visible: screenSize(context) > tabletScreen,
-            child: MainSideBar(isMain: true),
-          ),
-          Expanded(
-            child: Column(
+    return Builder(
+      builder: (context) {
+        if (returnCompany(context).currentCompany != null) {
+          return Scaffold(
+            key: _scaffoldKey,
+            appBar: screenSize(context) > mobileScreen
+                ? null
+                : appBar(context: context, isMain: true),
+            drawer: MainSideBar(isMain: true),
+            body: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceEvenly,
               children: [
                 Visibility(
                   visible:
-                      screenSize(context) > mobileScreen,
-                  child: MainTopBar(
-                    isMain: true,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    searchController:
-                        projectSearchController,
-                    globalKey: _scaffoldKey,
-                  ),
+                      screenSize(context) > tabletScreen,
+                  child: MainSideBar(isMain: true),
                 ),
                 Expanded(
-                  child: Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: SizedBox(
-                            height: double.infinity,
-                            child:
-                                returnNav(
-                                      context,
-                                    ).currentPage ==
-                                    0
-                                ? Dashboard(
-                                    projectSearchController:
-                                        projectSearchController,
-                                  )
-                                : returnNav(
-                                        context,
-                                      ).currentPage ==
-                                      1
-                                ? Projects(
-                                    projectSearchController:
-                                        projectSearchController,
-                                  )
-                                : returnNav(
-                                        context,
-                                      ).currentPage ==
-                                      2
-                                ? Employees()
-                                : returnNav(
-                                        context,
-                                      ).currentPage ==
-                                      3
-                                ? Requests()
-                                : UserPage(),
-                          ),
-                        ),
-                      ),
                       Visibility(
                         visible:
                             screenSize(context) >
-                            tabletScreenBig,
-                        child: RightSideBar(),
+                            mobileScreen,
+                        child: MainTopBar(
+                          isMain: true,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          searchController:
+                              projectSearchController,
+                          globalKey: _scaffoldKey,
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment
+                                  .spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.all(
+                                      15,
+                                    ),
+                                child: SizedBox(
+                                  height: double.infinity,
+                                  child:
+                                      returnNav(
+                                            context,
+                                          ).currentPage ==
+                                          0
+                                      ? Dashboard(
+                                          projectSearchController:
+                                              projectSearchController,
+                                        )
+                                      : returnNav(
+                                              context,
+                                            ).currentPage ==
+                                            1
+                                      ? Projects(
+                                          projectSearchController:
+                                              projectSearchController,
+                                        )
+                                      : returnNav(
+                                              context,
+                                            ).currentPage ==
+                                            2
+                                      ? Employees()
+                                      : returnNav(
+                                              context,
+                                            ).currentPage ==
+                                            3
+                                      ? Requests()
+                                      : UserPage(),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible:
+                                  screenSize(context) >
+                                  tabletScreenBig,
+                              child: RightSideBar(),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return CompanySetup();
+        }
+      },
     );
   }
 }

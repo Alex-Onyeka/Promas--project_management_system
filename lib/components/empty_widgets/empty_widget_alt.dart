@@ -46,33 +46,38 @@ class EmptyWidgetAlt extends StatelessWidget {
               ),
               SizedBox(height: 2),
               Visibility(
-                visible: showButton ?? true,
-                child: SizedBox(
-                  width: 200,
-                  child: InkWell(
-                    onTap: action,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: mainBorderRadius,
-                        border: Border.all(
-                          color: const Color.fromARGB(
-                            59,
-                            66,
-                            66,
-                            66,
+                visible: returnUser(
+                  context,
+                ).currentUser!.isAdmin,
+                child: Visibility(
+                  visible: showButton ?? true,
+                  child: SizedBox(
+                    width: 200,
+                    child: InkWell(
+                      onTap: action,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: mainBorderRadius,
+                          border: Border.all(
+                            color: const Color.fromARGB(
+                              59,
+                              66,
+                              66,
+                              66,
+                            ),
                           ),
                         ),
-                      ),
-                      padding: EdgeInsets.all(12),
-                      child: Center(
-                        child: Text(
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: returnTheme(
-                              context,
-                            ).darkMediumGrey(),
+                        padding: EdgeInsets.all(12),
+                        child: Center(
+                          child: Text(
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: returnTheme(
+                                context,
+                              ).darkMediumGrey(),
+                            ),
+                            buttonText,
                           ),
-                          buttonText,
                         ),
                       ),
                     ),

@@ -11,57 +11,60 @@ class MainFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: returnTheme(context).white(),
-        borderRadius: mainBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(22, 0, 0, 0),
-            blurRadius: 10,
-            spreadRadius: 5,
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: Ink(
-          decoration: BoxDecoration(
-            color: returnTheme(context).white(),
-            borderRadius: mainBorderRadius,
-          ),
-          child: InkWell(
-            borderRadius: mainBorderRadius,
-            onTap: () {
-              action();
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 10,
-              ),
-              child: Row(
-                spacing: 5,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    color: returnTheme(
-                      context,
-                    ).tertiaryColor(),
-                    size: 18,
-                    Icons.add,
-                  ),
-                  Text(
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+    return Visibility(
+      visible: returnUser(context).currentUser!.isAdmin,
+      child: Container(
+        decoration: BoxDecoration(
+          color: returnTheme(context).white(),
+          borderRadius: mainBorderRadius,
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(22, 0, 0, 0),
+              blurRadius: 10,
+              spreadRadius: 5,
+            ),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: Ink(
+            decoration: BoxDecoration(
+              color: returnTheme(context).white(),
+              borderRadius: mainBorderRadius,
+            ),
+            child: InkWell(
+              borderRadius: mainBorderRadius,
+              onTap: () {
+                action();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 10,
+                ),
+                child: Row(
+                  spacing: 5,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
                       color: returnTheme(
                         context,
-                      ).darkGrey(),
+                      ).tertiaryColor(),
+                      size: 18,
+                      Icons.add,
                     ),
-                    'Create Project',
-                  ),
-                ],
+                    Text(
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: returnTheme(
+                          context,
+                        ).darkGrey(),
+                      ),
+                      'Create Project',
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

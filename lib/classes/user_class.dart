@@ -23,7 +23,7 @@ class UserClass {
       createdAt: DateTime.parse(json['created_at']),
       name: json['name'] ?? '',
       email: json['email'] ?? '',
-      isAdmin: json['is_admin'] ?? false,
+      isAdmin: json['is_admin'],
       jobTitle: json['job_title'] ?? '',
       companyId: json['company_id'],
     );

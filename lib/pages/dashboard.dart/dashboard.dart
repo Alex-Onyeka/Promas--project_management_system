@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promas/classes/company_class.dart';
 import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
 import 'package:promas/components/buttons/main_button.dart';
@@ -8,6 +9,7 @@ import 'package:promas/components/tiles/project_tile.dart';
 import 'package:promas/main.dart';
 import 'package:promas/pages/projects/project_page.dart';
 import 'package:promas/providers/branch_provider.dart';
+import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/project_provider.dart';
 import 'package:promas/providers/requests_provider.dart';
 import 'package:promas/providers/user_provider.dart';
@@ -39,6 +41,10 @@ class _DashboardState extends State<Dashboard> {
   final nameController = TextEditingController();
   final descController = TextEditingController();
 
+  Future<CompanyClass?> getCompany() async {
+    return await CompanyProvider().getMyCompany();
+  }
+
   Future<void> getAllProjectss() async {
     await ProjectProvider().getAllProjectsByCompany();
   }
@@ -66,6 +72,7 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await getCompany();
       await initFuncs();
       if (mounted) {
         setState(() {});
@@ -75,9 +82,32 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    List<ProjectClass> projectsIn = returnProject(
-      context,
-    ).projects();
+    List<ProjectClass> getProjectsForEmployee(
+      BuildContext context,
+    ) {
+      final user = returnUser(context).currentUser!;
+      final allProjects = user.isAdmin
+          ? returnProject(context).projects()
+          : returnProject(context).projectsMain;
+      final allBranches = returnBranch(context).branches;
+
+      final projectsIn = allProjects.where((proj) {
+        final projectBranches = allBranches.where(
+          (bran) => bran.projectId == proj.uuid,
+        );
+
+        return projectBranches.any(
+          (bran) => bran.employees.contains(user.id),
+        );
+      }).toList();
+
+      return projectsIn;
+    }
+
+    List<ProjectClass> projectsIn =
+        returnUser(context).currentUser!.isAdmin
+        ? returnProject(context).projects()
+        : getProjectsForEmployee(context);
 
     projectsIn.sort(
       (a, b) => b.createdAt!.compareTo(a.createdAt!),

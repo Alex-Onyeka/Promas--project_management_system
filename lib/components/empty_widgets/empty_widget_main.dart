@@ -41,11 +41,16 @@ class EmptyWidgetMain extends StatelessWidget {
                 title,
               ),
               SizedBox(height: 2),
-              SizedBox(
-                width: 200,
-                child: MainButton(
-                  action: action,
-                  title: buttonText,
+              Visibility(
+                visible: returnUser(
+                  context,
+                ).currentUser!.isAdmin,
+                child: SizedBox(
+                  width: 200,
+                  child: MainButton(
+                    action: action,
+                    title: buttonText,
+                  ),
                 ),
               ),
               SizedBox(height: 55),

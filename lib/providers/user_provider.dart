@@ -92,9 +92,9 @@ class UserProvider extends ChangeNotifier {
           .map((json) => UserClass.fromJson(json))
           .toList();
 
-      users = usersTemp
-          .where((us) => us.id != currentUser?.id)
-          .toList();
+      users = usersTemp;
+      // .where((us) => us.id != currentUser?.id)
+      // .toList();
       print('Users Gotten Success');
       notifyListeners();
       return users;

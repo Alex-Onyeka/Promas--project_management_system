@@ -36,7 +36,13 @@ class _EmployeesState extends State<Employees> {
 
   @override
   Widget build(BuildContext context) {
-    var usersIn = returnUser(context).users;
+    var usersIn = returnUser(context).users
+        .where(
+          (user) =>
+              user.id !=
+              returnUser(context).currentUser!.id,
+        )
+        .toList();
     usersIn.sort((a, b) => a.name.compareTo(b.name));
     return Scaffold(
       body: SingleChildScrollView(

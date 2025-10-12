@@ -236,155 +236,160 @@ class _ProjectPageState extends State<ProjectPage> {
                                                   .end,
                                           spacing: 5,
                                           children: [
-                                            InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                  context:
-                                                      context,
-                                                  builder: (context) {
-                                                    return AddProjectDialog(
-                                                      project:
-                                                          widget.project,
-                                                      nameController:
-                                                          nameController,
-                                                      descController:
-                                                          descController,
-                                                    );
-                                                  },
-                                                ).then((_) {
-                                                  setState(
-                                                    () {},
-                                                  );
-                                                });
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      8.0,
-                                                  vertical:
-                                                      6,
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize
-                                                          .min,
-                                                  spacing:
-                                                      5,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .center,
-                                                  children: [
-                                                    Icon(
-                                                      size:
-                                                          18,
-                                                      color: returnTheme(
+                                            IgnorePointer(
+                                              ignoring:
+                                                  !returnUser(
+                                                    context,
+                                                  ).currentUser!.isAdmin,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  showDialog(
+                                                    context:
                                                         context,
-                                                      ).mediumGrey(),
-                                                      Icons
-                                                          .edit_outlined,
-                                                    ),
-                                                    Text(
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            11,
+                                                    builder:
+                                                        (
+                                                          context,
+                                                        ) {
+                                                          return AddProjectDialog(
+                                                            project: widget.project,
+                                                            nameController: nameController,
+                                                            descController: descController,
+                                                          );
+                                                        },
+                                                  ).then((
+                                                    _,
+                                                  ) {
+                                                    setState(
+                                                      () {},
+                                                    );
+                                                  });
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        8.0,
+                                                    vertical:
+                                                        6,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    spacing:
+                                                        5,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    children: [
+                                                      Icon(
+                                                        size:
+                                                            18,
                                                         color: returnTheme(
                                                           context,
                                                         ).mediumGrey(),
+                                                        Icons.edit_outlined,
                                                       ),
-                                                      'Edit Project',
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: returnTheme(
+                                                            context,
+                                                          ).mediumGrey(),
+                                                        ),
+                                                        'Edit Project',
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                            InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                  context:
-                                                      context,
-                                                  builder: (context) {
-                                                    return ConfirmAlert(
-                                                      isLoading:
-                                                          isLoading,
-                                                      buttonText:
-                                                          isLoading
-                                                          ? 'Deleting...'
-                                                          : 'Delete Project',
-                                                      action: () async {
-                                                        toggleLoading();
-                                                        await returnProject(
+                                            IgnorePointer(
+                                              ignoring:
+                                                  !returnUser(
+                                                    context,
+                                                  ).currentUser!.isAdmin,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  showDialog(
+                                                    context:
+                                                        context,
+                                                    builder:
+                                                        (
                                                           context,
-                                                          listen: false,
-                                                        ).deleteProject(
-                                                          widget.project.uuid!,
-                                                        );
-                                                        if (context.mounted) {
-                                                          print(
-                                                            'Context is Mounted',
+                                                        ) {
+                                                          return ConfirmAlert(
+                                                            isLoading: isLoading,
+                                                            buttonText: isLoading
+                                                                ? 'Deleting...'
+                                                                : 'Delete Project',
+                                                            action: () async {
+                                                              toggleLoading();
+                                                              await returnProject(
+                                                                context,
+                                                                listen: false,
+                                                              ).deleteProject(
+                                                                widget.project.uuid!,
+                                                              );
+                                                              if (context.mounted) {
+                                                                print(
+                                                                  'Context is Mounted',
+                                                                );
+                                                                Navigator.of(
+                                                                  context,
+                                                                ).pop();
+                                                                Navigator.of(
+                                                                  context,
+                                                                ).pop();
+                                                              } else {
+                                                                print(
+                                                                  'Context is Not Mounted',
+                                                                );
+                                                              }
+                                                            },
+                                                            subText: 'Are you sure you want to delete this project?',
+                                                            title: 'Delete Project?',
                                                           );
-                                                          Navigator.of(
-                                                            context,
-                                                          ).pop();
-                                                          Navigator.of(
-                                                            context,
-                                                          ).pop();
-                                                        } else {
-                                                          print(
-                                                            'Context is Not Mounted',
-                                                          );
-                                                        }
-                                                      },
-                                                      subText:
-                                                          'Are you sure you want to delete this project?',
-                                                      title:
-                                                          'Delete Project?',
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      8.0,
-                                                  vertical:
-                                                      6,
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize
-                                                          .min,
-                                                  spacing:
-                                                      5,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .center,
-                                                  children: [
-                                                    Icon(
-                                                      size:
-                                                          18,
-                                                      color: const Color.fromARGB(
-                                                        255,
-                                                        255,
-                                                        92,
-                                                        92,
-                                                      ),
-                                                      Icons
-                                                          .delete_outlined,
-                                                    ),
-                                                    Text(
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            11,
+                                                        },
+                                                  );
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        8.0,
+                                                    vertical:
+                                                        6,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    spacing:
+                                                        5,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    children: [
+                                                      Icon(
+                                                        size:
+                                                            18,
                                                         color: const Color.fromARGB(
                                                           255,
                                                           255,
                                                           92,
                                                           92,
                                                         ),
+                                                        Icons.delete_outlined,
                                                       ),
-                                                      'Delete Project',
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: const Color.fromARGB(
+                                                            255,
+                                                            255,
+                                                            92,
+                                                            92,
+                                                          ),
+                                                        ),
+                                                        'Delete Project',
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -415,54 +420,62 @@ class _ProjectPageState extends State<ProjectPage> {
                                             ),
                                             'BRANCHES',
                                           ),
-                                          InkWell(
-                                            onTap: () async {
-                                              await createBranch(
-                                                context:
-                                                    context,
-                                                descController:
-                                                    descController,
-                                                nameController:
-                                                    nameController,
-                                                projectId: widget
-                                                    .project
-                                                    .uuid!,
-                                              );
-                                              setState(
-                                                () {},
-                                              );
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  EdgeInsets.symmetric(
-                                                    vertical:
-                                                        10,
-                                                    horizontal:
-                                                        10,
-                                                  ),
-                                              child: Row(
-                                                spacing: 3,
-                                                children: [
-                                                  Icon(
-                                                    color: returnTheme(
+                                          IgnorePointer(
+                                            ignoring:
+                                                !returnUser(
                                                       context,
-                                                    ).darkMediumGrey(),
-                                                    size:
-                                                        18,
-                                                    Icons
-                                                        .add,
-                                                  ),
-                                                  Text(
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          11,
+                                                    )
+                                                    .currentUser!
+                                                    .isAdmin,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                await createBranch(
+                                                  context:
+                                                      context,
+                                                  descController:
+                                                      descController,
+                                                  nameController:
+                                                      nameController,
+                                                  projectId: widget
+                                                      .project
+                                                      .uuid!,
+                                                );
+                                                setState(
+                                                  () {},
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical:
+                                                      10,
+                                                  horizontal:
+                                                      10,
+                                                ),
+                                                child: Row(
+                                                  spacing:
+                                                      3,
+                                                  children: [
+                                                    Icon(
                                                       color: returnTheme(
                                                         context,
                                                       ).darkMediumGrey(),
+                                                      size:
+                                                          18,
+                                                      Icons
+                                                          .add,
                                                     ),
-                                                    'Create New Branch',
-                                                  ),
-                                                ],
+                                                    Text(
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            11,
+                                                        color: returnTheme(
+                                                          context,
+                                                        ).darkMediumGrey(),
+                                                      ),
+                                                      'Create New Branch',
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -668,51 +681,64 @@ class _BranchListTileState extends State<BranchListTile> {
                             mainAxisAlignment:
                                 MainAxisAlignment.start,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  updateBranch(
-                                    branch: widget.branch,
-                                    context: context,
-                                    setState: () {
-                                      setState(() {
-                                        widget.action();
-                                      });
-                                    },
-                                  );
-                                },
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(
-                                        horizontal: 20.0,
-                                        vertical: 15,
-                                      ),
-                                  child: Row(
-                                    spacing: 3,
-                                    mainAxisSize:
-                                        MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          color:
-                                              returnTheme(
-                                                context,
-                                              ).darkGrey(),
+                              IgnorePointer(
+                                ignoring:
+                                    !returnUser(context)
+                                        .currentUser!
+                                        .isAdmin &&
+                                    !widget.branch.employees
+                                        .contains(
+                                          returnUser(
+                                            context,
+                                          ).currentUser!.id,
                                         ),
-                                        calcPercentageSingle(
-                                          widget
-                                              .branch
-                                              .level,
+                                child: InkWell(
+                                  onTap: () {
+                                    updateBranch(
+                                      branch: widget.branch,
+                                      context: context,
+                                      setState: () {
+                                        setState(() {
+                                          widget.action();
+                                        });
+                                      },
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(
+                                          horizontal: 20.0,
+                                          vertical: 15,
                                         ),
-                                      ),
-                                      Icon(
-                                        size: 18,
-                                        color: returnTheme(
-                                          context,
-                                        ).mediumGrey(),
-                                        Icons.edit_outlined,
-                                      ),
-                                    ],
+                                    child: Row(
+                                      spacing: 3,
+                                      mainAxisSize:
+                                          MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color:
+                                                returnTheme(
+                                                  context,
+                                                ).darkGrey(),
+                                          ),
+                                          calcPercentageSingle(
+                                            widget
+                                                .branch
+                                                .level,
+                                          ),
+                                        ),
+                                        Icon(
+                                          size: 18,
+                                          color: returnTheme(
+                                            context,
+                                          ).mediumGrey(),
+                                          Icons
+                                              .edit_outlined,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -788,114 +814,113 @@ class _BranchListTileState extends State<BranchListTile> {
                               MainAxisAlignment.end,
                           spacing: 0,
                           children: [
-                            InkWell(
-                              onTap: () async {
-                                await createBranch(
-                                  branch: widget.branch,
-                                  context: context,
-                                  descController:
-                                      widget.descController,
-                                  nameController:
-                                      widget.nameController,
-                                  projectId: widget
-                                      .branch
-                                      .projectId,
-                                );
-                                widget.action();
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(
-                                      horizontal: 6.0,
-                                      vertical: 6,
-                                    ),
-                                child: Row(
-                                  mainAxisSize:
-                                      MainAxisSize.min,
-                                  spacing: 3,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment
-                                          .center,
-                                  children: [
-                                    Icon(
-                                      size: 18,
-                                      color: returnTheme(
-                                        context,
-                                      ).mediumGrey(),
-                                      Icons.edit_outlined,
-                                    ),
-                                    Text(
-                                      style: TextStyle(
-                                        fontSize: 11,
+                            IgnorePointer(
+                              ignoring: !returnUser(
+                                context,
+                              ).currentUser!.isAdmin,
+                              child: InkWell(
+                                onTap: () async {
+                                  await createBranch(
+                                    branch: widget.branch,
+                                    context: context,
+                                    descController: widget
+                                        .descController,
+                                    nameController: widget
+                                        .nameController,
+                                    projectId: widget
+                                        .branch
+                                        .projectId,
+                                  );
+                                  widget.action();
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(
+                                        horizontal: 6.0,
+                                        vertical: 6,
+                                      ),
+                                  child: Row(
+                                    mainAxisSize:
+                                        MainAxisSize.min,
+                                    spacing: 3,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .center,
+                                    children: [
+                                      Icon(
+                                        size: 18,
                                         color: returnTheme(
                                           context,
                                         ).mediumGrey(),
+                                        Icons.edit_outlined,
                                       ),
-                                      'Edit',
-                                    ),
-                                  ],
+                                      Text(
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: returnTheme(
+                                            context,
+                                          ).mediumGrey(),
+                                        ),
+                                        'Edit',
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return ConfirmAlert(
-                                      isLoading: isLoading,
-                                      buttonText: 'Delete',
-                                      action: () async {
-                                        toggleLoading();
-                                        setState(() {});
-                                        await returnBranch(
-                                          context,
-                                          listen: false,
-                                        ).deleteBranch(
-                                          widget
-                                              .branch
-                                              .uuid!,
-                                        );
-                                        Navigator.of(
-                                          context,
-                                        ).pop();
-                                      },
-                                      subText:
-                                          'Are you sure you want to delete this Branch?',
-                                      title:
-                                          'Delete Branch?',
-                                    );
-                                  },
-                                );
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(
-                                      horizontal: 6.0,
-                                      vertical: 6,
-                                    ),
-                                child: Row(
-                                  mainAxisSize:
-                                      MainAxisSize.min,
-                                  spacing: 3,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment
-                                          .center,
-                                  children: [
-                                    Icon(
-                                      size: 18,
-                                      color:
-                                          const Color.fromARGB(
-                                            255,
-                                            255,
-                                            92,
-                                            92,
-                                          ),
-                                      Icons.delete_outlined,
-                                    ),
-                                    Text(
-                                      style: TextStyle(
-                                        fontSize: 11,
+                            IgnorePointer(
+                              ignoring: !returnUser(
+                                context,
+                              ).currentUser!.isAdmin,
+                              child: InkWell(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return ConfirmAlert(
+                                        isLoading:
+                                            isLoading,
+                                        buttonText:
+                                            'Delete',
+                                        action: () async {
+                                          toggleLoading();
+                                          setState(() {});
+                                          await returnBranch(
+                                            context,
+                                            listen: false,
+                                          ).deleteBranch(
+                                            widget
+                                                .branch
+                                                .uuid!,
+                                          );
+                                          Navigator.of(
+                                            context,
+                                          ).pop();
+                                        },
+                                        subText:
+                                            'Are you sure you want to delete this Branch?',
+                                        title:
+                                            'Delete Branch?',
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(
+                                        horizontal: 6.0,
+                                        vertical: 6,
+                                      ),
+                                  child: Row(
+                                    mainAxisSize:
+                                        MainAxisSize.min,
+                                    spacing: 3,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .center,
+                                    children: [
+                                      Icon(
+                                        size: 18,
                                         color:
                                             const Color.fromARGB(
                                               255,
@@ -903,10 +928,24 @@ class _BranchListTileState extends State<BranchListTile> {
                                               92,
                                               92,
                                             ),
+                                        Icons
+                                            .delete_outlined,
                                       ),
-                                      'Delete ',
-                                    ),
-                                  ],
+                                      Text(
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color:
+                                              const Color.fromARGB(
+                                                255,
+                                                255,
+                                                92,
+                                                92,
+                                              ),
+                                        ),
+                                        'Delete ',
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -996,67 +1035,71 @@ class _BranchListTileState extends State<BranchListTile> {
                                                 ),
                                                 'No Staff Added to this Project',
                                               ),
-                                              InkWell(
-                                                onTap: () {
-                                                  showDialog(
-                                                    context:
-                                                        context,
-                                                    builder:
-                                                        (
+                                              IgnorePointer(
+                                                ignoring: !returnUser(
+                                                  context,
+                                                ).currentUser!.isAdmin,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context:
                                                           context,
-                                                        ) {
-                                                          return StatefulBuilder(
-                                                            builder:
-                                                                (
-                                                                  context,
-                                                                  setState,
-                                                                ) {
-                                                                  return SelectStaffDialog(
-                                                                    branch: widget.branch,
-                                                                    selectStaff: () {},
-                                                                  );
-                                                                },
-                                                          );
-                                                        },
-                                                  ).then((
-                                                    _,
-                                                  ) {
-                                                    setState(
-                                                      () {},
-                                                    );
-                                                  });
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(
-                                                    vertical:
-                                                        3.0,
-                                                    horizontal:
-                                                        10,
-                                                  ),
-                                                  child: Row(
-                                                    spacing:
-                                                        5,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.center,
-                                                    children: [
-                                                      Icon(
-                                                        size:
-                                                            15,
-                                                        color: returnTheme(
-                                                          context,
-                                                        ).secondaryColor(),
-                                                        Icons.add,
-                                                      ),
-                                                      Text(
-                                                        style: TextStyle(
-                                                          fontSize: 11,
+                                                      builder:
+                                                          (
+                                                            context,
+                                                          ) {
+                                                            return StatefulBuilder(
+                                                              builder:
+                                                                  (
+                                                                    context,
+                                                                    setState,
+                                                                  ) {
+                                                                    return SelectStaffDialog(
+                                                                      branch: widget.branch,
+                                                                      selectStaff: () {},
+                                                                    );
+                                                                  },
+                                                            );
+                                                          },
+                                                    ).then((
+                                                      _,
+                                                    ) {
+                                                      setState(
+                                                        () {},
+                                                      );
+                                                    });
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(
+                                                      vertical:
+                                                          3.0,
+                                                      horizontal:
+                                                          10,
+                                                    ),
+                                                    child: Row(
+                                                      spacing:
+                                                          5,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.center,
+                                                      children: [
+                                                        Icon(
+                                                          size: 15,
                                                           color: returnTheme(
                                                             context,
                                                           ).secondaryColor(),
+                                                          Icons.add,
                                                         ),
-                                                        'Add Staff',
-                                                      ),
-                                                    ],
+                                                        Text(
+                                                          style: TextStyle(
+                                                            fontSize: 11,
+                                                            color: returnTheme(
+                                                              context,
+                                                            ).secondaryColor(),
+                                                          ),
+                                                          'Add Staff',
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),

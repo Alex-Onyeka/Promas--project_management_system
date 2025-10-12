@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
 import 'package:promas/components/buttons/main_button.dart';
 import 'package:promas/components/empty_widgets/empty_widget_main.dart';
@@ -70,7 +71,31 @@ class _ProjectsState extends State<Projects> {
 
   @override
   Widget build(BuildContext context) {
-    var projectIn = returnProject(context).projectsMain;
+    List<ProjectClass> getProjectsForEmployee(
+      BuildContext context,
+    ) {
+      final user = returnUser(context).currentUser!;
+      final allProjects = returnProject(
+        context,
+      ).projectsMain;
+      final allBranches = returnBranch(context).branches;
+
+      final projectsIn = allProjects.where((proj) {
+        final projectBranches = allBranches.where(
+          (bran) => bran.projectId == proj.uuid,
+        );
+
+        return projectBranches.any(
+          (bran) => bran.employees.contains(user.id),
+        );
+      }).toList();
+
+      return projectsIn;
+    }
+
+    List<ProjectClass> projectIn = getProjectsForEmployee(
+      context,
+    );
     projectIn.sort(
       (a, b) => b.createdAt!.compareTo(a.createdAt!),
     );
