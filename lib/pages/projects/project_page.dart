@@ -3,7 +3,9 @@ import 'package:promas/classes/branch_class.dart';
 import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/add_branch_dialog.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
-import 'package:promas/components/alert_dialogues/confirm_alert.dart';
+import 'package:promas/components/alert_dialogues/delete_branch_dialog.dart';
+import 'package:promas/components/alert_dialogues/delete_project_dialog.dart';
+import 'package:promas/components/alert_dialogues/remove_staff_dialog.dart';
 import 'package:promas/components/alert_dialogues/select_staff_dialog.dart';
 import 'package:promas/components/alert_dialogues/update_level_dialog.dart';
 import 'package:promas/components/empty_widgets/empty_widget_alt.dart';
@@ -315,37 +317,8 @@ class _ProjectPageState extends State<ProjectPage> {
                                                         (
                                                           context,
                                                         ) {
-                                                          return ConfirmAlert(
-                                                            isLoading: isLoading,
-                                                            buttonText: isLoading
-                                                                ? 'Deleting...'
-                                                                : 'Delete Project',
-                                                            action: () async {
-                                                              toggleLoading();
-                                                              await returnProject(
-                                                                context,
-                                                                listen: false,
-                                                              ).deleteProject(
-                                                                widget.project.uuid!,
-                                                              );
-                                                              if (context.mounted) {
-                                                                print(
-                                                                  'Context is Mounted',
-                                                                );
-                                                                Navigator.of(
-                                                                  context,
-                                                                ).pop();
-                                                                Navigator.of(
-                                                                  context,
-                                                                ).pop();
-                                                              } else {
-                                                                print(
-                                                                  'Context is Not Mounted',
-                                                                );
-                                                              }
-                                                            },
-                                                            subText: 'Are you sure you want to delete this project?',
-                                                            title: 'Delete Project?',
+                                                          return DeleteProjectDialog(
+                                                            project: widget.project,
                                                           );
                                                         },
                                                   );
@@ -635,21 +608,21 @@ class _BranchListTileState extends State<BranchListTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 2.5),
       child: Ink(
         decoration: BoxDecoration(
           color: returnTheme(context).white(),
-          borderRadius: mainBorderRadius,
-          border: Border.all(
-            color: const Color.fromARGB(20, 66, 66, 66),
-          ),
+          // borderRadius: mainBorderRadius,
+          // border: Border.all(
+          //   color: const Color.fromARGB(20, 66, 66, 66),
+          // ),
         ),
         child: SizedBox(
           child: Column(
             children: [
               Ink(
                 child: InkWell(
-                  borderRadius: mainBorderRadius,
+                  // borderRadius: mainBorderRadius,
                   onTap: () {
                     setState(() {
                       isOpen = !isOpen;
@@ -667,12 +640,14 @@ class _BranchListTileState extends State<BranchListTile> {
                         Expanded(
                           child: Text(
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
                               color: returnTheme(
                                 context,
-                              ).darkGrey(),
+                              ).darkMediumGrey(),
                             ),
-                            widget.branch.name,
+                            widget.branch.name
+                                .toUpperCase(),
                           ),
                         ),
                         Expanded(
@@ -877,30 +852,9 @@ class _BranchListTileState extends State<BranchListTile> {
                                   showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return ConfirmAlert(
-                                        isLoading:
-                                            isLoading,
-                                        buttonText:
-                                            'Delete',
-                                        action: () async {
-                                          toggleLoading();
-                                          setState(() {});
-                                          await returnBranch(
-                                            context,
-                                            listen: false,
-                                          ).deleteBranch(
-                                            widget
-                                                .branch
-                                                .uuid!,
-                                          );
-                                          Navigator.of(
-                                            context,
-                                          ).pop();
-                                        },
-                                        subText:
-                                            'Are you sure you want to delete this Branch?',
-                                        title:
-                                            'Delete Branch?',
+                                      return DeleteBranchDialog(
+                                        branch:
+                                            widget.branch,
                                       );
                                     },
                                   );
@@ -1184,27 +1138,9 @@ class _BranchListTileState extends State<BranchListTile> {
                                                                     (
                                                                       context,
                                                                     ) {
-                                                                      return ConfirmAlert(
-                                                                        isLoading: isLoading,
-                                                                        buttonText: 'Remove Staff',
-                                                                        action: () async {
-                                                                          // toggleLoading();
-                                                                          await returnBranch(
-                                                                            context,
-                                                                            listen: false,
-                                                                          ).removeStaffFromBranch(
-                                                                            widget.branch.uuid!,
-                                                                            use.id!,
-                                                                          );
-                                                                          // toggleLoading();
-                                                                          if (context.mounted) {
-                                                                            Navigator.of(
-                                                                              context,
-                                                                            ).pop();
-                                                                          }
-                                                                        },
-                                                                        subText: 'Are you sure you want to remove this staff from the Branch?',
-                                                                        title: 'Remove Staff?',
+                                                                      return RemoveStaffDialog(
+                                                                        branch: widget.branch,
+                                                                        user: use,
                                                                       );
                                                                     },
                                                               );
@@ -1397,7 +1333,8 @@ class DashboardContainers extends StatelessWidget {
               Text(
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
                   color: returnTheme(
                     context,
                   ).darkMediumGrey(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:promas/classes/user_class.dart';
-import 'package:promas/components/alert_dialogues/confirm_alert.dart';
+import 'package:promas/components/alert_dialogues/delete_staff_dialog.dart';
+import 'package:promas/components/alert_dialogues/edit_user_isadmin_dialog.dart';
 import 'package:promas/components/empty_widgets/empty_widget_alt.dart';
 import 'package:promas/components/main_divider.dart';
 import 'package:promas/constants/general_constants.dart';
@@ -503,20 +504,7 @@ class _EmployeesState extends State<Employees> {
     return showDialog(
       context: context,
       builder: (context) {
-        return ConfirmAlert(
-          buttonText: 'Delete Staff',
-          action: () async {
-            await UserProvider().removeUserFromCompany(
-              user.id!,
-            );
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
-          },
-          subText:
-              'Are you sure you want to Staff From Company?',
-          title: 'Delete Staff?',
-        );
+        return DeleteStaffDialog(user: user);
       },
     );
   }
@@ -529,20 +517,9 @@ class _EmployeesState extends State<Employees> {
     return showDialog(
       context: context,
       builder: (context) {
-        return ConfirmAlert(
-          buttonText: 'Make Admin',
-          action: () async {
-            await UserProvider().editUserIdAdmin(
-              user.id!,
-              boolValue,
-            );
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
-          },
-          subText:
-              'Are you sure you want to make this staff an Admin?',
-          title: 'Make Staff Admin?',
+        return EditUserIsAdminDialog(
+          user: user,
+          boolValue: boolValue,
         );
       },
     );

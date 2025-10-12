@@ -93,9 +93,10 @@ class _ProjectsState extends State<Projects> {
       return projectsIn;
     }
 
-    List<ProjectClass> projectIn = getProjectsForEmployee(
-      context,
-    );
+    List<ProjectClass> projectIn =
+        returnUser(context).currentUser!.isAdmin
+        ? returnProject(context).projectsMain
+        : getProjectsForEmployee(context);
     projectIn.sort(
       (a, b) => b.createdAt!.compareTo(a.createdAt!),
     );

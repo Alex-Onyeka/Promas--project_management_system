@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:promas/components/alert_dialogues/confirm_alert.dart';
+import 'package:promas/components/alert_dialogues/logout_dialog.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
-import 'package:promas/services/auth_service.dart';
 
 class MainSideBar extends StatefulWidget {
   final bool isMain;
@@ -151,25 +150,11 @@ class _MainSideBarState extends State<MainSideBar> {
                     ).currentPage,
                     index: 10,
                     action: () {
-                      var safeContext = context;
+                      // var safeContext = context;
                       showDialog(
                         context: context,
                         builder: (context) {
-                          return ConfirmAlert(
-                            isLoading: isLoading,
-                            subText:
-                                'Are you sure you want to Log out?',
-                            title: 'Logout?',
-                            action: () async {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              await AuthService().signOut(
-                                context: safeContext,
-                              );
-                            },
-                            buttonText: 'Proceed',
-                          );
+                          return LogoutDialog();
                         },
                       );
                     },

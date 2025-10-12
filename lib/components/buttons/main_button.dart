@@ -19,7 +19,7 @@ class MainButton extends StatefulWidget {
 }
 
 class _MainButtonState extends State<MainButton> {
-  bool isLoading = false;
+  // bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -53,9 +53,9 @@ class _MainButtonState extends State<MainButton> {
           ),
           child: InkWell(
             onTap: () {
-              setState(() {
-                isLoading = true;
-              });
+              // setState(() {
+              //   isLoading = true;
+              // });
               widget.action();
             },
             child: Container(
@@ -92,11 +92,12 @@ class _MainButtonState extends State<MainButton> {
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: !isLoading,
-                      // widget.loadingWidget == null ||
-                      // (widget.loadingWidget != null &&
-                      //     widget.loadingWidget ==
-                      //         false),
+                      visible:
+                          // !isLoading,
+                          widget.loadingWidget == null ||
+                          (widget.loadingWidget != null &&
+                              widget.loadingWidget ==
+                                  false),
                       child: Text(
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -108,9 +109,10 @@ class _MainButtonState extends State<MainButton> {
                       ),
                     ),
                     Visibility(
-                      visible: isLoading,
-                      // widget.loadingWidget != null &&
-                      // widget.loadingWidget == true,
+                      visible:
+                          //  isLoading,
+                          widget.loadingWidget != null &&
+                          widget.loadingWidget == true,
                       child: Center(
                         child: SizedBox(
                           height: 20,

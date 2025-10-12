@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:promas/classes/request_class.dart';
-import 'package:promas/components/alert_dialogues/confirm_alert.dart';
+import 'package:promas/components/alert_dialogues/accept_request_dialog.dart';
+import 'package:promas/components/alert_dialogues/decline_request_dialog.dart';
 import 'package:promas/components/empty_widgets/empty_widget_alt.dart';
 import 'package:promas/components/main_divider.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
 import 'package:promas/providers/requests_provider.dart';
-import 'package:promas/providers/user_provider.dart';
 
 class Requests extends StatefulWidget {
   const Requests({super.key});
@@ -100,9 +100,7 @@ class _RequestsState extends State<Requests> {
                                 buttonText: '',
                                 title:
                                     'No Requests Sent Yet',
-                                action: () async {
-                                  // await createProject();
-                                },
+                                action: () async {},
                               ),
                             ),
                           ),
@@ -615,20 +613,7 @@ class _RequestsState extends State<Requests> {
     return showDialog(
       context: context,
       builder: (context) {
-        return ConfirmAlert(
-          buttonText: 'Decline Request',
-          action: () async {
-            await RequestsProvider().deleteRequest(
-              req.userId!,
-            );
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
-          },
-          subText:
-              'Are you sure you want to decline this request?',
-          title: 'Decline Request?',
-        );
+        return DeclineRequestDialog(request: req);
       },
     );
   }
@@ -640,20 +625,7 @@ class _RequestsState extends State<Requests> {
     return showDialog(
       context: context,
       builder: (context) {
-        return ConfirmAlert(
-          buttonText: 'Accept Request',
-          action: () async {
-            await UserProvider().addUserToCompany(
-              req.userId!,
-            );
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
-          },
-          subText:
-              'Are you sure you want to accept this request?',
-          title: 'Accept Request?',
-        );
+        return AcceptRequestDialog(request: req);
       },
     );
   }

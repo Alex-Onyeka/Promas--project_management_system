@@ -44,6 +44,8 @@ class _UpdateLevelDialogState
     });
   }
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return AlertPlaceholder(
@@ -176,7 +178,11 @@ class _UpdateLevelDialogState
               ),
               SizedBox(height: 10),
               MainButton(
+                loadingWidget: isLoading,
                 action: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
                   widget.branch.level = level;
                   await returnBranch(
                     context,
@@ -186,6 +192,9 @@ class _UpdateLevelDialogState
                     widget.branch,
                   );
                   widget.updateBranch();
+                  setState(() {
+                    isLoading = false;
+                  });
                   Navigator.of(context).pop();
                 },
                 title: 'Update Branch Level',
