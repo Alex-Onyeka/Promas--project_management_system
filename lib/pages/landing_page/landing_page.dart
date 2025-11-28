@@ -8,6 +8,7 @@ import 'package:promas/main.dart';
 import 'package:promas/pages/company/company_setup.dart';
 import 'package:promas/pages/dashboard.dart/dashboard.dart';
 import 'package:promas/pages/employees/employees.dart';
+import 'package:promas/pages/privacy_poilcy.dart/privacy_policy.dart';
 import 'package:promas/pages/projects/projects.dart';
 import 'package:promas/pages/requests/requests.dart';
 import 'package:promas/pages/user_page/user_page.dart';
@@ -108,7 +109,12 @@ class _LandingPageState extends State<LandingPage> {
                                             ).currentPage ==
                                             3
                                       ? Requests()
-                                      : UserPage(),
+                                      : returnNav(
+                                              context,
+                                            ).currentPage ==
+                                            4
+                                      ? UserPage()
+                                      : PrivacyPolicy(),
                                 ),
                               ),
                             ),

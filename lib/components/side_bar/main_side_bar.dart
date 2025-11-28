@@ -148,6 +148,17 @@ class _MainSideBarState extends State<MainSideBar> {
                     currentSelected: returnNav(
                       context,
                     ).currentPage,
+                    index: 5,
+                    action: () {
+                      navigateNow(5);
+                    },
+                    title: 'Privacy Policy',
+                    icon: Icons.document_scanner,
+                  ),
+                  MenuListItem(
+                    currentSelected: returnNav(
+                      context,
+                    ).currentPage,
                     index: 10,
                     action: () {
                       // var safeContext = context;
