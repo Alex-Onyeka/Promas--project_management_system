@@ -6,6 +6,8 @@ import 'package:promas/components/buttons/secondary_button.dart';
 import 'package:promas/components/sections/heading_section.dart';
 import 'package:promas/components/text_fields/normal_textfield.dart';
 import 'package:promas/main.dart';
+import 'package:promas/pages/base_page.dart';
+import 'package:promas/services/auth_service.dart';
 
 class EditProfileDialog extends StatefulWidget {
   final TextEditingController nameController;
@@ -94,6 +96,100 @@ class _EditProfileDialogState
               SizedBox(height: 4),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class DeleteAccountDialog extends StatefulWidget {
+  const DeleteAccountDialog({super.key});
+
+  @override
+  State<DeleteAccountDialog> createState() =>
+      _DeleteAccountDialogState();
+}
+
+class _DeleteAccountDialogState
+    extends State<DeleteAccountDialog> {
+  bool isLoading = false;
+
+  void toggleLoading(bool value) {
+    setState(() {
+      isLoading = value;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertPlaceholder(
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 5,
+          children: [
+            HeadingSection(
+              title: 'Delete Account',
+              subText:
+                  'Are you sure you want to delete your account?',
+            ),
+            SizedBox(height: 10),
+            MainButton(
+              action: () async {
+                toggleLoading(true);
+                var res = await AuthService()
+                    .deleteAuthAccount();
+                if (res == 1) {
+                  var useracc = returnUser(
+                    context,
+                    listen: false,
+                  ).currentUser!;
+
+                  await returnUser(
+                    context,
+                    listen: false,
+                  ).deleteUser(useracc.id!);
+                  if (useracc.isAdmin) {
+                    await returnCompany(
+                      context,
+                      listen: false,
+                    ).deleteCompany(
+                      returnCompany(
+                        context,
+                        listen: false,
+                      ).currentCompany!.id!,
+                    );
+                  }
+                  toggleLoading(false);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BasePage();
+                      },
+                    ),
+                  );
+                } else {
+                  Navigator.of(context).pop();
+                }
+              },
+              title: 'Delete Account',
+              loadingWidget: isLoading,
+            ),
+            SizedBox(height: 4),
+            SecondaryButton(
+              title: 'Cancel',
+              action: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            SizedBox(height: 4),
+          ],
         ),
       ),
     );

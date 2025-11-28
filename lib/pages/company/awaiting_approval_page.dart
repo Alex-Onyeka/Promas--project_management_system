@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promas/components/buttons/main_button.dart';
+import 'package:promas/components/buttons/secondary_button.dart';
 import 'package:promas/components/containers/auth_container.dart';
 import 'package:promas/components/loading_widget.dart';
 import 'package:promas/main.dart';
@@ -112,6 +113,16 @@ class _AwaitingApprovalPageState
                                   },
                                   title:
                                       'Check for Approval',
+                                ),
+                                SizedBox(height: 10),
+                                SecondaryButton(
+                                  title: 'Logout',
+                                  action: () async {
+                                    await AuthService()
+                                        .signOut(
+                                          context: context,
+                                        );
+                                  },
                                 ),
                               ],
                             ),

@@ -110,58 +110,112 @@ class _UserPageState extends State<UserPage> {
                             width: 300,
                             color: greyNeutral(),
                           ),
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return EditProfileDialog(
-                                      nameController:
-                                          nameController,
-                                      user: UserProvider()
-                                          .currentUser!,
-                                    );
+                          Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center,
+                            spacing: 10,
+                            children: [
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return EditProfileDialog(
+                                          nameController:
+                                              nameController,
+                                          user: UserProvider()
+                                              .currentUser!,
+                                        );
+                                      },
+                                    ).then((_) {
+                                      setState(() {});
+                                    });
                                   },
-                                ).then((_) {
-                                  setState(() {});
-                                });
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(
-                                      horizontal: 50.0,
-                                      vertical: 10,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(
+                                          horizontal: 10.0,
+                                          vertical: 10,
+                                        ),
+                                    child: Row(
+                                      mainAxisSize:
+                                          MainAxisSize.min,
+                                      spacing: 5,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .center,
+                                      children: [
+                                        Icon(
+                                          size: 18,
+                                          color: returnTheme(
+                                            context,
+                                          ).mediumGrey(),
+                                          Icons
+                                              .edit_outlined,
+                                        ),
+                                        Text(
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: returnTheme(
+                                              context,
+                                            ).mediumGrey(),
+                                          ),
+                                          'Edit Profile',
+                                        ),
+                                      ],
                                     ),
-                                child: Row(
-                                  mainAxisSize:
-                                      MainAxisSize.min,
-                                  spacing: 5,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment
-                                          .center,
-                                  children: [
-                                    Icon(
-                                      size: 18,
-                                      color: returnTheme(
-                                        context,
-                                      ).mediumGrey(),
-                                      Icons.edit_outlined,
-                                    ),
-                                    Text(
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: returnTheme(
-                                          context,
-                                        ).mediumGrey(),
-                                      ),
-                                      'Edit Profile',
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return DeleteAccountDialog();
+                                      },
+                                    ).then((_) {
+                                      setState(() {});
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(
+                                          horizontal: 10.0,
+                                          vertical: 10,
+                                        ),
+                                    child: Row(
+                                      mainAxisSize:
+                                          MainAxisSize.min,
+                                      spacing: 5,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .center,
+                                      children: [
+                                        Icon(
+                                          size: 18,
+                                          color: Colors.red,
+                                          Icons
+                                              .delete_forever_outlined,
+                                        ),
+                                        Text(
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color:
+                                                Colors.red,
+                                          ),
+                                          'Delete Account',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -243,59 +297,122 @@ class _UserPageState extends State<UserPage> {
                                 width: 300,
                                 color: greyNeutral(),
                               ),
-                              Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return EditProfileDialog(
-                                          nameController:
-                                              nameController,
-                                          user: UserProvider()
-                                              .currentUser!,
-                                        );
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment
+                                        .center,
+                                spacing: 10,
+                                children: [
+                                  Material(
+                                    color:
+                                        Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return EditProfileDialog(
+                                              nameController:
+                                                  nameController,
+                                              user: UserProvider()
+                                                  .currentUser!,
+                                            );
+                                          },
+                                        ).then((_) {
+                                          setState(() {});
+                                        });
                                       },
-                                    ).then((_) {
-                                      setState(() {});
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(
-                                          horizontal: 50.0,
-                                          vertical: 10,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal:
+                                                  10.0,
+                                              vertical: 10,
+                                            ),
+                                        child: Row(
+                                          mainAxisSize:
+                                              MainAxisSize
+                                                  .min,
+                                          spacing: 5,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .center,
+                                          children: [
+                                            Icon(
+                                              size: 18,
+                                              color: returnTheme(
+                                                context,
+                                              ).mediumGrey(),
+                                              Icons
+                                                  .edit_outlined,
+                                            ),
+                                            Text(
+                                              style: TextStyle(
+                                                fontSize:
+                                                    11,
+                                                color: returnTheme(
+                                                  context,
+                                                ).mediumGrey(),
+                                              ),
+                                              'Edit Profile',
+                                            ),
+                                          ],
                                         ),
-                                    child: Row(
-                                      mainAxisSize:
-                                          MainAxisSize.min,
-                                      spacing: 5,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .center,
-                                      children: [
-                                        Icon(
-                                          size: 18,
-                                          color: returnTheme(
-                                            context,
-                                          ).mediumGrey(),
-                                          Icons
-                                              .edit_outlined,
-                                        ),
-                                        Text(
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color: returnTheme(
-                                              context,
-                                            ).mediumGrey(),
-                                          ),
-                                          'Edit Profile',
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  Material(
+                                    color:
+                                        Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return DeleteAccountDialog();
+                                          },
+                                        ).then((_) {
+                                          setState(() {});
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal:
+                                                  10.0,
+                                              vertical: 10,
+                                            ),
+                                        child: Row(
+                                          mainAxisSize:
+                                              MainAxisSize
+                                                  .min,
+                                          spacing: 5,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .center,
+                                          children: [
+                                            Icon(
+                                              size: 18,
+                                              color: Colors
+                                                  .red,
+                                              Icons
+                                                  .delete_forever_outlined,
+                                            ),
+                                            Text(
+                                              style: TextStyle(
+                                                fontSize:
+                                                    11,
+                                                color: Colors
+                                                    .red,
+                                              ),
+                                              'Delete Account',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

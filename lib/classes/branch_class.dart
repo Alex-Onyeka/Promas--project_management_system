@@ -23,15 +23,21 @@ class BranchClass {
 
   factory BranchClass.fromJson(Map<String, dynamic> json) {
     return BranchClass(
-      uuid: json['uuid'] as String,
-      createdAt: DateTime.parse(json['created_at']),
-      lastUpdate: DateTime.parse(json['last_update']),
-      name: json['name'],
+      uuid: json['uuid'] as String?,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : null,
+      lastUpdate: json['last_update'] != null
+          ? DateTime.parse(json['last_update'])
+          : null,
+      name: json['name'] ?? '',
       desc: json['desc'],
-      projectId: json['project_id'],
-      level: (json['level']) as double,
-      employees: List<String>.from(json['employees']),
-      companyId: json['company_id'],
+      projectId: json['project_id'] ?? '',
+      level: (json['level'] as num?)?.toDouble() ?? 0.0,
+      employees: json['employees'] != null
+          ? List<String>.from(json['employees'])
+          : [],
+      companyId: json['company_id'] as int,
     );
   }
 

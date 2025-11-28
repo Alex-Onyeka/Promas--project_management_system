@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promas/pages/base_page.dart';
+import 'package:promas/pages/user_page/user_page.dart';
 import 'package:promas/providers/branch_provider.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/nav_provider.dart';
@@ -130,7 +131,10 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: '/',
-      routes: {'/': (context) => BasePage()},
+      routes: {
+        '/': (context) => BasePage(),
+        'delete_account': (context) => UserPage(),
+      },
     );
   }
 }

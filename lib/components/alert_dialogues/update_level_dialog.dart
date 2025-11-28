@@ -249,7 +249,7 @@ class BranchPercentageSelectionContainer
                 fontWeight: FontWeight.bold,
                 color: returnTheme(context).mediumGrey(),
               ),
-              '$percentage%',
+              '${percentage.toStringAsFixed(0)}%',
             ),
             Container(
               padding: EdgeInsets.all(3),

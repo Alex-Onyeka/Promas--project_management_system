@@ -752,30 +752,34 @@ class _BranchListTileState extends State<BranchListTile> {
                         visible: widget.branch.desc != null,
                         child: Row(
                           children: [
-                            Column(
-                              spacing: 2,
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    color: returnTheme(
-                                      context,
-                                    ).mediumGrey(),
+                            Flexible(
+                              child: Column(
+                                spacing: 2,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment
+                                        .start,
+                                children: [
+                                  Text(
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      color: returnTheme(
+                                        context,
+                                      ).mediumGrey(),
+                                    ),
+                                    'Branch Description:',
                                   ),
-                                  'Branch Description:',
-                                ),
-                                Text(
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: returnTheme(
-                                      context,
-                                    ).darkMediumGrey(),
+                                  Text(
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: returnTheme(
+                                        context,
+                                      ).darkMediumGrey(),
+                                    ),
+                                    widget.branch.desc ??
+                                        '',
                                   ),
-                                  widget.branch.desc ?? '',
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),

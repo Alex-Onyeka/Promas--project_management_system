@@ -108,29 +108,62 @@ class AuthService {
   Stream<AuthState> get authStateChanges =>
       _client.auth.onAuthStateChange.map((event) => event);
 
-  // /// Reset password via email
-  // Future<void> resetPassword(String email) async {
-  //   await _client.auth.resetPasswordForEmail(
-  //     email,
-  //     redirectTo: 'io.supabase.flutter://reset-callback/',
-  //   );
-  // }
+  Future<int> deleteAuthAccount() async {
+    try {
+      // 1️⃣ Get current user session
+      final session =
+          Supabase.instance.client.auth.currentSession;
 
-  // /// Update password
-  // Future<User?> updatePassword(String newPassword) async {
-  //   final response = await _client.auth.updateUser(
-  //     UserAttributes(password: newPassword),
-  //   );
-  //   return response.user;
-  // }
+      if (session == null) {
+        print("User is not signed in");
+        return 0;
+      }
 
-  // /// Update user metadata (like name, jobTitle etc.)
-  // Future<User?> updateMetadata(
-  //   Map<String, dynamic> data,
-  // ) async {
-  //   final response = await _client.auth.updateUser(
-  //     UserAttributes(data: data),
-  //   );
-  //   return response.user;
-  // }
+      // 2️⃣ Call the Edge Function with Authorization header
+      final response = await Supabase
+          .instance
+          .client
+          .functions
+          .invoke(
+            'delete_own_account',
+            headers: {
+              'Authorization':
+                  'Bearer ${session.accessToken}',
+            },
+          );
+
+      // 3️⃣ Safely cast the response data
+      final data = response.data as Map<String, dynamic>?;
+
+      // 4️⃣ Handle errors returned by the function
+      if (response.status != 200) {
+        print(
+          'Error deleting account: ${response.data.toString()}',
+        );
+        return 0;
+      }
+
+      if (data != null && data['error'] != null) {
+        print('Error deleting account: ${data['error']}');
+        return 0;
+      }
+
+      // 5️⃣ Success: delete completed
+      if (data != null && data['success'] == true) {
+        print('Account deleted successfully');
+
+        // Optional: sign out the user immediately
+        await Supabase.instance.client.auth.signOut();
+
+        return 1;
+      }
+
+      // 6️⃣ Unknown error fallback
+      print('Unknown error deleting account');
+      return 0;
+    } catch (e) {
+      print("Exception deleting user: ${e.toString()}");
+      return 0;
+    }
+  }
 }
