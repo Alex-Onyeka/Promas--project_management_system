@@ -13,6 +13,7 @@ class BasePage extends StatefulWidget {
 class _BasePageState extends State<BasePage> {
   @override
   Widget build(BuildContext context) {
+    // return Scaffold(body: Center(child: Text('data')));
     var user = AuthService().currentUser;
     if (user != null) {
       return Home();
