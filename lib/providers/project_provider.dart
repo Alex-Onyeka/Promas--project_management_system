@@ -71,6 +71,9 @@ class ProjectProvider extends ChangeNotifier {
         .toList();
 
     projectsMain = tempProjects;
+    projectsMain.sort(
+      (a, b) => b.createdAt!.compareTo(a.createdAt!),
+    );
     notifyListeners();
     await BranchProvider().getBranchesByCompany();
     return projectsMain;
