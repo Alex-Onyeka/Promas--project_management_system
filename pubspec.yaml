@@ -1,5 +1,5 @@
 name: promas
-description: "A new Flutter project."
+description: "A streamlined desktop solution for software companies to plan, track, and manage projects efficiently. PROMAS improves collaboration, organizes tasks, and provides clear visibility across the development lifecycle."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -40,6 +40,7 @@ dependencies:
   intl: ^0.20.2
   flutter_svg: ^2.2.1
   change_app_package_name: ^1.5.0
+  msix: ^3.6.2
 
 dev_dependencies:
   flutter_test:
@@ -48,12 +49,28 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.7
 
+msix_config:
+  display_name: Promas
+  publisher_display_name: Stockall Solutions
+  identity_name: StockallSolutions.Promas
+  msix_version: 1.0.3.0
+  logo_path: assets/logo_icon.png
+  start_menu_icon_path: assets/logo_icon.png
+  tile_icon_path: assets/logo_icon.png
+  capabilities: internetClient
+  # publisher: CN=C30F1185-CC3C-46C0-BCF0-18DA02C31DC5
+
+
 # Configuration for flutter_launcher_icons
 flutter_icons:
   android: true
   ios: true
   image_path: assets/logo_icon.png
   min_sdk_android: 21
+windows:
+  generate: true
+  image_path: assets/logo_icon.png
+  icon_size: 48
 
 # Configuration for flutter_native_splash
 flutter_native_splash:
@@ -61,6 +78,7 @@ flutter_native_splash:
   image: assets/logo_splash.png
   android: true
   ios: true
+  fullscreen: true 
 
 
 # For information on the generic Dart part of this file, see the

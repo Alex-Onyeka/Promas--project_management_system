@@ -87475,7 +87475,7 @@ $S:219}
 A.OU.prototype={
 I(a){var s=null,r=A.u(a,!0,t.A).HC()
 r=A.wL(s,A.aJg(B.ac,s,s,B.aW),r,s)
-return new A.BQ(A.ah(["/",new A.aft(),"delete_account",new A.afu(),"privacy_policy",new A.afv()],t.N,t.Ab),"/","Project Management System",r,!1,s)}}
+return new A.BQ(A.ah(["/",new A.aft(),"/delete-account",new A.afu(),"/privacy-policy",new A.afv()],t.N,t.Ab),"/","Project Management System",r,!1,s)}}
 A.aft.prototype={
 $1(a){return new A.it(null)},
 $S:59}

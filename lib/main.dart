@@ -134,8 +134,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => BasePage(),
-        'delete_account': (context) => UserPage(),
-        'privacy_policy': (context) => PrivacyPolicy(),
+        '/delete-account': (context) => UserPage(),
+        '/privacy-policy': (context) => PrivacyPolicy(),
       },
     );
   }
