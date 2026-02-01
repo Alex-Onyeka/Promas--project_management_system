@@ -12,8 +12,10 @@ class NavProvider extends ChangeNotifier {
       return 'Employees';
     } else if (currentPage == 3) {
       return 'Requests';
-    } else {
+    } else if (currentPage == 4) {
       return 'Profile Page';
+    } else {
+      return 'Privacy Policy';
     }
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promas/pages/base_page.dart';
-import 'package:promas/pages/privacy_poilcy.dart/privacy_policy.dart';
-import 'package:promas/pages/user_page/user_page.dart';
+import 'package:promas/pages/landing_page/landing_page.dart';
 import 'package:promas/providers/branch_provider.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/nav_provider.dart';
@@ -134,8 +133,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => BasePage(),
-        '/delete-account': (context) => UserPage(),
-        '/privacy-policy': (context) => PrivacyPolicy(),
+        '/delete-account': (context) =>
+            LandingPage(pageIndex: 4),
+        '/privacy-policy': (context) =>
+            LandingPage(pageIndex: 5),
       },
     );
   }

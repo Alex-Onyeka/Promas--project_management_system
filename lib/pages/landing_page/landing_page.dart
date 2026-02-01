@@ -14,7 +14,8 @@ import 'package:promas/pages/requests/requests.dart';
 import 'package:promas/pages/user_page/user_page.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({super.key});
+  final int? pageIndex;
+  const LandingPage({super.key, this.pageIndex});
 
   @override
   State<LandingPage> createState() => _LandingPageState();
@@ -29,6 +30,14 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.pageIndex != null) {
+        returnNav(
+          context,
+          listen: false,
+        ).navigate(widget.pageIndex!);
+      }
+    });
   }
 
   @override
