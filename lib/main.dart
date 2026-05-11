@@ -16,9 +16,9 @@ void main() async {
 
   // initialize supabase before runApp
   await Supabase.initialize(
-    url: 'https://kutrcxsojatauupkgypp.supabase.co',
+    url: 'https://iudrocbtlupuxehuhcfi.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1dHJjeHNvamF0YXV1cGtneXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0MTU4NDAsImV4cCI6MjA3NDk5MTg0MH0.Zb2do9wWLfwf7kU5buavd4H7f_3FR9rqYy7hJRQvU9g',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1ZHJvY2J0bHVwdXhlaHVoY2ZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0Mzk3MjQsImV4cCI6MjA5NDAxNTcyNH0.2KH4fye59YQrFljSZh8tpnpVW-rbQ-Ivcgi7USOJMmk',
   );
   runApp(
     MultiProvider(
