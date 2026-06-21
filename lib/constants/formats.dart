@@ -150,9 +150,21 @@ String formatLargeNumber(String numberString) {
   );
   if (number == null) return numberString;
 
-  // Format with commas
-  final formatter = NumberFormat('#,###.###');
-  return addZeroAfterDecimalPoint(formatter.format(number));
+  if (number >= 1_000_000_000) {
+    // billions
+    final billions = number / 1_000_000_000;
+    return '${billions.toStringAsFixed(3)}B';
+  } else if (number >= 1_000_000) {
+    // millions
+    final millions = number / 1_000_000;
+    return '${millions.toStringAsFixed(3)}M';
+  } else {
+    // normal formatting with commas
+    final formatter = NumberFormat('#,###.###');
+    return addZeroAfterDecimalPoint(
+      formatter.format(number),
+    );
+  }
 }
 
 String formatLargeNumberDouble(num number) {

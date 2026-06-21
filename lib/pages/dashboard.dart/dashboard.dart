@@ -624,9 +624,12 @@ class _DashboardState extends State<Dashboard> {
                                                       ? 11
                                                       : 9,
                                                 ),
-                                                selectedProject
-                                                        ?.name ??
-                                                    'Select Project',
+                                                cutLongText(
+                                                  16,
+                                                  selectedProject
+                                                          ?.name ??
+                                                      'Select Project',
+                                                ),
                                               ),
                                               Icon(
                                                 size:

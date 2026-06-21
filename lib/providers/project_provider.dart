@@ -97,6 +97,7 @@ class ProjectProvider extends ChangeNotifier {
   Future<List<ProjectClass>>
   getAllProjectsByCompany() async {
     try {
+      toggleLoading(true);
       final response = await _client
           .from(_table)
           .select()
@@ -131,12 +132,14 @@ class ProjectProvider extends ChangeNotifier {
       print(
         'Gotten All Company Projects: ${projectsMain.length}',
       );
+      toggleLoading(false);
       return projectsMain;
     } catch (e) {
       print('Error Fetching Projects: ${e.toString()}');
       if (e is DioException) {
         print(e.response?.data);
       }
+      toggleLoading(false);
       return [];
     }
   }

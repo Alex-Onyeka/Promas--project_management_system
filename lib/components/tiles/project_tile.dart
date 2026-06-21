@@ -41,52 +41,47 @@ class ProjectTile extends StatelessWidget {
             borderRadius: mainBorderRadius,
             onTap: viewProject,
             child: Container(
-              // width: 260,
-              // height: 125,
-              padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
-              child: Column(
+              padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+              child: Row(
+                spacing: 5,
                 crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: theme.lightMediumGrey(),
-                        ),
-                        child: Icon(
-                          size: 12,
-                          color: theme.darkMediumGrey(),
-                          Icons.workspace_premium_rounded,
-                        ),
-                      ),
-                      SizedBox(
-                        width: screen > mobileScreen
-                            ? 10
-                            : 8,
-                      ),
-                      Flexible(
-                        child: Text(
-                          style: TextStyle(
-                            fontSize: screen > mobileScreen
-                                ? 14
-                                : 12,
-                            color: theme.darkMediumGrey(),
-                            fontWeight: FontWeight.bold,
-                          ),
-                          cutLongText(
-                            screen > mobileScreen ? 20 : 16,
-                            project.name,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: theme.lightMediumGrey(),
+                    ),
+                    child: Icon(
+                      size: 18,
+                      color: theme.darkMediumGrey(),
+                      Icons.workspace_premium_rounded,
+                    ),
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(
+                    width: screen > mobileScreen ? 10 : 8,
+                  ),
+                  Expanded(
+                    child: Text(
+                      style: TextStyle(
+                        fontSize: screen > mobileScreen
+                            ? 14
+                            : 12,
+                        color: theme.darkMediumGrey(),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      cutLongText(
+                        screen > mobileScreen ? 20 : 16,
+                        project.name,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    size: 18,
+                    color: theme.lightMediumGrey(),
+                    Icons.arrow_forward_ios_rounded,
+                  ),
                 ],
               ),
             ),

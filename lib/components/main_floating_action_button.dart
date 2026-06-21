@@ -42,7 +42,7 @@ class MainFloatingActionButton extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(
                   vertical: 10,
-                  horizontal: 10,
+                  horizontal: 15,
                 ),
                 child: Row(
                   spacing: 5,
@@ -57,11 +57,11 @@ class MainFloatingActionButton extends StatelessWidget {
                     ),
                     Text(
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 11,
                         fontWeight: FontWeight.bold,
                         color: returnTheme(
                           context: context,
-                        ).darkGrey(),
+                        ).lightMediumGrey(),
                       ),
                       'Create Project',
                     ),
