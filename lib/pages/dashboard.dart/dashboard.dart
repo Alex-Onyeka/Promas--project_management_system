@@ -324,7 +324,13 @@ class _DashboardState extends State<Dashboard> {
                                       children: [
                                         DashboardContainerTilesWidget(
                                           icon: Icon(
-                                            size: 30,
+                                            size:
+                                                screenSize(
+                                                      context,
+                                                    ) >
+                                                    tabletScreen
+                                                ? 30
+                                                : 25,
                                             color: theme
                                                 .secondaryLight(),
                                             Icons.add_chart,
@@ -342,7 +348,13 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                         DashboardContainerTilesWidget(
                                           icon: Icon(
-                                            size: 30,
+                                            size:
+                                                screenSize(
+                                                      context,
+                                                    ) >
+                                                    tabletScreen
+                                                ? 30
+                                                : 25,
                                             color: theme
                                                 .tertiaryColor(),
                                             Icons
@@ -368,7 +380,13 @@ class _DashboardState extends State<Dashboard> {
                                       children: [
                                         DashboardContainerTilesWidget(
                                           icon: Icon(
-                                            size: 35,
+                                            size:
+                                                screenSize(
+                                                      context,
+                                                    ) >
+                                                    tabletScreen
+                                                ? 35
+                                                : 28,
                                             color: theme
                                                 .primaryLight(),
                                             Icons
@@ -387,7 +405,13 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                         DashboardContainerTilesWidget(
                                           icon: Icon(
-                                            size: 28,
+                                            size:
+                                                screenSize(
+                                                      context,
+                                                    ) >
+                                                    tabletScreen
+                                                ? 28
+                                                : 22,
                                             color: theme
                                                 .secondaryLight(),
                                             Icons.message,
@@ -432,7 +456,7 @@ class _DashboardState extends State<Dashboard> {
                           children: [
                             SizedBox(height: 15),
                             SizedBox(
-                              height: 200,
+                              height: 180,
                               child:
                                   CreateProjectWidgetDashboard(
                                     theme: theme,
@@ -457,9 +481,9 @@ class _DashboardState extends State<Dashboard> {
                         Padding(
                           padding:
                               const EdgeInsets.fromLTRB(
-                                10.0,
+                                5.0,
                                 10,
-                                10,
+                                5,
                                 20,
                               ),
                           child: Row(
@@ -477,7 +501,13 @@ class _DashboardState extends State<Dashboard> {
                                 children: [
                                   Text(
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize:
+                                          screenSize(
+                                                context,
+                                              ) >
+                                              tabletScreen
+                                          ? 14
+                                          : 12,
                                       fontWeight:
                                           FontWeight.bold,
                                     ),
@@ -489,8 +519,20 @@ class _DashboardState extends State<Dashboard> {
                                         context: context,
                                       ).isLoading) {
                                         return SizedBox(
-                                          height: 13,
-                                          width: 13,
+                                          height:
+                                              screenSize(
+                                                    context,
+                                                  ) >
+                                                  tabletScreen
+                                              ? 13
+                                              : 11,
+                                          width:
+                                              screenSize(
+                                                    context,
+                                                  ) >
+                                                  tabletScreen
+                                              ? 13
+                                              : 11,
                                           child: CircularProgressIndicator(
                                             strokeWidth: 2,
                                             color: theme
@@ -524,7 +566,13 @@ class _DashboardState extends State<Dashboard> {
                                                     5,
                                                   ),
                                               child: Icon(
-                                                size: 18,
+                                                size:
+                                                    screenSize(
+                                                          context,
+                                                        ) >
+                                                        tabletScreen
+                                                    ? 18
+                                                    : 15,
                                                 Icons
                                                     .refresh,
                                               ),
@@ -567,12 +615,22 @@ class _DashboardState extends State<Dashboard> {
                                               5,
                                             ),
                                         child: Container(
-                                          padding:
-                                              EdgeInsets.symmetric(
-                                                vertical: 5,
-                                                horizontal:
-                                                    10,
-                                              ),
+                                          padding: EdgeInsets.symmetric(
+                                            vertical:
+                                                screenSize(
+                                                      context,
+                                                    ) >
+                                                    tabletScreen
+                                                ? 5
+                                                : 3,
+                                            horizontal:
+                                                screenSize(
+                                                      context,
+                                                    ) >
+                                                    tabletScreen
+                                                ? 10
+                                                : 6,
+                                          ),
 
                                           child: Row(
                                             spacing: 5,
@@ -580,13 +638,25 @@ class _DashboardState extends State<Dashboard> {
                                               Text(
                                                 style: TextStyle(
                                                   fontSize:
-                                                      11,
+                                                      screenSize(
+                                                            context,
+                                                          ) >
+                                                          tabletScreen
+                                                      ? 11
+                                                      : 9,
                                                 ),
                                                 selectedProject
                                                         ?.name ??
                                                     'Select Project',
                                               ),
                                               Icon(
+                                                size:
+                                                    screenSize(
+                                                          context,
+                                                        ) >
+                                                        tabletScreen
+                                                    ? 20
+                                                    : 18,
                                                 Icons
                                                     .keyboard_arrow_down_rounded,
                                               ),
@@ -1059,7 +1129,7 @@ class CreateProjectWidgetDashboard extends StatelessWidget {
       );
     } else {
       return Container(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.fromLTRB(20, 15, 10, 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: theme.white(),
@@ -1075,7 +1145,7 @@ class CreateProjectWidgetDashboard extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  flex: 4,
+                  flex: 6,
                   child: Column(
                     crossAxisAlignment:
                         CrossAxisAlignment.start,
@@ -1109,7 +1179,7 @@ class CreateProjectWidgetDashboard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 230,
+                        width: 220,
                         child: MainButton(
                           action: () {
                             for (var pr
@@ -1128,7 +1198,7 @@ class CreateProjectWidgetDashboard extends StatelessWidget {
             ),
             Row(
               children: [
-                Expanded(flex: 8, child: SizedBox()),
+                Expanded(flex: 9, child: SizedBox()),
                 Expanded(
                   flex: 6,
                   child: Image.asset(workingMan),
