@@ -29,7 +29,7 @@ class DarkTheme {
   );
 
   final lightGrey = const Color.fromARGB(255, 22, 22, 22);
-  final lightMediumGrey = Colors.grey.shade700;
+  final lightMediumGrey = Colors.grey.shade600;
   final mediumGrey = Colors.grey.shade500;
   final darkMediumGrey = Colors.grey.shade400;
   final darkGrey = Colors.grey.shade100;

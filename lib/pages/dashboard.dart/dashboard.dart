@@ -449,7 +449,7 @@ class _DashboardState extends State<Dashboard> {
                       borderRadius: BorderRadius.circular(
                         10,
                       ),
-                      color: Colors.white,
+                      color: theme.white(),
                     ),
                     child: Column(
                       children: [
@@ -485,6 +485,8 @@ class _DashboardState extends State<Dashboard> {
                                           : 12,
                                       fontWeight:
                                           FontWeight.bold,
+                                      color: theme
+                                          .darkMediumGrey(),
                                     ),
                                     'Work Done Chart',
                                   ),
@@ -548,6 +550,8 @@ class _DashboardState extends State<Dashboard> {
                                                         tabletScreen
                                                     ? 18
                                                     : 15,
+                                                color: theme
+                                                    .lightMediumGrey(),
                                                 Icons
                                                     .refresh,
                                               ),
@@ -667,6 +671,8 @@ class _DashboardState extends State<Dashboard> {
                                                     5,
                                               ),
                                           child: Icon(
+                                            color: theme
+                                                .lightMediumGrey(),
                                             size: 18,
                                             Icons.clear,
                                           ),
@@ -696,9 +702,8 @@ class _DashboardState extends State<Dashboard> {
                                   LineChartData(
                                     borderData: FlBorderData(
                                       border: Border.all(
-                                        color: Colors
-                                            .grey
-                                            .shade200,
+                                        color: theme
+                                            .lightMediumGrey(),
                                       ),
                                     ),
                                     titlesData: FlTitlesData(
@@ -731,12 +736,14 @@ class _DashboardState extends State<Dashboard> {
                                                     '.',
                                                   )
                                                   .first,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize:
                                                     11,
                                                 fontWeight:
                                                     FontWeight
                                                         .bold,
+                                                color: theme
+                                                    .lightMediumGrey(),
                                               ),
                                             );
                                           },
@@ -805,6 +812,8 @@ class _DashboardState extends State<Dashboard> {
                                                           11,
                                                       fontWeight:
                                                           FontWeight.bold,
+                                                      color:
+                                                          theme.lightMediumGrey(),
                                                     ),
                                                     "${daysName[date.weekday - 1]} - ${date.day}",
                                                   ),
@@ -814,6 +823,8 @@ class _DashboardState extends State<Dashboard> {
                                                           11,
                                                       fontWeight:
                                                           FontWeight.bold,
+                                                      color:
+                                                          theme.lightMediumGrey(),
                                                     ),
                                                     "(${months[date.month - 1]} - ${date.year})",
                                                   ),
@@ -856,9 +867,8 @@ class _DashboardState extends State<Dashboard> {
                                         LineChartData(
                                           borderData: FlBorderData(
                                             border: Border.all(
-                                              color: Colors
-                                                  .grey
-                                                  .shade200,
+                                              color: theme
+                                                  .lightMediumGrey(),
                                             ),
                                           ),
                                           titlesData: FlTitlesData(
@@ -888,11 +898,13 @@ class _DashboardState extends State<Dashboard> {
                                                       value
                                                           .toString(),
                                                     ).split('.').first,
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       fontSize:
                                                           11,
                                                       fontWeight:
                                                           FontWeight.bold,
+                                                      color:
+                                                          theme.lightMediumGrey(),
                                                     ),
                                                   );
                                                 },
@@ -961,6 +973,7 @@ class _DashboardState extends State<Dashboard> {
                                                           style: TextStyle(
                                                             fontSize: 11,
                                                             fontWeight: FontWeight.bold,
+                                                            color: theme.lightMediumGrey(),
                                                           ),
                                                           "${daysName[date.weekday - 1]} - ${date.day}",
                                                         ),
@@ -968,6 +981,7 @@ class _DashboardState extends State<Dashboard> {
                                                           style: TextStyle(
                                                             fontSize: 11,
                                                             fontWeight: FontWeight.bold,
+                                                            color: theme.lightMediumGrey(),
                                                           ),
                                                           "(${months[date.month - 1]} - ${date.year})",
                                                         ),
@@ -1043,6 +1057,7 @@ class _CreateProjectWidgetDashboardState
 
   @override
   Widget build(BuildContext context) {
+    var theme = returnTheme(context: context);
     if (screenSize(context) > tabletScreen) {
       return Container(
         padding: EdgeInsets.all(20),
@@ -1075,6 +1090,8 @@ class _CreateProjectWidgetDashboardState
                                   fontSize: 16,
                                   fontWeight:
                                       FontWeight.bold,
+                                  color: theme
+                                      .darkMediumGrey(),
                                 ),
                                 'Create A New Software Project!',
                               ),
@@ -1083,6 +1100,8 @@ class _CreateProjectWidgetDashboardState
                                   fontSize: 11,
                                   fontWeight:
                                       FontWeight.normal,
+                                  color: theme
+                                      .lightMediumGrey(),
                                 ),
                                 'Click on the button to create a new Software Project.',
                               ),
@@ -1123,7 +1142,7 @@ class _CreateProjectWidgetDashboardState
       );
     } else {
       return Container(
-        padding: EdgeInsets.fromLTRB(20, 15, 10, 20),
+        padding: EdgeInsets.fromLTRB(15, 15, 5, 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: widget.theme.white(),
@@ -1135,6 +1154,7 @@ class _CreateProjectWidgetDashboardState
           ],
         ),
         child: Stack(
+          alignment: AlignmentGeometry.center,
           children: [
             Row(
               children: [
@@ -1154,9 +1174,11 @@ class _CreateProjectWidgetDashboardState
                             children: [
                               Text(
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 15,
                                   fontWeight:
                                       FontWeight.bold,
+                                  color: theme
+                                      .darkMediumGrey(),
                                 ),
                                 'Create A New Software Project!',
                               ),
@@ -1165,6 +1187,8 @@ class _CreateProjectWidgetDashboardState
                                   fontSize: 11,
                                   fontWeight:
                                       FontWeight.normal,
+                                  color: theme
+                                      .lightMediumGrey(),
                                 ),
                                 'Click on the button to create a new Software Project.',
                               ),
@@ -1173,7 +1197,7 @@ class _CreateProjectWidgetDashboardState
                         ),
                       ),
                       SizedBox(
-                        width: 220,
+                        width: 180,
                         child: MainButton(
                           action: () {
                             createProject();
@@ -1188,10 +1212,11 @@ class _CreateProjectWidgetDashboardState
               ],
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(flex: 9, child: SizedBox()),
                 Expanded(
-                  flex: 6,
+                  flex: 5,
                   child: Image.asset(workingMan),
                 ),
               ],

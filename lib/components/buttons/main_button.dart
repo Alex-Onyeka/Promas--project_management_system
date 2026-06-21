@@ -104,7 +104,7 @@ class _MainButtonState extends State<MainButton> {
                       child: Text(
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
                           fontWeight: FontWeight.normal,
                           color: Colors.white,
                         ),

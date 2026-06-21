@@ -20,7 +20,7 @@ class LightTheme {
 
   final white = Colors.white;
   final lightGrey = Colors.grey.shade100;
-  final lightMediumGrey = Colors.grey.shade400;
+  final lightMediumGrey = Colors.grey.shade500;
   final mediumGrey = Colors.grey.shade500;
   final darkMediumGrey = Colors.grey.shade700;
   final darkGrey = Colors.grey.shade900;

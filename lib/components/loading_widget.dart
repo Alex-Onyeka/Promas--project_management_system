@@ -14,6 +14,7 @@ class LoadingWidget extends StatelessWidget {
         child: Container(
           height: 380,
           width: 380,
+          margin: EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
             color: returnTheme().lightGrey(),
             borderRadius: mainBorderRadius,
