@@ -31,7 +31,7 @@ class EmptyWidgetAlt extends StatelessWidget {
               Icon(
                 size: 26,
                 color: returnTheme(
-                  context,
+                  context: context,
                 ).darkMediumGrey(),
                 icon ?? Icons.work_off_outlined,
               ),
@@ -39,7 +39,7 @@ class EmptyWidgetAlt extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   color: returnTheme(
-                    context,
+                    context: context,
                   ).darkMediumGrey(),
                 ),
                 title,
@@ -47,7 +47,7 @@ class EmptyWidgetAlt extends StatelessWidget {
               SizedBox(height: 2),
               Visibility(
                 visible: returnUser(
-                  context,
+                  context: context,
                 ).currentUser!.isAdmin,
                 child: Visibility(
                   visible: showButton ?? true,
@@ -73,7 +73,7 @@ class EmptyWidgetAlt extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 11,
                               color: returnTheme(
-                                context,
+                                context: context,
                               ).darkMediumGrey(),
                             ),
                             buttonText,

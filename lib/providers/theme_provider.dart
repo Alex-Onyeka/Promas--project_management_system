@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:promas/classes/themes/dark_theme.dart';
 import 'package:promas/classes/themes/light_theme.dart';
+import 'package:promas/classes/themes/dark_theme.dart';
 
 class ThemeProvider extends ChangeNotifier {
   ThemeProvider._internal();

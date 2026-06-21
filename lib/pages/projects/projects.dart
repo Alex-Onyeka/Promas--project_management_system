@@ -5,7 +5,6 @@ import 'package:promas/components/buttons/main_button.dart';
 import 'package:promas/components/empty_widgets/empty_widget_main.dart';
 import 'package:promas/components/main_floating_action_button.dart';
 import 'package:promas/components/tiles/project_tile.dart';
-import 'package:promas/constants/formats.dart';
 import 'package:promas/main.dart';
 import 'package:promas/pages/projects/project_page.dart';
 import 'package:promas/providers/branch_provider.dart';
@@ -30,19 +29,21 @@ class _ProjectsState extends State<Projects> {
         return AddProjectDialog(
           descController: descController,
           nameController: nameController,
+          urlController: urlController,
         );
       },
     );
   }
 
   int currentIndex = 0;
-  void toggleCompleted({required int value}) {
+  void toggleManaged({required int value}) {
     setState(() {
       currentIndex = value;
     });
   }
 
   final nameController = TextEditingController();
+  final urlController = TextEditingController();
   final descController = TextEditingController();
 
   Future<void> getAllProjectss() async {
@@ -74,11 +75,15 @@ class _ProjectsState extends State<Projects> {
     List<ProjectClass> getProjectsForEmployee(
       BuildContext context,
     ) {
-      final user = returnUser(context).currentUser!;
+      final user = returnUser(
+        context: context,
+      ).currentUser!;
       final allProjects = returnProject(
-        context,
+        context: context,
       ).projectsMain;
-      final allBranches = returnBranch(context).branches;
+      final allBranches = returnBranch(
+        context: context,
+      ).branches;
 
       final projectsIn = allProjects.where((proj) {
         final projectBranches = allBranches.where(
@@ -94,8 +99,8 @@ class _ProjectsState extends State<Projects> {
     }
 
     List<ProjectClass> projectIn =
-        returnUser(context).currentUser!.isAdmin
-        ? returnProject(context).projectsMain
+        returnUser(context: context).currentUser!.isAdmin
+        ? returnProject(context: context).projectsMain
         : getProjectsForEmployee(context);
     projectIn.sort(
       (a, b) => b.createdAt!.compareTo(a.createdAt!),
@@ -131,19 +136,19 @@ class _ProjectsState extends State<Projects> {
               spacing: 5,
               children: [
                 SwitchTabButton(
-                  title: 'Incomplete',
+                  title: 'Managed',
                   myIndex: 0,
                   currentIndex: currentIndex,
-                  toggleCompleted: () {
-                    toggleCompleted(value: 0);
+                  toggleManaged: () {
+                    toggleManaged(value: 0);
                   },
                 ),
                 SwitchTabButton(
-                  title: 'Completed',
+                  title: 'Unmanaged',
                   myIndex: 1,
                   currentIndex: currentIndex,
-                  toggleCompleted: () {
-                    toggleCompleted(value: 1);
+                  toggleManaged: () {
+                    toggleManaged(value: 1);
                   },
                 ),
               ],
@@ -189,17 +194,8 @@ class _ProjectsState extends State<Projects> {
                                         ),
                                   )
                                   .isNotEmpty,
-                              child: GridView(
-                                gridDelegate:
-                                    SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent:
-                                          300,
-                                      mainAxisExtent: 130,
-                                      // childAspectRatio:
-                                      //     2,
-                                      crossAxisSpacing: 10,
-                                      mainAxisSpacing: 10,
-                                    ),
+                              child: Column(
+                                spacing: 5,
                                 children: projectIn
                                     .where(
                                       (pro) => pro.name
@@ -216,12 +212,11 @@ class _ProjectsState extends State<Projects> {
                                         project,
                                       ) => ProjectTile(
                                         viewProject: () async {
-                                          await returnProject(
-                                            context,
-                                            listen: false,
-                                          ).deleteProject(
-                                            project.uuid!,
-                                          );
+                                          await returnProject()
+                                              .deleteProject(
+                                                project
+                                                    .uuid!,
+                                              );
                                         },
                                         project: project,
                                       ),
@@ -254,7 +249,7 @@ class _ProjectsState extends State<Projects> {
                                       Icon(
                                         size: 35,
                                         color: returnTheme(
-                                          context,
+                                          context: context,
                                         ).darkGrey(),
                                         Icons
                                             .work_off_outlined,
@@ -263,7 +258,8 @@ class _ProjectsState extends State<Projects> {
                                         style: TextStyle(
                                           fontSize: 13,
                                           color: returnTheme(
-                                            context,
+                                            context:
+                                                context,
                                           ).darkMediumGrey(),
                                         ),
                                         'No Projects Found Under this Name',
@@ -304,82 +300,22 @@ class _ProjectsState extends State<Projects> {
                               child: Stack(
                                 children: [
                                   Visibility(
-                                    visible: projectIn.where((
-                                      project,
-                                    ) {
-                                      var branches =
-                                          returnBranch(
-                                            context,
-                                          ).branches.where(
-                                            (branch) =>
-                                                branch
-                                                    .projectId ==
-                                                project
-                                                    .uuid,
-                                          );
-
-                                      var value = branches
-                                          .map(
-                                            (bra) =>
-                                                bra.level,
-                                          )
-                                          .toList();
-                                      var perc =
-                                          calcPercentageNumber(
-                                            value,
-                                          );
-                                      if (perc != 100) {
-                                        return true;
-                                      } else {
-                                        return false;
-                                      }
-                                    }).isNotEmpty,
-                                    child: GridView(
-                                      gridDelegate:
-                                          SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent:
-                                                300,
-                                            mainAxisExtent:
-                                                130,
-                                            crossAxisSpacing:
-                                                10,
-                                            mainAxisSpacing:
-                                                10,
-                                          ),
+                                    visible: projectIn
+                                        .where(
+                                          (project) =>
+                                              project
+                                                  .githubUrl !=
+                                              null,
+                                        )
+                                        .isNotEmpty,
+                                    child: ListView(
                                       children: projectIn
-                                          .where((project) {
-                                            var branches =
-                                                returnBranch(
-                                                  context,
-                                                ).branches.where(
-                                                  (
-                                                    branch,
-                                                  ) =>
-                                                      branch
-                                                          .projectId ==
-                                                      project
-                                                          .uuid,
-                                                );
-
-                                            var value = branches
-                                                .map(
-                                                  (
-                                                    bra,
-                                                  ) => bra
-                                                      .level,
-                                                )
-                                                .toList();
-                                            var perc =
-                                                calcPercentageNumber(
-                                                  value,
-                                                );
-                                            if (perc !=
-                                                100) {
-                                              return true;
-                                            } else {
-                                              return false;
-                                            }
-                                          })
+                                          .where(
+                                            (project) =>
+                                                project
+                                                    .githubUrl !=
+                                                null,
+                                          )
                                           .map(
                                             (
                                               pro,
@@ -406,41 +342,19 @@ class _ProjectsState extends State<Projects> {
                                     ),
                                   ),
                                   Visibility(
-                                    visible: projectIn.where((
-                                      project,
-                                    ) {
-                                      var branches =
-                                          returnBranch(
-                                            context,
-                                          ).branches.where(
-                                            (branch) =>
-                                                branch
-                                                    .projectId ==
-                                                project
-                                                    .uuid,
-                                          );
-
-                                      var value = branches
-                                          .map(
-                                            (bra) =>
-                                                bra.level,
-                                          )
-                                          .toList();
-                                      var perc =
-                                          calcPercentageNumber(
-                                            value,
-                                          );
-                                      if (perc != 100) {
-                                        return true;
-                                      } else {
-                                        return false;
-                                      }
-                                    }).isEmpty,
+                                    visible: projectIn
+                                        .where(
+                                          (project) =>
+                                              project
+                                                  .githubUrl !=
+                                              null,
+                                        )
+                                        .isEmpty,
                                     child: EmptyWidgetMain(
                                       buttonText:
                                           ' Create New Project',
                                       title:
-                                          'You Don\'t have any Completed Projects',
+                                          'You Don\'t have any Managed Projects',
                                       action: () async {
                                         await createProject();
                                       },
@@ -454,82 +368,22 @@ class _ProjectsState extends State<Projects> {
                               child: Stack(
                                 children: [
                                   Visibility(
-                                    visible: projectIn.where((
-                                      project,
-                                    ) {
-                                      var branches =
-                                          returnBranch(
-                                            context,
-                                          ).branches.where(
-                                            (branch) =>
-                                                branch
-                                                    .projectId ==
-                                                project
-                                                    .uuid,
-                                          );
-
-                                      var value = branches
-                                          .map(
-                                            (bra) =>
-                                                bra.level,
-                                          )
-                                          .toList();
-                                      var perc =
-                                          calcPercentageNumber(
-                                            value,
-                                          );
-                                      if (perc == 100) {
-                                        return true;
-                                      } else {
-                                        return false;
-                                      }
-                                    }).isNotEmpty,
-                                    child: GridView(
-                                      gridDelegate:
-                                          SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent:
-                                                300,
-                                            mainAxisExtent:
-                                                130,
-                                            crossAxisSpacing:
-                                                10,
-                                            mainAxisSpacing:
-                                                10,
-                                          ),
+                                    visible: projectIn
+                                        .where(
+                                          (project) =>
+                                              project
+                                                  .githubUrl ==
+                                              null,
+                                        )
+                                        .isNotEmpty,
+                                    child: ListView(
                                       children: projectIn
-                                          .where((project) {
-                                            var branches =
-                                                returnBranch(
-                                                  context,
-                                                ).branches.where(
-                                                  (
-                                                    branch,
-                                                  ) =>
-                                                      branch
-                                                          .projectId ==
-                                                      project
-                                                          .uuid,
-                                                );
-
-                                            var value = branches
-                                                .map(
-                                                  (
-                                                    bra,
-                                                  ) => bra
-                                                      .level,
-                                                )
-                                                .toList();
-                                            var perc =
-                                                calcPercentageNumber(
-                                                  value,
-                                                );
-                                            if (perc ==
-                                                100) {
-                                              return true;
-                                            } else {
-                                              return false;
-                                            }
-                                          })
+                                          .where(
+                                            (project) =>
+                                                project
+                                                    .githubUrl ==
+                                                null,
+                                          )
                                           .map(
                                             (
                                               pro,
@@ -556,41 +410,19 @@ class _ProjectsState extends State<Projects> {
                                     ),
                                   ),
                                   Visibility(
-                                    visible: projectIn.where((
-                                      project,
-                                    ) {
-                                      var branches =
-                                          returnBranch(
-                                            context,
-                                          ).branches.where(
-                                            (branch) =>
-                                                branch
-                                                    .projectId ==
-                                                project
-                                                    .uuid,
-                                          );
-
-                                      var value = branches
-                                          .map(
-                                            (bra) =>
-                                                bra.level,
-                                          )
-                                          .toList();
-                                      var perc =
-                                          calcPercentageNumber(
-                                            value,
-                                          );
-                                      if (perc == 100) {
-                                        return true;
-                                      } else {
-                                        return false;
-                                      }
-                                    }).isEmpty,
+                                    visible: projectIn
+                                        .where(
+                                          (project) =>
+                                              project
+                                                  .githubUrl ==
+                                              null,
+                                        )
+                                        .isEmpty,
                                     child: EmptyWidgetMain(
                                       buttonText:
                                           ' Create New Project',
                                       title:
-                                          'You Don\'t have any Incompleted Projects',
+                                          'You Don\'t have any Unmanaged Projects',
                                       action: () async {
                                         await createProject();
                                       },
@@ -616,13 +448,13 @@ class _ProjectsState extends State<Projects> {
 
 class SwitchTabButton extends StatelessWidget {
   final int currentIndex;
-  final Function() toggleCompleted;
+  final Function() toggleManaged;
   final int myIndex;
   final String title;
   const SwitchTabButton({
     super.key,
     required this.currentIndex,
-    required this.toggleCompleted,
+    required this.toggleManaged,
     required this.myIndex,
     required this.title,
   });
@@ -631,14 +463,16 @@ class SwitchTabButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
-        onTap: toggleCompleted,
+        onTap: toggleManaged,
         child: Container(
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
                 color: currentIndex != myIndex
                     ? Colors.transparent
-                    : returnTheme(context).tertiaryColor(),
+                    : returnTheme(
+                        context: context,
+                      ).tertiaryColor(),
                 width: currentIndex != myIndex ? 0 : 2,
               ),
             ),
@@ -653,7 +487,7 @@ class SwitchTabButton extends StatelessWidget {
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   color: returnTheme(
-                    context,
+                    context: context,
                   ).darkMediumGrey(),
                 ),
                 title,

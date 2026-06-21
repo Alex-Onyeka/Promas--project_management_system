@@ -15,12 +15,12 @@ class MainSideBar extends StatefulWidget {
 class _MainSideBarState extends State<MainSideBar> {
   void navigateNow(int index) {
     if (widget.isMain) {
-      returnNav(context, listen: false).navigate(index);
+      returnNav().navigate(index);
       screenSize(context) <= tabletScreen
           ? Navigator.of(context).pop()
           : {};
     } else {
-      returnNav(context, listen: false).navigate(index);
+      returnNav().navigate(index);
       Navigator.of(context).pop();
       screenSize(context) <= tabletScreen
           ? Navigator.of(context).pop()
@@ -38,7 +38,7 @@ class _MainSideBarState extends State<MainSideBar> {
           ? 220
           : 270,
       decoration: BoxDecoration(
-        color: returnTheme(context).lightGrey(),
+        color: returnTheme(context: context).lightGrey(),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,7 +64,7 @@ class _MainSideBarState extends State<MainSideBar> {
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: returnTheme(
-                      context,
+                      context: context,
                     ).primaryColor(),
                   ),
                   'Promas',
@@ -80,7 +80,7 @@ class _MainSideBarState extends State<MainSideBar> {
                 children: [
                   MenuListItem(
                     currentSelected: returnNav(
-                      context,
+                      context: context,
                     ).currentPage,
                     index: 0,
                     action: () {
@@ -92,7 +92,7 @@ class _MainSideBarState extends State<MainSideBar> {
                   ),
                   MenuListItem(
                     currentSelected: returnNav(
-                      context,
+                      context: context,
                     ).currentPage,
                     index: 1,
                     action: () {
@@ -103,11 +103,11 @@ class _MainSideBarState extends State<MainSideBar> {
                   ),
                   Visibility(
                     visible: returnUser(
-                      context,
+                      context: context,
                     ).currentUser!.isAdmin,
                     child: MenuListItem(
                       currentSelected: returnNav(
-                        context,
+                        context: context,
                       ).currentPage,
                       index: 2,
                       action: () {
@@ -119,11 +119,11 @@ class _MainSideBarState extends State<MainSideBar> {
                   ),
                   Visibility(
                     visible: returnUser(
-                      context,
+                      context: context,
                     ).currentUser!.isAdmin,
                     child: MenuListItem(
                       currentSelected: returnNav(
-                        context,
+                        context: context,
                       ).currentPage,
                       index: 3,
                       action: () {
@@ -135,7 +135,7 @@ class _MainSideBarState extends State<MainSideBar> {
                   ),
                   MenuListItem(
                     currentSelected: returnNav(
-                      context,
+                      context: context,
                     ).currentPage,
                     index: 4,
                     action: () {
@@ -146,7 +146,7 @@ class _MainSideBarState extends State<MainSideBar> {
                   ),
                   MenuListItem(
                     currentSelected: returnNav(
-                      context,
+                      context: context,
                     ).currentPage,
                     index: 5,
                     action: () {
@@ -157,7 +157,7 @@ class _MainSideBarState extends State<MainSideBar> {
                   ),
                   MenuListItem(
                     currentSelected: returnNav(
-                      context,
+                      context: context,
                     ).currentPage,
                     index: 10,
                     action: () {
@@ -193,9 +193,11 @@ class _MainSideBarState extends State<MainSideBar> {
                     Icon(
                       size: 14,
                       color: returnTheme(
-                        context,
+                        context: context,
                       ).darkMediumGrey(),
-                      returnTheme(context).isDarkMode
+                      returnTheme(
+                            context: context,
+                          ).isDarkMode
                           ? Icons.nightlight
                           : Icons.sunny,
                     ),
@@ -204,10 +206,12 @@ class _MainSideBarState extends State<MainSideBar> {
                         fontSize: 11,
                         fontWeight: FontWeight.normal,
                         color: returnTheme(
-                          context,
+                          context: context,
                         ).darkMediumGrey(),
                       ),
-                      returnTheme(context).isDarkMode
+                      returnTheme(
+                            context: context,
+                          ).isDarkMode
                           ? 'Dark Theme'
                           : 'Light Theme',
                     ),
@@ -215,10 +219,7 @@ class _MainSideBarState extends State<MainSideBar> {
                 ),
                 InkWell(
                   onTap: () {
-                    returnTheme(
-                      context,
-                      listen: false,
-                    ).switchTheme();
+                    returnTheme().switchTheme();
                   },
                   child: Container(
                     height: 20,
@@ -228,12 +229,14 @@ class _MainSideBarState extends State<MainSideBar> {
                         20,
                       ),
                       color: returnTheme(
-                        context,
+                        context: context,
                       ).lightMediumGrey(),
                     ),
                     child: Row(
                       mainAxisAlignment:
-                          returnTheme(context).isDarkMode
+                          returnTheme(
+                            context: context,
+                          ).isDarkMode
                           ? MainAxisAlignment.end
                           : MainAxisAlignment.start,
                       children: [
@@ -246,7 +249,7 @@ class _MainSideBarState extends State<MainSideBar> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: returnTheme(
-                              context,
+                              context: context,
                             ).darkMediumGrey(),
                           ),
                         ),
@@ -286,7 +289,7 @@ class MenuListItem extends StatefulWidget {
 
 class _MenuListItemState extends State<MenuListItem> {
   Color? backGroundColor() {
-    if (returnTheme(context).isDarkMode) {
+    if (returnTheme(context: context).isDarkMode) {
       if (widget.currentSelected == widget.index) {
         return const Color.fromARGB(55, 255, 255, 255);
       } else {
@@ -330,7 +333,9 @@ class _MenuListItemState extends State<MenuListItem> {
                           : 20,
                       color:
                           widget.color ??
-                          returnTheme(context).darkGrey(),
+                          returnTheme(
+                            context: context,
+                          ).primaryColor(),
                       widget.icon,
                     ),
                     Text(
@@ -342,7 +347,7 @@ class _MenuListItemState extends State<MenuListItem> {
                             : 10.8,
                         fontWeight: FontWeight.normal,
                         color: returnTheme(
-                          context,
+                          context: context,
                         ).darkMediumGrey(),
                       ),
                       widget.title,

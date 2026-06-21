@@ -1,6 +1,10 @@
 import 'package:flutter/widgets.dart';
 
 class NavProvider extends ChangeNotifier {
+  static final NavProvider _instance =
+      NavProvider._internal();
+  factory NavProvider() => _instance;
+  NavProvider._internal();
   int currentPage = 0;
 
   String pageName() {

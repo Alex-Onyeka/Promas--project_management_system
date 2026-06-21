@@ -4,12 +4,14 @@ class CompanyClass {
   String name;
   String desc;
   final String? email;
+  final String? token;
 
   CompanyClass({
     this.id,
     this.createdAt,
     required this.name,
     required this.desc,
+    this.token,
     this.email,
   });
 
@@ -21,6 +23,7 @@ class CompanyClass {
       name: json['name'] ?? '',
       desc: json['desc'] ?? '',
       email: json['email'] as String?,
+      token: json['token'] as String?,
     );
   }
 
@@ -32,6 +35,7 @@ class CompanyClass {
       'name': name,
       'desc': desc,
       'email': email,
+      'token': token,
     };
   }
 
@@ -41,12 +45,14 @@ class CompanyClass {
     DateTime? createdAt,
     String? name,
     String? desc,
+    String? token,
   }) {
     return CompanyClass(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       name: name ?? this.name,
       desc: desc ?? this.desc,
+      token: token ?? this.token,
     );
   }
 }

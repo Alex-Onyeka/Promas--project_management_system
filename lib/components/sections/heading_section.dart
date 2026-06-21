@@ -60,10 +60,7 @@ class HeadingSection extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 11,
-            color: returnTheme(
-              context,
-              listen: false,
-            ).darkMediumGrey(),
+            color: returnTheme().darkMediumGrey(),
             fontWeight: FontWeight.normal,
           ),
           subText,

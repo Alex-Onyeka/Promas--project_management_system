@@ -27,7 +27,7 @@ class EmptyWidgetMain extends StatelessWidget {
               Icon(
                 size: 30,
                 color: returnTheme(
-                  context,
+                  context: context,
                 ).darkMediumGrey(),
                 Icons.work_off_outlined,
               ),
@@ -35,7 +35,7 @@ class EmptyWidgetMain extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   color: returnTheme(
-                    context,
+                    context: context,
                   ).darkMediumGrey(),
                 ),
                 title,
@@ -43,7 +43,7 @@ class EmptyWidgetMain extends StatelessWidget {
               SizedBox(height: 2),
               Visibility(
                 visible: returnUser(
-                  context,
+                  context: context,
                 ).currentUser!.isAdmin,
                 child: SizedBox(
                   width: 200,

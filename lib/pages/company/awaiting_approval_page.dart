@@ -47,7 +47,7 @@ class _AwaitingApprovalPageState
                                 Icon(
                                   size: 35,
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).primaryColor(),
                                   Icons.home_work_outlined,
                                 ),
@@ -79,7 +79,7 @@ class _AwaitingApprovalPageState
                                       fontWeight:
                                           FontWeight.bold,
                                       color: returnTheme(
-                                        context,
+                                        context: context,
                                       ).darkMediumGrey(),
                                     ),
                                     'Request Not Yet Approved',
@@ -94,7 +94,7 @@ class _AwaitingApprovalPageState
                                     fontWeight:
                                         FontWeight.bold,
                                     color: returnTheme(
-                                      context,
+                                      context: context,
                                     ).mediumGrey(),
                                   ),
                                   'Your Request is yet to be approved by the company... Awaiting Company to Approve your request.',

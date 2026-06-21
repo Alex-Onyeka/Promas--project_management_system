@@ -48,10 +48,7 @@ class _RemoveStaffDialogState
             MainButton(
               action: () async {
                 toggleLoading(true);
-                await returnBranch(
-                  context,
-                  listen: false,
-                ).removeStaffFromBranch(
+                await returnBranch().removeStaffFromBranch(
                   widget.branch.uuid!,
                   widget.user.id!,
                 );

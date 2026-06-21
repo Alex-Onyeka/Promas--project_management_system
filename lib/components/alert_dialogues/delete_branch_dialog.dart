@@ -45,10 +45,9 @@ class _DeleteBranchDialogState
             MainButton(
               action: () async {
                 toggleLoading(true);
-                await returnBranch(
-                  context,
-                  listen: false,
-                ).deleteBranch(widget.branch.uuid!);
+                await returnBranch().deleteBranch(
+                  widget.branch.uuid!,
+                );
                 toggleLoading(false);
                 if (context.mounted) {
                   Navigator.of(context).pop();

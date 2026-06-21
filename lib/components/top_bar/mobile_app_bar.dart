@@ -9,18 +9,18 @@ AppBar appBar({
   return AppBar(
     titleSpacing: 0,
     iconTheme: IconThemeData(
-      color: returnTheme(context).darkMediumGrey(),
+      color: returnTheme(context: context).darkMediumGrey(),
     ),
-    backgroundColor: returnTheme(context).white(),
+    backgroundColor: returnTheme(context: context).white(),
     foregroundColor: Colors.transparent,
     title: Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
           if (isMain) {
-            returnNav(context, listen: false).navigate(4);
+            returnNav().navigate(4);
           } else {
-            returnNav(context, listen: false).navigate(4);
+            returnNav().navigate(4);
             Navigator.of(context).pop();
           }
         },
@@ -38,12 +38,14 @@ AppBar appBar({
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: returnTheme(
-                    context,
+                    context: context,
                   ).darkMediumGrey(),
                 ),
                 child: Icon(
                   size: 18,
-                  color: returnTheme(context).lightGrey(),
+                  color: returnTheme(
+                    context: context,
+                  ).lightGrey(),
                   Icons.person,
                 ),
               ),
@@ -56,7 +58,7 @@ AppBar appBar({
                   Text(
                     style: TextStyle(
                       color: returnTheme(
-                        context,
+                        context: context,
                       ).darkGrey(),
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
@@ -67,7 +69,7 @@ AppBar appBar({
                   Text(
                     style: TextStyle(
                       color: returnTheme(
-                        context,
+                        context: context,
                       ).darkMediumGrey(),
                       fontSize: 9,
                     ),
@@ -85,7 +87,9 @@ AppBar appBar({
     centerTitle: true,
     actions: [
       Visibility(
-        visible: returnUser(context).currentUser!.isAdmin,
+        visible: returnUser(
+          context: context,
+        ).currentUser!.isAdmin,
         child: Padding(
           padding: const EdgeInsets.only(right: 25.0),
           child: Material(
@@ -93,15 +97,9 @@ AppBar appBar({
             child: InkWell(
               onTap: () {
                 if (isMain) {
-                  returnNav(
-                    context,
-                    listen: false,
-                  ).navigate(3);
+                  returnNav().navigate(3);
                 } else {
-                  returnNav(
-                    context,
-                    listen: false,
-                  ).navigate(3);
+                  returnNav().navigate(3);
                   Navigator.of(context).pop();
                 }
               },
@@ -115,13 +113,13 @@ AppBar appBar({
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: returnTheme(
-                          context,
+                          context: context,
                         ).lightMediumGrey(),
                       ),
                       child: Icon(
                         size: 18,
                         color: returnTheme(
-                          context,
+                          context: context,
                         ).darkMediumGrey(),
                         Icons.notifications_rounded,
                       ),
@@ -133,7 +131,7 @@ AppBar appBar({
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: returnTheme(
-                        context,
+                        context: context,
                       ).tertiaryColor(),
                     ),
                     child: Center(
@@ -142,10 +140,11 @@ AppBar appBar({
                           fontWeight: FontWeight.bold,
                           fontSize: 9,
                           color: returnTheme(
-                            context,
+                            context: context,
                           ).darkGrey(),
                         ),
-                        returnRequest(context).requests
+                        returnRequest(context: context)
+                            .requests
                             .where(
                               (req) => req.userId != null,
                             )

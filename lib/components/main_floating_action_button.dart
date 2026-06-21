@@ -12,10 +12,12 @@ class MainFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: returnUser(context).currentUser!.isAdmin,
+      visible: returnUser(
+        context: context,
+      ).currentUser!.isAdmin,
       child: Container(
         decoration: BoxDecoration(
-          color: returnTheme(context).white(),
+          color: returnTheme(context: context).white(),
           borderRadius: mainBorderRadius,
           boxShadow: [
             BoxShadow(
@@ -29,7 +31,7 @@ class MainFloatingActionButton extends StatelessWidget {
           color: Colors.transparent,
           child: Ink(
             decoration: BoxDecoration(
-              color: returnTheme(context).white(),
+              color: returnTheme(context: context).white(),
               borderRadius: mainBorderRadius,
             ),
             child: InkWell(
@@ -48,7 +50,7 @@ class MainFloatingActionButton extends StatelessWidget {
                   children: [
                     Icon(
                       color: returnTheme(
-                        context,
+                        context: context,
                       ).tertiaryColor(),
                       size: 18,
                       Icons.add,
@@ -58,7 +60,7 @@ class MainFloatingActionButton extends StatelessWidget {
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         color: returnTheme(
-                          context,
+                          context: context,
                         ).darkGrey(),
                       ),
                       'Create Project',

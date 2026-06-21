@@ -15,26 +15,27 @@ class ProjectTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = returnTheme(context);
+    var theme = returnTheme(context: context);
     var screen = screenSize(context);
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
         borderRadius: mainBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: const Color.fromARGB(10, 0, 0, 0),
+            color: const Color.fromARGB(5, 0, 0, 0),
             blurRadius: 10,
             spreadRadius: 10,
           ),
         ],
-        color: returnTheme(context).white(),
+        color: returnTheme(context: context).white(),
       ),
       child: Material(
         color: Colors.transparent,
         child: Ink(
           decoration: BoxDecoration(
             borderRadius: mainBorderRadius,
-            color: returnTheme(context).white(),
+            color: returnTheme(context: context).white(),
           ),
           child: InkWell(
             borderRadius: mainBorderRadius,
@@ -86,204 +87,6 @@ class ProjectTile extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 5),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: screen > mobileScreen
-                                ? const EdgeInsets.only(
-                                    left: 15.0,
-                                  )
-                                : const EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                            child: Text(
-                              style: TextStyle(
-                                fontSize:
-                                    screen > mobileScreen
-                                    ? 10
-                                    : 8,
-                                color: theme.mediumGrey(),
-                              ),
-                              cutLongText(
-                                screen > mobileScreen
-                                    ? 80
-                                    : 70,
-                                project.desc,
-                              ),
-                              // 'Project Description is the way of Life and Beans',
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          thickness: 0.5,
-                          color: theme.lightMediumGrey(),
-                        ),
-                        Padding(
-                          padding: screen > mobileScreen
-                              ? const EdgeInsets.only(
-                                  left: 10.0,
-                                )
-                              : const EdgeInsets.only(
-                                  left: 10,
-                                ),
-                          child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment
-                                    .spaceBetween,
-                            children: [
-                              Row(
-                                spacing: 4,
-                                children: [
-                                  Row(
-                                    spacing: 3,
-                                    children: [
-                                      Text(
-                                        style: TextStyle(
-                                          fontSize:
-                                              screen >
-                                                  mobileScreen
-                                              ? 8
-                                              : 6,
-                                          color: theme
-                                              .darkMediumGrey(),
-                                        ),
-                                        'Level:',
-                                      ),
-                                      Builder(
-                                        builder: (context) {
-                                          if (calcPercentageNumber(
-                                                returnBranch(
-                                                      context,
-                                                    )
-                                                    .branches
-                                                    .where(
-                                                      (
-                                                        branch,
-                                                      ) =>
-                                                          branch.projectId ==
-                                                          project.uuid,
-                                                    )
-                                                    .toList()
-                                                    .map(
-                                                      (
-                                                        branch,
-                                                      ) => branch
-                                                          .level,
-                                                    )
-                                                    .toList(),
-                                              ) ==
-                                              100) {
-                                            return Icon(
-                                              size: 15,
-                                              color: Colors
-                                                  .green,
-                                              Icons
-                                                  .check_box_outlined,
-                                            );
-                                          } else {
-                                            return Text(
-                                              style: TextStyle(
-                                                fontSize:
-                                                    screen >
-                                                        mobileScreen
-                                                    ? 9
-                                                    : 7,
-                                                fontWeight:
-                                                    FontWeight
-                                                        .bold,
-                                                color: theme
-                                                    .darkMediumGrey(),
-                                              ),
-                                              calcPercentage(
-                                                returnBranch(
-                                                      context,
-                                                    )
-                                                    .branches
-                                                    .where(
-                                                      (
-                                                        branch,
-                                                      ) =>
-                                                          branch.projectId ==
-                                                          project.uuid,
-                                                    )
-                                                    .toList()
-                                                    .map(
-                                                      (
-                                                        branch,
-                                                      ) => branch
-                                                          .level,
-                                                    )
-                                                    .toList(),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    height: 13,
-                                    width: 1,
-                                    color: returnTheme(
-                                      context,
-                                    ).lightMediumGrey(),
-                                  ),
-                                  Row(
-                                    spacing: 3,
-                                    children: [
-                                      Text(
-                                        style: TextStyle(
-                                          fontSize:
-                                              screen >
-                                                  mobileScreen
-                                              ? 8
-                                              : 6,
-                                          color: theme
-                                              .darkMediumGrey(),
-                                        ),
-                                        'Updated:',
-                                      ),
-                                      Text(
-                                        style: TextStyle(
-                                          fontSize:
-                                              screen >
-                                                  mobileScreen
-                                              ? 9
-                                              : 7,
-                                          fontWeight:
-                                              FontWeight
-                                                  .bold,
-                                          color: theme
-                                              .darkMediumGrey(),
-                                        ),
-                                        formatShortDateTwo(
-                                          project
-                                              .lastUpdate,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Icon(
-                                size: screen > mobileScreen
-                                    ? 14
-                                    : 12,
-                                color: theme
-                                    .darkMediumGrey(),
-                                Icons
-                                    .arrow_forward_ios_rounded,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

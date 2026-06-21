@@ -135,3 +135,32 @@ String cutLongText(int count, String text) {
     return text;
   }
 }
+
+String addZeroAfterDecimalPoint(String value) {
+  if (value.contains('.')) {
+    return value;
+  } else {
+    return "$value.0";
+  }
+}
+
+String formatLargeNumber(String numberString) {
+  final number = double.tryParse(
+    numberString.replaceAll(',', ''),
+  );
+  if (number == null) return numberString;
+
+  // Format with commas
+  final formatter = NumberFormat('#,###.###');
+  return addZeroAfterDecimalPoint(formatter.format(number));
+}
+
+String formatLargeNumberDouble(num number) {
+  final formatter = NumberFormat('#,###.###');
+  return addZeroAfterDecimalPoint(formatter.format(number));
+}
+
+String formatLargeNumberDoubleWidgetDecimal(num number) {
+  final formatter = NumberFormat('#,##0.0');
+  return formatter.format(number);
+}

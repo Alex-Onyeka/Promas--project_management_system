@@ -58,13 +58,15 @@ class _SelectStaffDialogState
               SizedBox(height: 3),
               Builder(
                 builder: (context) {
-                  if (returnUser(context).users.isEmpty) {
+                  if (returnUser(
+                    context: context,
+                  ).users.isEmpty) {
                     return Column(
                       children: [
                         Icon(
                           size: 20,
                           color: returnTheme(
-                            context,
+                            context: context,
                           ).darkMediumGrey(),
                           Icons.person_outline_rounded,
                         ),
@@ -81,7 +83,7 @@ class _SelectStaffDialogState
                                 style: TextStyle(
                                   fontSize: 10,
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).darkMediumGrey(),
                                 ),
                                 'You Haven\'t added any Staff to your Company',
@@ -95,7 +97,8 @@ class _SelectStaffDialogState
                   } else {
                     return Column(
                       spacing: 5,
-                      children: returnUser(context).users
+                      children: returnUser(context: context)
+                          .users
                           .where(
                             (us) => us.name
                                 .toLowerCase()
@@ -107,39 +110,32 @@ class _SelectStaffDialogState
                           .map(
                             (user) => ListTile(
                               onTap: () {
-                                if (!returnBranch(
-                                  context,
-                                  listen: false,
-                                ).selectedStaffs.contains(
-                                  user,
-                                )) {
+                                if (!returnBranch()
+                                    .selectedStaffs
+                                    .contains(user)) {
                                   setState(() {
-                                    returnBranch(
-                                      context,
-                                      listen: false,
-                                    ).selectNewStaff(user);
+                                    returnBranch()
+                                        .selectNewStaff(
+                                          user,
+                                        );
                                   });
                                   print(
-                                    returnBranch(
-                                      context,
-                                      listen: false,
-                                    ).selectedStaffs.length,
+                                    returnBranch()
+                                        .selectedStaffs
+                                        .length,
                                   );
                                   print(user.name);
                                 } else {
                                   setState(() {
-                                    returnBranch(
-                                      context,
-                                      listen: false,
-                                    ).removeSelectedStaff(
-                                      user,
-                                    );
+                                    returnBranch()
+                                        .removeSelectedStaff(
+                                          user,
+                                        );
                                   });
                                   print(
-                                    returnBranch(
-                                      context,
-                                      listen: false,
-                                    ).selectedStaffs.length,
+                                    returnBranch()
+                                        .selectedStaffs
+                                        .length,
                                   );
                                 }
                               },
@@ -152,7 +148,7 @@ class _SelectStaffDialogState
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: returnTheme(
-                                        context,
+                                        context: context,
                                       ).darkMediumGrey(),
                                       fontWeight:
                                           FontWeight.bold,
@@ -168,7 +164,7 @@ class _SelectStaffDialogState
                                           BoxShape.circle,
                                       border: Border.all(
                                         color: returnTheme(
-                                          context,
+                                          context: context,
                                         ).mediumGrey(),
                                       ),
                                     ),
@@ -181,17 +177,14 @@ class _SelectStaffDialogState
                                         shape:
                                             BoxShape.circle,
                                         color:
-                                            returnBranch(
-                                                  context,
-                                                  listen:
-                                                      false,
-                                                )
+                                            returnBranch()
                                                 .selectedStaffs
                                                 .contains(
                                                   user,
                                                 )
                                             ? returnTheme(
-                                                context,
+                                                context:
+                                                    context,
                                               ).tertiaryLight()
                                             : Colors
                                                   .transparent,
@@ -214,25 +207,17 @@ class _SelectStaffDialogState
                   setState(() {
                     isLoading = true;
                   });
-                  if (returnBranch(
-                    context,
-                    listen: false,
-                  ).selectedStaffs.isNotEmpty) {
+                  if (returnBranch()
+                      .selectedStaffs
+                      .isNotEmpty) {
                     if (widget.branch != null) {
-                      await returnBranch(
-                        context,
-                        listen: false,
-                      ).addStaffToBranch(
+                      await returnBranch().addStaffToBranch(
                         widget.branch!.uuid!,
-                        returnBranch(context, listen: false)
-                            .selectedStaffs
+                        returnBranch().selectedStaffs
                             .map((staff) => staff.id!)
                             .toList(),
                       );
-                      returnBranch(
-                        context,
-                        listen: false,
-                      ).clearSelectedStaffs();
+                      returnBranch().clearSelectedStaffs();
                     }
                     nameController.clear();
                     Navigator.of(context).pop();
@@ -245,10 +230,7 @@ class _SelectStaffDialogState
                 title: 'Cancel',
                 action: () {
                   nameController.clear();
-                  returnBranch(
-                    context,
-                    listen: false,
-                  ).clearSelectedStaffs();
+                  returnBranch().clearSelectedStaffs();
                   Navigator.of(context).pop();
                 },
               ),

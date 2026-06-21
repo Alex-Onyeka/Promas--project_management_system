@@ -5,7 +5,6 @@ import 'package:promas/pages/company/company_setup.dart';
 import 'package:promas/pages/landing_page/landing_page.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/user_provider.dart';
-import 'package:promas/services/auth_service.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -50,18 +49,7 @@ class _HomeState extends State<Home> {
         builder: (context) {
           if (UserProvider().currentUser == null) {
             return Center(
-              child: Container(
-                child: Center(
-                  child: InkWell(
-                    onTap: () {
-                      AuthService().signOut(
-                        context: context,
-                      );
-                    },
-                    child: Text('Click'),
-                  ),
-                ),
-              ),
+              child: CircularProgressIndicator.adaptive(),
             );
           } else {
             if (CompanyProvider().currentCompany == null) {

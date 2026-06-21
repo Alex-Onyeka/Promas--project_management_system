@@ -28,7 +28,9 @@ class _PasswordTextFieldState
       children: [
         Text(
           style: TextStyle(
-            color: returnTheme(context).mediumGrey(),
+            color: returnTheme(
+              context: context,
+            ).mediumGrey(),
             fontSize: 11,
             fontWeight: FontWeight.normal,
           ),
@@ -38,7 +40,9 @@ class _PasswordTextFieldState
         ),
         TextFormField(
           style: TextStyle(
-            color: returnTheme(context).mediumGrey(),
+            color: returnTheme(
+              context: context,
+            ).mediumGrey(),
             fontSize: 13,
           ),
           controller: widget.passwordController,

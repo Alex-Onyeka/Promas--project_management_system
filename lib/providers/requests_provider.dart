@@ -13,6 +13,19 @@ class RequestsProvider extends ChangeNotifier {
   final String _table = 'requests';
 
   List<RequestClass> requests = [];
+
+  List<RequestClass> acceptedRequests() {
+    return requests
+        .where((item) => item.userId == null)
+        .toList();
+  }
+
+  List<RequestClass> unAcceptedRequests() {
+    return requests
+        .where((item) => item.userId != null)
+        .toList();
+  }
+
   RequestClass? currentRequest;
 
   void clearCache() {

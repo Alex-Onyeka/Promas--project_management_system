@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promas/constants/general_constants.dart';
+import 'package:promas/main.dart';
 
 class MainButton extends StatefulWidget {
   final Function() action;
@@ -33,7 +34,9 @@ class _MainButtonState extends State<MainButton> {
               topLeft: Radius.circular(5),
               topRight: Radius.circular(5),
             ),
-            color: Colors.blue,
+            color: returnTheme(
+              context: context,
+            ).primaryColor(),
             boxShadow: [
               BoxShadow(
                 color:

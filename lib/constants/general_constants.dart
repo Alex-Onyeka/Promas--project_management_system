@@ -21,3 +21,5 @@ var mainBorderRadius = BorderRadius.only(
 String appName = 'Promas';
 
 const String mainLogo = 'assets/logo.svg';
+
+const String workingMan = 'assets/workingman.png';

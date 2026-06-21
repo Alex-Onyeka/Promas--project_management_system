@@ -35,6 +35,7 @@ class _ProjectPageState extends State<ProjectPage> {
   final projectSearchController = TextEditingController();
   final nameController = TextEditingController();
   final descController = TextEditingController();
+  final urlController = TextEditingController();
   bool isLoading = false;
 
   void toggleLoading() {
@@ -46,12 +47,12 @@ class _ProjectPageState extends State<ProjectPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<BranchClass> branchIn = returnBranch(context)
-        .branches
-        .where(
-          (bra) => bra.projectId == widget.project.uuid,
-        )
-        .toList();
+    List<BranchClass> branchIn =
+        returnBranch(context: context).branches
+            .where(
+              (bra) => bra.projectId == widget.project.uuid,
+            )
+            .toList();
     branchIn.sort(
       (a, b) => b.lastUpdate!.compareTo(a.lastUpdate!),
     );
@@ -121,10 +122,10 @@ class _ProjectPageState extends State<ProjectPage> {
                                               ),
                                           child: Icon(
                                             size: 20,
-                                            color:
-                                                returnTheme(
+                                            color: returnTheme(
+                                              context:
                                                   context,
-                                                ).darkGrey(),
+                                            ).darkGrey(),
                                             Icons
                                                 .arrow_back_ios_new_rounded,
                                           ),
@@ -140,7 +141,8 @@ class _ProjectPageState extends State<ProjectPage> {
                                                   .bold,
                                           color:
                                               returnTheme(
-                                                context,
+                                                context:
+                                                    context,
                                               ).darkGrey(),
                                         ),
                                         widget.project.name,
@@ -154,10 +156,10 @@ class _ProjectPageState extends State<ProjectPage> {
                                               ),
                                           child: Icon(
                                             size: 20,
-                                            color:
-                                                returnTheme(
+                                            color: returnTheme(
+                                              context:
                                                   context,
-                                                ).darkGrey(),
+                                            ).darkGrey(),
                                             Icons
                                                 .arrow_back_ios_new_rounded,
                                           ),
@@ -175,7 +177,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                       fontWeight:
                                           FontWeight.normal,
                                       color: returnTheme(
-                                        context,
+                                        context: context,
                                       ).darkMediumGrey(),
                                     ),
                                     widget.project.desc,
@@ -239,10 +241,10 @@ class _ProjectPageState extends State<ProjectPage> {
                                           spacing: 5,
                                           children: [
                                             IgnorePointer(
-                                              ignoring:
-                                                  !returnUser(
+                                              ignoring: !returnUser(
+                                                context:
                                                     context,
-                                                  ).currentUser!.isAdmin,
+                                              ).currentUser!.isAdmin,
                                               child: InkWell(
                                                 onTap: () {
                                                   showDialog(
@@ -256,6 +258,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                                             project: widget.project,
                                                             nameController: nameController,
                                                             descController: descController,
+                                                            urlController: urlController,
                                                           );
                                                         },
                                                   ).then((
@@ -285,7 +288,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                                         size:
                                                             18,
                                                         color: returnTheme(
-                                                          context,
+                                                          context: context,
                                                         ).mediumGrey(),
                                                         Icons.edit_outlined,
                                                       ),
@@ -293,7 +296,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                                         style: TextStyle(
                                                           fontSize: 11,
                                                           color: returnTheme(
-                                                            context,
+                                                            context: context,
                                                           ).mediumGrey(),
                                                         ),
                                                         'Edit Project',
@@ -304,10 +307,10 @@ class _ProjectPageState extends State<ProjectPage> {
                                               ),
                                             ),
                                             IgnorePointer(
-                                              ignoring:
-                                                  !returnUser(
+                                              ignoring: !returnUser(
+                                                context:
                                                     context,
-                                                  ).currentUser!.isAdmin,
+                                              ).currentUser!.isAdmin,
                                               child: InkWell(
                                                 onTap: () {
                                                   showDialog(
@@ -388,18 +391,17 @@ class _ProjectPageState extends State<ProjectPage> {
                                                   FontWeight
                                                       .bold,
                                               color: returnTheme(
-                                                context,
+                                                context:
+                                                    context,
                                               ).darkGrey(),
                                             ),
                                             'BRANCHES',
                                           ),
                                           IgnorePointer(
-                                            ignoring:
-                                                !returnUser(
-                                                      context,
-                                                    )
-                                                    .currentUser!
-                                                    .isAdmin,
+                                            ignoring: !returnUser(
+                                              context:
+                                                  context,
+                                            ).currentUser!.isAdmin,
                                             child: InkWell(
                                               onTap: () async {
                                                 await createBranch(
@@ -430,7 +432,8 @@ class _ProjectPageState extends State<ProjectPage> {
                                                   children: [
                                                     Icon(
                                                       color: returnTheme(
-                                                        context,
+                                                        context:
+                                                            context,
                                                       ).darkMediumGrey(),
                                                       size:
                                                           18,
@@ -442,7 +445,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                                         fontSize:
                                                             11,
                                                         color: returnTheme(
-                                                          context,
+                                                          context: context,
                                                         ).darkMediumGrey(),
                                                       ),
                                                       'Create New Branch',
@@ -479,7 +482,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                                           style: TextStyle(
                                                             fontSize: 11,
                                                             color: returnTheme(
-                                                              context,
+                                                              context: context,
                                                             ).mediumGrey(),
                                                           ),
                                                           'Branch Name',
@@ -494,7 +497,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                                             style: TextStyle(
                                                               fontSize: 11,
                                                               color: returnTheme(
-                                                                context,
+                                                                context: context,
                                                               ).mediumGrey(),
                                                             ),
                                                             'Level',
@@ -611,7 +614,7 @@ class _BranchListTileState extends State<BranchListTile> {
       padding: const EdgeInsets.symmetric(vertical: 2.5),
       child: Ink(
         decoration: BoxDecoration(
-          color: returnTheme(context).white(),
+          color: returnTheme(context: context).white(),
           // borderRadius: mainBorderRadius,
           // border: Border.all(
           //   color: const Color.fromARGB(20, 66, 66, 66),
@@ -643,7 +646,7 @@ class _BranchListTileState extends State<BranchListTile> {
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
                               color: returnTheme(
-                                context,
+                                context: context,
                               ).darkMediumGrey(),
                             ),
                             widget.branch.name
@@ -658,13 +661,16 @@ class _BranchListTileState extends State<BranchListTile> {
                             children: [
                               IgnorePointer(
                                 ignoring:
-                                    !returnUser(context)
+                                    !returnUser(
+                                          context: context,
+                                        )
                                         .currentUser!
                                         .isAdmin &&
                                     !widget.branch.employees
                                         .contains(
                                           returnUser(
-                                            context,
+                                            context:
+                                                context,
                                           ).currentUser!.id,
                                         ),
                                 child: InkWell(
@@ -693,10 +699,10 @@ class _BranchListTileState extends State<BranchListTile> {
                                         Text(
                                           style: TextStyle(
                                             fontSize: 11,
-                                            color:
-                                                returnTheme(
+                                            color: returnTheme(
+                                              context:
                                                   context,
-                                                ).darkGrey(),
+                                            ).darkGrey(),
                                           ),
                                           calcPercentageSingle(
                                             widget
@@ -707,7 +713,8 @@ class _BranchListTileState extends State<BranchListTile> {
                                         Icon(
                                           size: 18,
                                           color: returnTheme(
-                                            context,
+                                            context:
+                                                context,
                                           ).mediumGrey(),
                                           Icons
                                               .edit_outlined,
@@ -723,7 +730,7 @@ class _BranchListTileState extends State<BranchListTile> {
                         Icon(
                           size: 20,
                           color: returnTheme(
-                            context,
+                            context: context,
                           ).mediumGrey(),
                           isOpen
                               ? Icons
@@ -763,7 +770,7 @@ class _BranchListTileState extends State<BranchListTile> {
                                     style: TextStyle(
                                       fontSize: 9,
                                       color: returnTheme(
-                                        context,
+                                        context: context,
                                       ).mediumGrey(),
                                     ),
                                     'Branch Description:',
@@ -772,7 +779,7 @@ class _BranchListTileState extends State<BranchListTile> {
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: returnTheme(
-                                        context,
+                                        context: context,
                                       ).darkMediumGrey(),
                                     ),
                                     widget.branch.desc ??
@@ -795,7 +802,7 @@ class _BranchListTileState extends State<BranchListTile> {
                           children: [
                             IgnorePointer(
                               ignoring: !returnUser(
-                                context,
+                                context: context,
                               ).currentUser!.isAdmin,
                               child: InkWell(
                                 onTap: () async {
@@ -829,7 +836,7 @@ class _BranchListTileState extends State<BranchListTile> {
                                       Icon(
                                         size: 18,
                                         color: returnTheme(
-                                          context,
+                                          context: context,
                                         ).mediumGrey(),
                                         Icons.edit_outlined,
                                       ),
@@ -837,7 +844,8 @@ class _BranchListTileState extends State<BranchListTile> {
                                         style: TextStyle(
                                           fontSize: 11,
                                           color: returnTheme(
-                                            context,
+                                            context:
+                                                context,
                                           ).mediumGrey(),
                                         ),
                                         'Edit',
@@ -849,7 +857,7 @@ class _BranchListTileState extends State<BranchListTile> {
                             ),
                             IgnorePointer(
                               ignoring: !returnUser(
-                                context,
+                                context: context,
                               ).currentUser!.isAdmin,
                               child: InkWell(
                                 onTap: () {
@@ -944,7 +952,8 @@ class _BranchListTileState extends State<BranchListTile> {
                                         style: TextStyle(
                                           fontSize: 11,
                                           color: returnTheme(
-                                            context,
+                                            context:
+                                                context,
                                           ).darkMediumGrey(),
                                         ),
                                         'Active Staffs:',
@@ -956,7 +965,8 @@ class _BranchListTileState extends State<BranchListTile> {
                                   Builder(
                                     builder: (context) {
                                       if (returnUser(
-                                            context,
+                                            context:
+                                                context,
                                           ).users
                                           .where(
                                             (user) => widget
@@ -978,7 +988,8 @@ class _BranchListTileState extends State<BranchListTile> {
                                               Icon(
                                                 size: 15,
                                                 color: returnTheme(
-                                                  context,
+                                                  context:
+                                                      context,
                                                 ).mediumGrey(),
                                                 Icons
                                                     .person,
@@ -988,14 +999,16 @@ class _BranchListTileState extends State<BranchListTile> {
                                                   fontSize:
                                                       11,
                                                   color: returnTheme(
-                                                    context,
+                                                    context:
+                                                        context,
                                                   ).darkGrey(),
                                                 ),
                                                 'No Staff Added to this Project',
                                               ),
                                               IgnorePointer(
                                                 ignoring: !returnUser(
-                                                  context,
+                                                  context:
+                                                      context,
                                                 ).currentUser!.isAdmin,
                                                 child: InkWell(
                                                   onTap: () {
@@ -1043,7 +1056,7 @@ class _BranchListTileState extends State<BranchListTile> {
                                                         Icon(
                                                           size: 15,
                                                           color: returnTheme(
-                                                            context,
+                                                            context: context,
                                                           ).secondaryColor(),
                                                           Icons.add,
                                                         ),
@@ -1051,7 +1064,7 @@ class _BranchListTileState extends State<BranchListTile> {
                                                           style: TextStyle(
                                                             fontSize: 11,
                                                             color: returnTheme(
-                                                              context,
+                                                              context: context,
                                                             ).secondaryColor(),
                                                           ),
                                                           'Add Staff',
@@ -1068,109 +1081,108 @@ class _BranchListTileState extends State<BranchListTile> {
                                         return SingleChildScrollView(
                                           child: Column(
                                             spacing: 5,
-                                            children: returnUser(context)
-                                                .users
-                                                .where(
-                                                  (
-                                                    user,
-                                                  ) => widget
-                                                      .branch
-                                                      .employees
-                                                      .contains(
-                                                        user.id,
-                                                      ),
-                                                )
-                                                .toList()
-                                                .map(
-                                                  (
-                                                    use,
-                                                  ) => Container(
-                                                    decoration: BoxDecoration(
-                                                      border: Border(
-                                                        bottom: BorderSide(
-                                                          color: const Color.fromARGB(
-                                                            31,
-                                                            66,
-                                                            66,
-                                                            66,
+                                            children:
+                                                returnUser(
+                                                      context:
+                                                          context,
+                                                    ).users
+                                                    .where(
+                                                      (
+                                                        user,
+                                                      ) => widget
+                                                          .branch
+                                                          .employees
+                                                          .contains(
+                                                            user.id,
+                                                          ),
+                                                    )
+                                                    .toList()
+                                                    .map(
+                                                      (
+                                                        use,
+                                                      ) => Container(
+                                                        decoration: BoxDecoration(
+                                                          border: Border(
+                                                            bottom: BorderSide(
+                                                              color: const Color.fromARGB(
+                                                                31,
+                                                                66,
+                                                                66,
+                                                                66,
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                    padding: EdgeInsets.symmetric(
-                                                      vertical:
-                                                          10,
-                                                      horizontal:
-                                                          10,
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.spaceBetween,
-                                                      spacing:
-                                                          5,
-                                                      children: [
-                                                        Row(
+                                                        padding: EdgeInsets.symmetric(
+                                                          vertical: 10,
+                                                          horizontal: 10,
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           spacing: 5,
                                                           children: [
-                                                            Icon(
-                                                              size: 15,
-                                                              color: returnTheme(
-                                                                context,
-                                                              ).mediumGrey(),
-                                                              Icons.person,
+                                                            Row(
+                                                              spacing: 5,
+                                                              children: [
+                                                                Icon(
+                                                                  size: 15,
+                                                                  color: returnTheme(
+                                                                    context: context,
+                                                                  ).mediumGrey(),
+                                                                  Icons.person,
+                                                                ),
+                                                                Text(
+                                                                  style: TextStyle(
+                                                                    fontSize: 12,
+                                                                    color: returnTheme(
+                                                                      context: context,
+                                                                    ).darkGrey(),
+                                                                  ),
+                                                                  use.name,
+                                                                ),
+                                                              ],
                                                             ),
-                                                            Text(
-                                                              style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: returnTheme(
-                                                                  context,
-                                                                ).darkGrey(),
+                                                            Visibility(
+                                                              visible:
+                                                                  UserProvider().currentUser!.isAdmin ==
+                                                                  true,
+                                                              child: InkWell(
+                                                                onTap: () {
+                                                                  showDialog(
+                                                                    context: context,
+                                                                    builder:
+                                                                        (
+                                                                          context,
+                                                                        ) {
+                                                                          return RemoveStaffDialog(
+                                                                            branch: widget.branch,
+                                                                            user: use,
+                                                                          );
+                                                                        },
+                                                                  );
+                                                                },
+                                                                child: Container(
+                                                                  padding: EdgeInsets.all(
+                                                                    8,
+                                                                  ),
+                                                                  decoration: BoxDecoration(
+                                                                    shape: BoxShape.circle,
+                                                                  ),
+                                                                  child: Icon(
+                                                                    size: 18,
+                                                                    color: returnTheme(
+                                                                      context: context,
+                                                                    ).mediumGrey(),
+                                                                    Icons.clear,
+                                                                  ),
+                                                                ),
                                                               ),
-                                                              use.name,
                                                             ),
                                                           ],
                                                         ),
-                                                        Visibility(
-                                                          visible:
-                                                              UserProvider().currentUser!.isAdmin ==
-                                                              true,
-                                                          child: InkWell(
-                                                            onTap: () {
-                                                              showDialog(
-                                                                context: context,
-                                                                builder:
-                                                                    (
-                                                                      context,
-                                                                    ) {
-                                                                      return RemoveStaffDialog(
-                                                                        branch: widget.branch,
-                                                                        user: use,
-                                                                      );
-                                                                    },
-                                                              );
-                                                            },
-                                                            child: Container(
-                                                              padding: EdgeInsets.all(
-                                                                8,
-                                                              ),
-                                                              decoration: BoxDecoration(
-                                                                shape: BoxShape.circle,
-                                                              ),
-                                                              child: Icon(
-                                                                size: 18,
-                                                                color: returnTheme(
-                                                                  context,
-                                                                ).mediumGrey(),
-                                                                Icons.clear,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                                .toList(),
+                                                      ),
+                                                    )
+                                                    .toList(),
                                           ),
                                         );
                                       }
@@ -1206,7 +1218,8 @@ class _BranchListTileState extends State<BranchListTile> {
                                             style: TextStyle(
                                               fontSize: 10,
                                               color: returnTheme(
-                                                context,
+                                                context:
+                                                    context,
                                               ).darkMediumGrey(),
                                             ),
                                             'Created Date:',
@@ -1218,7 +1231,8 @@ class _BranchListTileState extends State<BranchListTile> {
                                                   FontWeight
                                                       .bold,
                                               color: returnTheme(
-                                                context,
+                                                context:
+                                                    context,
                                               ).darkMediumGrey(),
                                             ),
                                             formateDate(
@@ -1254,7 +1268,8 @@ class _BranchListTileState extends State<BranchListTile> {
                                             style: TextStyle(
                                               fontSize: 10,
                                               color: returnTheme(
-                                                context,
+                                                context:
+                                                    context,
                                               ).darkMediumGrey(),
                                             ),
                                             'Last Updated:',
@@ -1266,7 +1281,8 @@ class _BranchListTileState extends State<BranchListTile> {
                                                   FontWeight
                                                       .bold,
                                               color: returnTheme(
-                                                context,
+                                                context:
+                                                    context,
                                               ).darkMediumGrey(),
                                             ),
                                             formateDate(
@@ -1330,7 +1346,9 @@ class DashboardContainers extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 9,
-                  color: returnTheme(context).mediumGrey(),
+                  color: returnTheme(
+                    context: context,
+                  ).mediumGrey(),
                 ),
                 text,
               ),
@@ -1340,7 +1358,7 @@ class DashboardContainers extends StatelessWidget {
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
                   color: returnTheme(
-                    context,
+                    context: context,
                   ).darkMediumGrey(),
                 ),
                 title ?? 'Not Set',
@@ -1371,10 +1389,7 @@ Future<void> createBranch({
       );
     },
   ).then((_) {
-    returnBranch(
-      context,
-      listen: false,
-    ).clearSelectedStaffs();
+    returnBranch().clearSelectedStaffs();
   });
 }
 

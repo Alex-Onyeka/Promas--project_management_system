@@ -34,11 +34,13 @@ class _AuthContainerState extends State<AuthContainer> {
           ? 650
           : null,
       decoration: BoxDecoration(
-        color: returnTheme(context).containerColor(),
+        color: returnTheme(
+          context: context,
+        ).containerColor(),
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: !returnTheme(context).isDarkMode
+            color: !returnTheme(context: context).isDarkMode
                 ? Color.fromARGB(10, 1, 42, 75)
                 : Color.fromARGB(14, 77, 175, 255),
             blurRadius: 20,

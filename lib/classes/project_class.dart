@@ -5,6 +5,7 @@ class ProjectClass {
   String desc;
   final int? companyId;
   DateTime lastUpdate;
+  final String? githubUrl;
 
   ProjectClass({
     this.uuid,
@@ -13,6 +14,7 @@ class ProjectClass {
     required this.name,
     required this.desc,
     this.companyId,
+    this.githubUrl,
   });
 
   /// From JSON (Supabase → Dart)
@@ -24,6 +26,7 @@ class ProjectClass {
       name: json['name'] ?? '',
       desc: json['desc'] ?? '',
       companyId: json['company_id'],
+      githubUrl: json['github_url'] as String?,
     );
   }
 
@@ -36,25 +39,27 @@ class ProjectClass {
       'name': name,
       'desc': desc,
       'company_id': companyId,
+      'github_url': githubUrl,
     };
   }
 
-  // /// Optional: copyWith for partial updates
-  // ProjectClass copyWith({
-  //   String? uuid,
-  //   DateTime? createdAt,
-  //   String? name,
-  //   String? desc,
-  //   double? level,
-  //   int? companyId,
-  // }) {
-  //   return ProjectClass(
-  //     uuid: uuid ?? this.uuid,
-  //     createdAt: createdAt ?? this.createdAt,
-  //     name: name ?? this.name,
-  //     desc: desc ?? this.desc,
-  //     level: level ?? this.level,
-  //     companyId: companyId ?? this.companyId,
-  //   );
-  // }
+  ProjectClass copyWith({
+    String? uuid,
+    DateTime? createdAt,
+    String? name,
+    String? desc,
+    int? companyId,
+    DateTime? lastUpdate,
+    String? githubUrl,
+  }) {
+    return ProjectClass(
+      uuid: uuid ?? this.uuid,
+      createdAt: createdAt ?? this.createdAt,
+      lastUpdate: lastUpdate ?? this.lastUpdate,
+      name: name ?? this.name,
+      desc: desc ?? this.desc,
+      companyId: companyId ?? this.companyId,
+      githubUrl: githubUrl ?? this.githubUrl,
+    );
+  }
 }

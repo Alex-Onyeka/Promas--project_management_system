@@ -45,10 +45,9 @@ class _DeleteProjectDialogState
             MainButton(
               action: () async {
                 toggleLoading(true);
-                await returnProject(
-                  context,
-                  listen: false,
-                ).deleteProject(widget.project.uuid!);
+                await returnProject().deleteProject(
+                  widget.project.uuid!,
+                );
                 toggleLoading(false);
                 if (context.mounted) {
                   Navigator.of(context).pop();

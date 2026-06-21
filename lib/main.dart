@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:promas/pages/base_page.dart';
 import 'package:promas/pages/landing_page/landing_page.dart';
 import 'package:promas/providers/branch_provider.dart';
+import 'package:promas/providers/commit_provider.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/nav_provider.dart';
 import 'package:promas/providers/project_provider.dart';
@@ -11,6 +13,7 @@ import 'package:promas/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// promas_super_secret_webhook_key_2026
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -44,74 +47,77 @@ void main() async {
         ChangeNotifierProvider<NavProvider>.value(
           value: NavProvider(),
         ),
+        ChangeNotifierProvider<CommitProvider>.value(
+          value: CommitProvider(),
+        ),
       ],
       child: const MyApp(),
     ),
   );
 }
 
-ThemeProvider returnTheme(
-  BuildContext context, {
-  bool listen = true,
-}) {
-  return Provider.of<ThemeProvider>(
-    context,
-    listen: listen,
-  );
+ThemeProvider returnTheme({BuildContext? context}) {
+  if (context == null) {
+    return ThemeProvider();
+  } else {
+    return Provider.of<ThemeProvider>(context);
+  }
 }
 
-NavProvider returnNav(
-  BuildContext context, {
-  bool listen = true,
-}) {
-  return Provider.of<NavProvider>(context, listen: listen);
+NavProvider returnNav({BuildContext? context}) {
+  if (context == null) {
+    return NavProvider();
+  } else {
+    return Provider.of<NavProvider>(context);
+  }
 }
 
-RequestsProvider returnRequest(
-  BuildContext context, {
-  bool listen = true,
-}) {
-  return Provider.of<RequestsProvider>(
-    context,
-    listen: listen,
-  );
+RequestsProvider returnRequest({BuildContext? context}) {
+  if (context == null) {
+    return RequestsProvider();
+  } else {
+    return Provider.of<RequestsProvider>(context);
+  }
 }
 
-UserProvider returnUser(
-  BuildContext context, {
-  bool listen = true,
-}) {
-  return Provider.of<UserProvider>(context, listen: listen);
+UserProvider returnUser({BuildContext? context}) {
+  if (context == null) {
+    return UserProvider();
+  } else {
+    return Provider.of<UserProvider>(context);
+  }
 }
 
-CompanyProvider returnCompany(
-  BuildContext context, {
-  bool listen = true,
-}) {
-  return Provider.of<CompanyProvider>(
-    context,
-    listen: listen,
-  );
+CompanyProvider returnCompany({BuildContext? context}) {
+  if (context == null) {
+    return CompanyProvider();
+  } else {
+    return Provider.of<CompanyProvider>(context);
+  }
 }
 
-ProjectProvider returnProject(
-  BuildContext context, {
-  bool listen = true,
-}) {
-  return Provider.of<ProjectProvider>(
-    context,
-    listen: listen,
-  );
+ProjectProvider returnProject({BuildContext? context}) {
+  if (context == null) {
+    return ProjectProvider();
+  } else {
+    return Provider.of<ProjectProvider>(context);
+  }
 }
 
-BranchProvider returnBranch(
-  BuildContext context, {
-  bool listen = true,
-}) {
-  return Provider.of<BranchProvider>(
-    context,
-    listen: listen,
-  );
+BranchProvider returnBranch({BuildContext? context}) {
+  if (context == null) {
+    return BranchProvider();
+  } else {
+    return Provider.of<BranchProvider>(context);
+  }
+}
+
+CommitProvider returnCommit({BuildContext? context}) {
+  if (context != null) {
+    return Provider.of<CommitProvider>(context);
+  } else {
+    return CommitProvider();
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -124,10 +130,13 @@ class MyApp extends StatelessWidget {
       title: 'Project Management System',
       theme: ThemeData(
         scaffoldBackgroundColor: returnTheme(
-          context,
+          context: context,
         ).containerColor(),
+        useMaterial3: true,
+        fontFamily: GoogleFonts.poppins().fontFamily,
+        textTheme: GoogleFonts.poppinsTextTheme(),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
+          seedColor: const Color.fromARGB(255, 98, 42, 255),
         ),
       ),
       initialRoute: '/',

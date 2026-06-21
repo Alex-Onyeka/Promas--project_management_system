@@ -73,10 +73,9 @@ class _EditProfileDialogState
                     toggleLoading(true);
                     widget.user.name =
                         widget.nameController.text;
-                    await returnUser(
-                      context,
-                      listen: false,
-                    ).updateUser(widget.user);
+                    await returnUser().updateUser(
+                      widget.user,
+                    );
                     widget.nameController.clear();
                     toggleLoading(false);
                     Navigator.of(context).pop();
@@ -145,24 +144,14 @@ class _DeleteAccountDialogState
                 var res = await AuthService()
                     .deleteAuthAccount();
                 if (res == 1) {
-                  var useracc = returnUser(
-                    context,
-                    listen: false,
-                  ).currentUser!;
+                  var useracc = returnUser().currentUser!;
 
-                  await returnUser(
-                    context,
-                    listen: false,
-                  ).deleteUser(useracc.id!);
+                  await returnUser().deleteUser(
+                    useracc.id!,
+                  );
                   if (useracc.isAdmin) {
-                    await returnCompany(
-                      context,
-                      listen: false,
-                    ).deleteCompany(
-                      returnCompany(
-                        context,
-                        listen: false,
-                      ).currentCompany!.id!,
+                    await returnCompany().deleteCompany(
+                      returnCompany().currentCompany!.id!,
                     );
                   }
                   toggleLoading(false);

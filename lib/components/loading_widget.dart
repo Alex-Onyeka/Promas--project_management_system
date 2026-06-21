@@ -15,10 +15,7 @@ class LoadingWidget extends StatelessWidget {
           height: 380,
           width: 380,
           decoration: BoxDecoration(
-            color: returnTheme(
-              context,
-              listen: false,
-            ).lightGrey(),
+            color: returnTheme().lightGrey(),
             borderRadius: mainBorderRadius,
           ),
           child: Column(
@@ -34,10 +31,8 @@ class LoadingWidget extends StatelessWidget {
                     IconButton(
                       onPressed: action,
                       icon: Icon(
-                        color: returnTheme(
-                          context,
-                          listen: false,
-                        ).darkMediumGrey(),
+                        color: returnTheme()
+                            .darkMediumGrey(),
                         size: 20,
                         Icons.clear,
                       ),
@@ -46,12 +41,7 @@ class LoadingWidget extends StatelessWidget {
                 ),
               ),
               Center(
-                child: CircularProgressIndicator(
-                  color: returnTheme(
-                    context,
-                    listen: false,
-                  ).darkGrey(),
-                ),
+                child: returnLoader(text: 'Loading...'),
               ),
               Opacity(
                 opacity: 0,
@@ -63,10 +53,8 @@ class LoadingWidget extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                       icon: Icon(
-                        color: returnTheme(
-                          context,
-                          listen: false,
-                        ).darkMediumGrey(),
+                        color: returnTheme()
+                            .darkMediumGrey(),
                         size: 20,
                         Icons.clear,
                       ),
@@ -80,4 +68,28 @@ class LoadingWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget returnLoader({String? text}) {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      CircularProgressIndicator.adaptive(),
+      Visibility(
+        visible: text != null,
+        child: Column(
+          children: [
+            SizedBox(height: 15),
+            Text(
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+              text ?? 'Loading...',
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
 }

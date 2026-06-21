@@ -87,10 +87,7 @@ class EditCompanyDialogState
                         widget.nameController.text;
                     widget.company.desc =
                         widget.descController.text;
-                    await returnCompany(
-                      context,
-                      listen: false,
-                    ).updateCompany(
+                    await returnCompany().updateCompany(
                       widget.company.id!,
                       widget.company,
                     );

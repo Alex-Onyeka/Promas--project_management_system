@@ -29,10 +29,12 @@ class MainTopBar extends StatelessWidget {
       ),
       height: 80,
       decoration: BoxDecoration(
-        color: returnTheme(context).white(),
+        color: returnTheme(context: context).white(),
         border: Border(
           bottom: BorderSide(
-            color: returnTheme(context).lightGrey(),
+            color: returnTheme(
+              context: context,
+            ).lightGrey(),
           ),
         ),
       ),
@@ -51,7 +53,7 @@ class MainTopBar extends StatelessWidget {
                     },
                     child: Icon(
                       color: returnTheme(
-                        context,
+                        context: context,
                       ).darkMediumGrey(),
                       Icons.menu,
                     ),
@@ -69,11 +71,13 @@ class MainTopBar extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.normal,
                       color: returnTheme(
-                        context,
+                        context: context,
                       ).darkGrey(),
                     ),
                     pageName ??
-                        returnNav(context).pageName(),
+                        returnNav(
+                          context: context,
+                        ).pageName(),
                   ),
                 ),
                 SizedBox(width: 20),
@@ -82,11 +86,17 @@ class MainTopBar extends StatelessWidget {
                       isVisible ??
                       screenSize(context) >=
                               tabletScreenBig &&
-                          returnNav(context).currentPage !=
+                          returnNav(
+                                context: context,
+                              ).currentPage !=
                               2 &&
-                          returnNav(context).currentPage !=
+                          returnNav(
+                                context: context,
+                              ).currentPage !=
                               3 &&
-                          returnNav(context).currentPage !=
+                          returnNav(
+                                context: context,
+                              ).currentPage !=
                               4,
                   child: SizedBox(
                     width:
@@ -113,15 +123,9 @@ class MainTopBar extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       if (isMain) {
-                        returnNav(
-                          context,
-                          listen: false,
-                        ).navigate(4);
+                        returnNav().navigate(4);
                       } else {
-                        returnNav(
-                          context,
-                          listen: false,
-                        ).navigate(4);
+                        returnNav().navigate(4);
                         Navigator.of(context).pop();
                       }
                     },
@@ -143,30 +147,30 @@ class MainTopBar extends StatelessWidget {
                               Text(
                                 style: TextStyle(
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).darkGrey(),
                                   fontSize: 13,
                                   fontWeight:
                                       FontWeight.bold,
                                 ),
                                 returnUser(
-                                      context,
+                                      context: context,
                                     ).currentUser?.name ??
                                     'No User Found..',
                               ),
                               Text(
                                 style: TextStyle(
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).darkMediumGrey(),
                                   fontSize: 10,
                                 ),
                                 returnUser(
-                                      context,
+                                      context: context,
                                     ).currentUser!.isAdmin
                                     ? 'Admin'
                                     : returnUser(
-                                        context,
+                                        context: context,
                                       ).currentUser!.email,
                               ),
                             ],
@@ -177,13 +181,13 @@ class MainTopBar extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: returnTheme(
-                                context,
+                                context: context,
                               ).darkMediumGrey(),
                             ),
                             child: Icon(
                               size: 18,
                               color: returnTheme(
-                                context,
+                                context: context,
                               ).lightGrey(),
                               Icons.person,
                             ),
@@ -196,22 +200,16 @@ class MainTopBar extends StatelessWidget {
                 SizedBox(width: 15),
                 Visibility(
                   visible: returnUser(
-                    context,
+                    context: context,
                   ).currentUser!.isAdmin,
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
                         if (isMain) {
-                          returnNav(
-                            context,
-                            listen: false,
-                          ).navigate(3);
+                          returnNav().navigate(3);
                         } else {
-                          returnNav(
-                            context,
-                            listen: false,
-                          ).navigate(3);
+                          returnNav().navigate(3);
                           Navigator.of(context).pop();
                         }
                       },
@@ -225,13 +223,13 @@ class MainTopBar extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: returnTheme(
-                                  context,
+                                  context: context,
                                 ).lightMediumGrey(),
                               ),
                               child: Icon(
                                 size: 18,
                                 color: returnTheme(
-                                  context,
+                                  context: context,
                                 ).darkMediumGrey(),
                                 Icons.notifications_rounded,
                               ),
@@ -243,7 +241,7 @@ class MainTopBar extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: returnTheme(
-                                context,
+                                context: context,
                               ).tertiaryColor(),
                             ),
                             child: Center(
@@ -253,11 +251,12 @@ class MainTopBar extends StatelessWidget {
                                       FontWeight.bold,
                                   fontSize: 9,
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).darkGrey(),
                                 ),
-                                returnRequest(context)
-                                    .requests
+                                returnRequest(
+                                      context: context,
+                                    ).requests
                                     .where(
                                       (req) =>
                                           req.userId !=

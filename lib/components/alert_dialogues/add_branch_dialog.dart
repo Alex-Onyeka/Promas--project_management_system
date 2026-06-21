@@ -40,15 +40,9 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
         widget.descController.text =
             widget.branch!.desc ?? '';
         // List<UserClass> users = [];
-        for (var user in returnUser(
-          context,
-          listen: false,
-        ).users) {
+        for (var user in returnUser().users) {
           if (widget.branch!.employees.contains(user.id)) {
-            returnBranch(
-              context,
-              listen: false,
-            ).selectedStaffs.add(user);
+            returnBranch().selectedStaffs.add(user);
           }
         }
       });
@@ -65,7 +59,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var branchPr = returnBranch(context);
+    var branchPr = returnBranch(context: context);
     return AlertPlaceholder(
       content: Form(
         key: _formKey,
@@ -118,7 +112,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                             Icon(
                               size: 20,
                               color: returnTheme(
-                                context,
+                                context: context,
                               ).darkMediumGrey(),
                               Icons.person_outline_rounded,
                             ),
@@ -136,7 +130,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: returnTheme(
-                                        context,
+                                        context: context,
                                       ).darkMediumGrey(),
                                     ),
                                     'No Staff Selected',
@@ -145,7 +139,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                                   Icon(
                                     size: 15,
                                     color: returnTheme(
-                                      context,
+                                      context: context,
                                     ).secondaryColor(),
                                     Icons.add,
                                   ),
@@ -153,7 +147,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: returnTheme(
-                                        context,
+                                        context: context,
                                       ).secondaryColor(),
                                       fontWeight:
                                           FontWeight.bold,
@@ -172,7 +166,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                       children: [
                         Column(
                           spacing: 5,
-                          children: returnBranch(context)
+                          children: returnBranch(context: context)
                               .selectedStaffs
                               .map(
                                 (user) => ListTile(
@@ -185,7 +179,8 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                                         style: TextStyle(
                                           fontSize: 11,
                                           color: returnTheme(
-                                            context,
+                                            context:
+                                                context,
                                           ).darkMediumGrey(),
                                           fontWeight:
                                               FontWeight
@@ -195,12 +190,10 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          returnBranch(
-                                            context,
-                                            listen: false,
-                                          ).removeSelectedStaff(
-                                            user,
-                                          );
+                                          returnBranch()
+                                              .removeSelectedStaff(
+                                                user,
+                                              );
                                         },
                                         child: Container(
                                           padding:
@@ -214,10 +207,10 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                                               ),
                                           child: Icon(
                                             size: 20,
-                                            color:
-                                                returnTheme(
+                                            color: returnTheme(
+                                              context:
                                                   context,
-                                                ).darkGrey(),
+                                            ).darkGrey(),
                                             Icons.clear,
                                           ),
                                         ),
@@ -266,7 +259,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                                   Icon(
                                     size: 15,
                                     color: returnTheme(
-                                      context,
+                                      context: context,
                                     ).secondaryColor(),
                                     Icons.add,
                                   ),
@@ -274,7 +267,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: returnTheme(
-                                        context,
+                                        context: context,
                                       ).secondaryColor(),
                                       fontWeight:
                                           FontWeight.bold,
@@ -300,10 +293,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                     toggleLoading();
                     if (widget.branch == null) {
                       print('Creating Branch');
-                      await returnBranch(
-                        context,
-                        listen: false,
-                      ).createBranch(
+                      await returnBranch().createBranch(
                         BranchClass(
                           name: widget.nameController.text
                               .trim(),
@@ -312,15 +302,10 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                           lastUpdate: DateTime.now(),
                           level: 0,
                           desc: widget.descController.text,
-                          employees:
-                              returnBranch(
-                                    context,
-                                    listen: false,
-                                  ).selectedStaffs
-                                  .map(
-                                    (staf) => staf.id ?? '',
-                                  )
-                                  .toList(),
+                          employees: returnBranch()
+                              .selectedStaffs
+                              .map((staf) => staf.id ?? '')
+                              .toList(),
                           companyId: CompanyProvider()
                               .currentCompany!
                               .id!,
@@ -328,10 +313,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                       );
                     } else {
                       print('Updating Branch');
-                      await returnBranch(
-                        context,
-                        listen: false,
-                      ).updateBranch(
+                      await returnBranch().updateBranch(
                         widget.branch!.uuid!,
                         BranchClass(
                           uuid: widget.branch!.uuid,
@@ -344,15 +326,10 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                           level: widget.branch!.level,
                           desc: widget.descController.text
                               .trim(),
-                          employees:
-                              returnBranch(
-                                    context,
-                                    listen: false,
-                                  ).selectedStaffs
-                                  .map(
-                                    (staf) => staf.id ?? '',
-                                  )
-                                  .toList(),
+                          employees: returnBranch()
+                              .selectedStaffs
+                              .map((staf) => staf.id ?? '')
+                              .toList(),
                           companyId: CompanyProvider()
                               .currentCompany!
                               .id!,
@@ -375,10 +352,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                 action: () {
                   widget.nameController.clear();
                   widget.descController.clear();
-                  returnBranch(
-                    context,
-                    listen: false,
-                  ).clearSelectedStaffs();
+                  returnBranch().clearSelectedStaffs();
                   Navigator.of(context).pop();
                 },
               ),

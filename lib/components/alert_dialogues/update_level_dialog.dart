@@ -73,7 +73,7 @@ class _UpdateLevelDialogState
                       style: TextStyle(
                         fontSize: 10,
                         color: returnTheme(
-                          context,
+                          context: context,
                         ).mediumGrey(),
                       ),
                       'Current Branch Level',
@@ -184,10 +184,7 @@ class _UpdateLevelDialogState
                     isLoading = true;
                   });
                   widget.branch.level = level;
-                  await returnBranch(
-                    context,
-                    listen: false,
-                  ).updateBranch(
+                  await returnBranch().updateBranch(
                     widget.branch.uuid!,
                     widget.branch,
                   );
@@ -203,10 +200,7 @@ class _UpdateLevelDialogState
               SecondaryButton(
                 title: 'Cancel',
                 action: () {
-                  returnBranch(
-                    context,
-                    listen: false,
-                  ).clearSelectedStaffs();
+                  returnBranch().clearSelectedStaffs();
                   Navigator.of(context).pop();
                 },
               ),
@@ -247,7 +241,7 @@ class BranchPercentageSelectionContainer
               style: TextStyle(
                 fontSize: 9,
                 fontWeight: FontWeight.bold,
-                color: returnTheme(context).mediumGrey(),
+                color: returnTheme().mediumGrey(),
               ),
               '${percentage.toStringAsFixed(0)}%',
             ),
@@ -256,7 +250,7 @@ class BranchPercentageSelectionContainer
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: returnTheme(context).mediumGrey(),
+                  color: returnTheme().mediumGrey(),
                 ),
               ),
               child: Container(
@@ -264,7 +258,7 @@ class BranchPercentageSelectionContainer
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: level >= percentage
-                      ? returnTheme(context).tertiaryLight()
+                      ? returnTheme().tertiaryLight()
                       : Colors.transparent,
                 ),
               ),

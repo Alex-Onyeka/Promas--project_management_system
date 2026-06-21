@@ -32,10 +32,7 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.pageIndex != null) {
-        returnNav(
-          context,
-          listen: false,
-        ).navigate(widget.pageIndex!);
+        returnNav().navigate(widget.pageIndex!);
       }
     });
   }
@@ -44,7 +41,10 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        if (returnCompany(context).currentCompany != null) {
+        if (returnCompany(
+              context: context,
+            ).currentCompany !=
+            null) {
           return Scaffold(
             key: _scaffoldKey,
             appBar: screenSize(context) > mobileScreen
@@ -93,7 +93,8 @@ class _LandingPageState extends State<LandingPage> {
                                   height: double.infinity,
                                   child:
                                       returnNav(
-                                            context,
+                                            context:
+                                                context,
                                           ).currentPage ==
                                           0
                                       ? Dashboard(
@@ -101,7 +102,8 @@ class _LandingPageState extends State<LandingPage> {
                                               projectSearchController,
                                         )
                                       : returnNav(
-                                              context,
+                                              context:
+                                                  context,
                                             ).currentPage ==
                                             1
                                       ? Projects(
@@ -109,17 +111,20 @@ class _LandingPageState extends State<LandingPage> {
                                               projectSearchController,
                                         )
                                       : returnNav(
-                                              context,
+                                              context:
+                                                  context,
                                             ).currentPage ==
                                             2
                                       ? Employees()
                                       : returnNav(
-                                              context,
+                                              context:
+                                                  context,
                                             ).currentPage ==
                                             3
                                       ? Requests()
                                       : returnNav(
-                                              context,
+                                              context:
+                                                  context,
                                             ).currentPage ==
                                             4
                                       ? UserPage()

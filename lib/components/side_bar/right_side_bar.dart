@@ -64,7 +64,7 @@ class _RightSideBarState extends State<RightSideBar> {
                           borderRadius:
                               BorderRadius.circular(5),
                           color: returnTheme(
-                            context,
+                            context: context,
                           ).tertiaryLight(),
                         ),
                         child: Column(
@@ -129,7 +129,7 @@ class _RightSideBarState extends State<RightSideBar> {
                         5,
                       ),
                       color: returnTheme(
-                        context,
+                        context: context,
                       ).secondaryLight(),
                     ),
                     child: Column(

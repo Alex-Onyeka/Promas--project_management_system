@@ -1,13 +1,13 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:promas/classes/company_class.dart';
 import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
 import 'package:promas/components/buttons/main_button.dart';
-import 'package:promas/components/empty_widgets/empty_widget_main.dart';
-import 'package:promas/components/main_floating_action_button.dart';
-import 'package:promas/components/tiles/project_tile.dart';
+import 'package:promas/components/loading_widget.dart';
+import 'package:promas/constants/formats.dart';
+import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
-import 'package:promas/pages/projects/project_page.dart';
 import 'package:promas/providers/branch_provider.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/project_provider.dart';
@@ -31,6 +31,7 @@ class _DashboardState extends State<Dashboard> {
       context: context,
       builder: (context) {
         return AddProjectDialog(
+          urlController: urlController,
           descController: descController,
           nameController: nameController,
         );
@@ -39,6 +40,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   final nameController = TextEditingController();
+  final urlController = TextEditingController();
   final descController = TextEditingController();
 
   Future<CompanyClass?> getCompany() async {
@@ -68,6 +70,135 @@ class _DashboardState extends State<Dashboard> {
     await getAllRequests();
   }
 
+  ProjectClass? selectedProject;
+
+  void selectProject(ProjectClass? project) {
+    setState(() {
+      selectedProject = project;
+    });
+  }
+
+  final buttonKey = GlobalKey();
+
+  void showMenuAction() async {
+    final RenderBox button =
+        buttonKey.currentContext!.findRenderObject()
+            as RenderBox;
+
+    final Offset position = button.localToGlobal(
+      Offset.zero,
+    );
+
+    final Size size = button.size;
+
+    final screenSize = MediaQuery.of(context).size;
+
+    await showMenu(
+      context: context,
+      color: Colors.white,
+      constraints: BoxConstraints(
+        maxWidth: 500,
+        minWidth: 200,
+      ),
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy + size.height + 10,
+        screenSize.width - position.dx - size.width,
+        screenSize.height - position.dy,
+      ),
+      items: returnProject().projectsMain.map((project) {
+        return PopupMenuItem(
+          onTap: () {
+            selectProject(project);
+          },
+          // value: 'edit',
+          child: Text(
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+            project.name,
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  List<WorkEntry> data() {
+    if (returnCommit(context: context).commits.isEmpty) {
+      return [WorkEntry(DateTime.now(), 0)];
+    } else {
+      if (selectedProject == null) {
+        return returnCommit(context: context).commits
+            .map(
+              (item) => WorkEntry(
+                item.date,
+                item.total.toDouble(),
+              ),
+            )
+            .toList();
+      } else {
+        var dataTemp = returnCommit(context: context)
+            .commits
+            .where(
+              (commit) =>
+                  commit.repo ==
+                  returnProject().projectGithubName(
+                    projectUrl:
+                        selectedProject?.githubUrl ?? '',
+                  ),
+            )
+            .map(
+              (item) => WorkEntry(
+                item.date,
+                item.total.toDouble(),
+              ),
+            )
+            .toList();
+        return dataTemp.isEmpty
+            ? [WorkEntry(DateTime.now(), 0)]
+            : dataTemp;
+      }
+    }
+  }
+
+  DateTime normalize(DateTime d) {
+    return DateTime(d.year, d.month, d.day);
+  }
+
+  Map<DateTime, double> groupByDay(List<WorkEntry> data) {
+    final Map<DateTime, double> grouped = {};
+
+    for (final item in data) {
+      final day = normalize(item.date);
+
+      grouped[day] = (grouped[day] ?? 0) + item.value;
+    }
+
+    return grouped;
+  }
+
+  List<DateTime> getLast7Days(List<WorkEntry> data) {
+    final latestDate = data
+        .map((e) => normalize(e.date))
+        .reduce((a, b) => a.isAfter(b) ? a : b);
+
+    return List.generate(7, (i) {
+      return latestDate.subtract(Duration(days: 6 - i));
+    });
+  }
+
+  List<FlSpot> groupedDataAction(List<WorkEntry> data) {
+    final grouped = groupByDay(data);
+    final last7Days = getLast7Days(data);
+
+    return List.generate(7, (index) {
+      final day = last7Days[index];
+
+      return FlSpot(index.toDouble(), grouped[day] ?? 0);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -82,14 +213,19 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = returnTheme(context: context);
     List<ProjectClass> getProjectsForEmployee(
       BuildContext context,
     ) {
-      final user = returnUser(context).currentUser!;
+      final user = returnUser(
+        context: context,
+      ).currentUser!;
       final allProjects = user.isAdmin
-          ? returnProject(context).projects()
-          : returnProject(context).projectsMain;
-      final allBranches = returnBranch(context).branches;
+          ? returnProject(context: context).projects()
+          : returnProject(context: context).projectsMain;
+      final allBranches = returnBranch(
+        context: context,
+      ).branches;
 
       final projectsIn = allProjects.where((proj) {
         final projectBranches = allBranches.where(
@@ -105,31 +241,28 @@ class _DashboardState extends State<Dashboard> {
     }
 
     List<ProjectClass> projectsIn =
-        returnUser(context).currentUser!.isAdmin
-        ? returnProject(context).projects()
+        returnUser(context: context).currentUser!.isAdmin
+        ? returnProject(context: context).projects()
         : getProjectsForEmployee(context);
 
     projectsIn.sort(
       (a, b) => b.createdAt!.compareTo(a.createdAt!),
     );
     return Scaffold(
-      floatingActionButton: Visibility(
-        visible: projectsIn.isNotEmpty,
-        child: MainFloatingActionButton(
-          action: () async {
-            await createProject();
-          },
-        ),
-      ),
+      // floatingActionButton: Visibility(
+      //   visible: projectsIn.isNotEmpty,
+      //   child: MainFloatingActionButton(
+      //     action: () async {
+      //       await createProject();
+      //     },
+      //   ),
+      // ),
       body: Builder(
         builder: (context) {
-          if (!returnRequest(
-            context,
-            listen: false,
-          ).isLoaded) {
+          if (!returnRequest().isLoaded) {
             return Scaffold(
               body: Center(
-                child: CircularProgressIndicator.adaptive(),
+                child: LoadingWidget(action: () {}),
               ),
             );
           } else {
@@ -137,221 +270,561 @@ class _DashboardState extends State<Dashboard> {
               child: Column(
                 spacing: 2,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: returnTheme(
-                            context,
-                          ).darkMediumGrey(),
-                        ),
-                        'Overview',
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 2),
+                  // Row(
+                  //   children: [
+                  //     Text(
+                  //       style: TextStyle(
+                  //         fontSize: 14,
+                  //         fontWeight: FontWeight.bold,
+                  //         color: returnTheme(
+                  //           context,
+                  //         ).darkMediumGrey(),
+                  //       ),
+                  //       'Overview',
+                  //     ),
+                  //   ],
+                  // ),
+                  // // SizedBox(height: 10),
+                  // Divider(
+                  //   thickness: 0.5,
+                  //   color: returnTheme(
+                  //     context,
+                  //   ).mediumGrey(),
+                  // ),
+                  SizedBox(height: 10),
                   SizedBox(
-                    height: 300,
-                    width: double.infinity,
-                    child: Stack(
+                    height: 200,
+                    child: Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                      spacing: 15,
                       children: [
-                        Visibility(
-                          visible: projectsIn.isEmpty,
-                          child: EmptyWidgetMain(
-                            buttonText:
-                                'Create New Project',
-                            title:
-                                'No Projects Created Yet',
-                            action: () async {
-                              await createProject();
-                            },
+                        Expanded(
+                          flex: 10,
+                          child: Column(
+                            spacing: 15,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  spacing: 15,
+                                  children: [
+                                    DashboardContainerTilesWidget(
+                                      icon: Icon(
+                                        size: 30,
+                                        color: theme
+                                            .secondaryLight(),
+                                        Icons.add_chart,
+                                      ),
+                                      title:
+                                          'Total Projects',
+                                      value:
+                                          returnProject(
+                                                context:
+                                                    context,
+                                              )
+                                              .projectsMain
+                                              .length
+                                              .toString(),
+                                    ),
+                                    DashboardContainerTilesWidget(
+                                      icon: Icon(
+                                        size: 30,
+                                        color: theme
+                                            .tertiaryColor(),
+                                        Icons
+                                            .account_tree_outlined,
+                                      ),
+                                      title:
+                                          'Total Branches',
+                                      value:
+                                          returnBranch(
+                                                context:
+                                                    context,
+                                              )
+                                              .branches
+                                              .length
+                                              .toString(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  spacing: 15,
+                                  children: [
+                                    DashboardContainerTilesWidget(
+                                      icon: Icon(
+                                        size: 35,
+                                        color: theme
+                                            .primaryLight(),
+                                        Icons
+                                            .people_outline_outlined,
+                                      ),
+                                      title: 'Total Staffs',
+                                      value:
+                                          returnUser(
+                                                context:
+                                                    context,
+                                              ).users.length
+                                              .toString(),
+                                    ),
+                                    DashboardContainerTilesWidget(
+                                      icon: Icon(
+                                        size: 28,
+                                        color: theme
+                                            .secondaryLight(),
+                                        Icons.message,
+                                      ),
+                                      title:
+                                          'Total Requests',
+                                      value:
+                                          returnRequest(
+                                                context:
+                                                    context,
+                                              )
+                                              .unAcceptedRequests()
+                                              .length
+                                              .toString(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Visibility(
-                          visible: projectsIn.isNotEmpty,
-                          child: Stack(
-                            children: [
-                              Visibility(
-                                visible: widget
-                                    .projectSearchController
-                                    .text
-                                    .isNotEmpty,
-                                child: Stack(
+                        Expanded(
+                          flex: 8,
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(10),
+                              color: theme.white(),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      const Color.fromARGB(
+                                        18,
+                                        0,
+                                        0,
+                                        0,
+                                      ),
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+                            child: Stack(
+                              children: [
+                                Row(
                                   children: [
-                                    Visibility(
-                                      visible: projectsIn
-                                          .where(
-                                            (pro) => pro
-                                                .name
-                                                .toLowerCase()
-                                                .contains(
-                                                  widget
-                                                      .projectSearchController
-                                                      .text
-                                                      .toLowerCase(),
-                                                ),
-                                          )
-                                          .isNotEmpty,
-                                      child: GridView(
-                                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                          maxCrossAxisExtent:
-                                              300,
-                                          mainAxisExtent:
-                                              130,
-                                          // childAspectRatio:
-                                          //     2,
-                                          crossAxisSpacing:
-                                              10,
-                                          mainAxisSpacing:
-                                              10,
-                                        ),
-                                        children: projectsIn
-                                            .where(
-                                              (pro) => pro
-                                                  .name
-                                                  .toLowerCase()
-                                                  .contains(
-                                                    widget
-                                                        .projectSearchController
-                                                        .text
-                                                        .toLowerCase(),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Column(
+                                        spacing: 10,
+                                        children: [
+                                          Expanded(
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                spacing: 5,
+                                                children: [
+                                                  Text(
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    'Create A New Software Project!',
                                                   ),
-                                            )
-                                            .map(
-                                              (
-                                                project,
-                                              ) => ProjectTile(
-                                                viewProject: () async {
-                                                  await returnProject(
-                                                    context,
-                                                    listen:
-                                                        false,
-                                                  ).deleteProject(
-                                                    project
-                                                        .uuid!,
-                                                  );
-                                                },
-                                                project:
-                                                    project,
+                                                  Text(
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          11,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                    'Click on the button to create a new Software Project.',
+                                                  ),
+                                                ],
                                               ),
-                                            )
-                                            .toList(),
+                                            ),
+                                          ),
+                                          MainButton(
+                                            action: () {
+                                              // returnCommit()
+                                              //     .fetchCommits(
+                                              //       owner:
+                                              //           'Alex-Onyeka',
+                                              //       repo:
+                                              //           'Stockall-CRM',
+                                              //     );
+                                              createProject();
+                                            },
+                                            title:
+                                                'Create New Project',
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Visibility(
-                                      visible: projectsIn
-                                          .where(
-                                            (pro) => pro
-                                                .name
-                                                .toLowerCase()
-                                                .contains(
-                                                  widget
-                                                      .projectSearchController
-                                                      .text
-                                                      .toLowerCase(),
+                                    Expanded(
+                                      flex: 3,
+                                      child: SizedBox(),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 8,
+                                      child: SizedBox(),
+                                    ),
+                                    Expanded(
+                                      flex: 6,
+                                      child: Image.asset(
+                                        workingMan,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        10,
+                      ),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(
+                                10.0,
+                                10,
+                                10,
+                                20,
+                              ),
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment
+                                    .spaceBetween,
+                            children: [
+                              Row(
+                                spacing:
+                                    returnProject(
+                                      context: context,
+                                    ).isLoading
+                                    ? 8
+                                    : 4,
+                                children: [
+                                  Text(
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight:
+                                          FontWeight.bold,
+                                    ),
+                                    'Work Done Chart',
+                                  ),
+                                  Builder(
+                                    builder: (context) {
+                                      if (returnProject(
+                                        context: context,
+                                      ).isLoading) {
+                                        return SizedBox(
+                                          height: 13,
+                                          width: 13,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: theme
+                                                .primaryColor(),
+                                          ),
+                                        );
+                                      } else {
+                                        return Material(
+                                          color: Colors
+                                              .transparent,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              returnProject()
+                                                  .toggleLoading(
+                                                    true,
+                                                  );
+                                              await returnProject()
+                                                  .getAllProjectsByCompany();
+                                              returnProject()
+                                                  .toggleLoading(
+                                                    false,
+                                                  );
+                                            },
+                                            borderRadius:
+                                                BorderRadius.circular(
+                                                  5,
                                                 ),
-                                          )
-                                          .isEmpty,
-                                      child: SizedBox(
-                                        height:
-                                            double.infinity,
-                                        child: Center(
-                                          child: Column(
-                                            spacing: 10,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
-                                            children: [
-                                              Icon(
-                                                size: 35,
-                                                color: returnTheme(
-                                                  context,
-                                                ).darkGrey(),
+                                            child: Padding(
+                                              padding:
+                                                  EdgeInsetsGeometry.all(
+                                                    5,
+                                                  ),
+                                              child: Icon(
+                                                size: 18,
                                                 Icons
-                                                    .work_off_outlined,
+                                                    .refresh,
                                               ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                spacing: 5,
+                                children: [
+                                  Material(
+                                    key: buttonKey,
+                                    color:
+                                        Colors.transparent,
+                                    child: Ink(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(
+                                              5,
+                                            ),
+                                        border: Border.all(
+                                          color: Colors
+                                              .grey
+                                              .shade300,
+                                        ),
+                                        color: Colors
+                                            .grey
+                                            .shade100,
+                                      ),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          showMenuAction();
+                                        },
+                                        borderRadius:
+                                            BorderRadius.circular(
+                                              5,
+                                            ),
+                                        child: Container(
+                                          padding:
+                                              EdgeInsets.symmetric(
+                                                vertical: 5,
+                                                horizontal:
+                                                    10,
+                                              ),
+
+                                          child: Row(
+                                            spacing: 5,
+                                            children: [
                                               Text(
                                                 style: TextStyle(
                                                   fontSize:
-                                                      13,
-                                                  color: returnTheme(
-                                                    context,
-                                                  ).darkMediumGrey(),
+                                                      11,
                                                 ),
-                                                'No Projects Found',
+                                                selectedProject
+                                                        ?.name ??
+                                                    'Select Project',
                                               ),
-                                              SizedBox(
-                                                height: 2,
-                                              ),
-                                              SizedBox(
-                                                width: 200,
-                                                child: MainButton(
-                                                  action: () {
-                                                    setState(() {
-                                                      widget
-                                                          .projectSearchController
-                                                          .clear();
-                                                    });
-                                                  },
-                                                  title:
-                                                      'Clear Search',
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 55,
+                                              Icon(
+                                                Icons
+                                                    .keyboard_arrow_down_rounded,
                                               ),
                                             ],
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Visibility(
-                                visible: widget
-                                    .projectSearchController
-                                    .text
-                                    .isEmpty,
-                                child: GridView(
-                                  gridDelegate:
-                                      SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent:
-                                            300,
-                                        mainAxisExtent: 130,
-                                        // childAspectRatio:
-                                        //     2,
-                                        crossAxisSpacing:
+                                  ),
+                                  Visibility(
+                                    visible:
+                                        selectedProject !=
+                                        null,
+                                    child: Material(
+                                      borderRadius:
+                                          BorderRadius.circular(
                                             10,
-                                        mainAxisSpacing: 10,
-                                      ),
-                                  children: projectsIn
-                                      .map(
-                                        (
-                                          pro,
-                                        ) => ProjectTile(
-                                          project: pro,
-                                          viewProject: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) {
-                                                  return ProjectPage(
-                                                    project:
-                                                        pro,
-                                                  );
-                                                },
+                                          ),
+                                      color: Colors
+                                          .transparent,
+                                      child: InkWell(
+                                        onTap: () {
+                                          selectProject(
+                                            null,
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.symmetric(
+                                                vertical:
+                                                    8.0,
+                                                horizontal:
+                                                    5,
                                               ),
-                                            );
-                                          },
+                                          child: Icon(
+                                            size: 18,
+                                            Icons.clear,
+                                          ),
                                         ),
-                                      )
-                                      .toList(),
-                                ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
+                          ),
+                        ),
+                        Container(
+                          height: 350,
+                          padding: EdgeInsets.fromLTRB(
+                            15,
+                            5,
+                            40,
+                            5,
+                          ),
+                          child: LineChart(
+                            LineChartData(
+                              borderData: FlBorderData(
+                                border: Border.all(
+                                  color:
+                                      Colors.grey.shade200,
+                                ),
+                              ),
+                              titlesData: FlTitlesData(
+                                topTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: false,
+                                  ),
+                                ),
+                                rightTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: false,
+                                  ),
+                                ),
+                                leftTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    reservedSize: 50,
+                                    showTitles: true,
+                                    getTitlesWidget: (value, meta) {
+                                      return Text(
+                                        formatLargeNumber(
+                                          value.toString(),
+                                        ).split('.').first,
+                                        style:
+                                            const TextStyle(
+                                              fontSize: 11,
+                                              fontWeight:
+                                                  FontWeight
+                                                      .bold,
+                                            ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 60,
+                                    interval: 1,
+                                    getTitlesWidget: (value, meta) {
+                                      final days =
+                                          getLast7Days(
+                                            data(),
+                                          );
+
+                                      if (value < 0 ||
+                                          value > 6) {
+                                        return const SizedBox();
+                                      }
+                                      final daysName = [
+                                        "Mon",
+                                        "Tue",
+                                        "Wed",
+                                        "Thu",
+                                        "Fri",
+                                        "Sat",
+                                        "Sun",
+                                      ];
+                                      final months = [
+                                        "Jan",
+                                        "Feb",
+                                        "Mar",
+                                        "Apr",
+                                        "May",
+                                        "June",
+                                        "July",
+                                        "Aug",
+                                        "Sept",
+                                        "Oct",
+                                        "Nov",
+                                        "Dec",
+                                      ];
+
+                                      final date =
+                                          days[value
+                                              .toInt()];
+
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.fromLTRB(
+                                              0,
+                                              10,
+                                              0,
+                                              0,
+                                            ),
+                                        child: Column(
+                                          mainAxisSize:
+                                              MainAxisSize
+                                                  .min,
+                                          children: [
+                                            Text(
+                                              style: TextStyle(
+                                                fontSize:
+                                                    11,
+                                                fontWeight:
+                                                    FontWeight
+                                                        .bold,
+                                              ),
+                                              "${daysName[date.weekday - 1]} - ${date.day}",
+                                            ),
+                                            Text(
+                                              style: TextStyle(
+                                                fontSize:
+                                                    11,
+                                                fontWeight:
+                                                    FontWeight
+                                                        .bold,
+                                              ),
+                                              "(${months[date.month - 1]} - ${date.year})",
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              lineBarsData: [
+                                LineChartBarData(
+                                  spots: groupedDataAction(
+                                    data(),
+                                  ),
+                                  isCurved: false,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -365,4 +838,75 @@ class _DashboardState extends State<Dashboard> {
       ),
     );
   }
+}
+
+class DashboardContainerTilesWidget
+    extends StatelessWidget {
+  final String title;
+  final Icon icon;
+  final String value;
+
+  const DashboardContainerTilesWidget({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = returnTheme(context: context);
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: theme.white(),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(18, 0, 0, 0),
+              blurRadius: 20,
+            ),
+          ],
+        ),
+        child: Row(
+          spacing: 5,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 5,
+              children: [
+                Text(
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: theme.darkMediumGrey(),
+                  ),
+                  formatLargeNumber(value),
+                ),
+                Text(
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: theme.mediumGrey(),
+                  ),
+                  title,
+                ),
+              ],
+            ),
+            icon,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class WorkEntry {
+  final DateTime date;
+  final double value;
+
+  WorkEntry(this.date, this.value);
 }

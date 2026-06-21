@@ -50,14 +50,16 @@ class _UserPageState extends State<UserPage> {
               child: Builder(
                 builder: (context) {
                   if (!returnUser(
-                    context,
+                    context: context,
                   ).currentUser!.isAdmin) {
                     return Container(
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: greyNeutral(),
                         ),
-                        color: returnTheme(context).white(),
+                        color: returnTheme(
+                          context: context,
+                        ).white(),
                       ),
                       child: Column(
                         mainAxisAlignment:
@@ -73,7 +75,7 @@ class _UserPageState extends State<UserPage> {
                             child: Icon(
                               size: 18,
                               color: returnTheme(
-                                context,
+                                context: context,
                               ).mediumGrey(),
                               Icons.person,
                             ),
@@ -83,22 +85,22 @@ class _UserPageState extends State<UserPage> {
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: returnTheme(
-                                context,
+                                context: context,
                               ).tertiaryColor(),
                             ),
                             returnUser(
-                              context,
+                              context: context,
                             ).currentUser!.name,
                           ),
                           Text(
                             style: TextStyle(
                               fontSize: 10,
                               color: returnTheme(
-                                context,
+                                context: context,
                               ).mediumGrey(),
                             ),
                             returnUser(
-                              context,
+                              context: context,
                             ).currentUser!.email,
                           ),
                           Container(
@@ -150,7 +152,8 @@ class _UserPageState extends State<UserPage> {
                                         Icon(
                                           size: 18,
                                           color: returnTheme(
-                                            context,
+                                            context:
+                                                context,
                                           ).mediumGrey(),
                                           Icons
                                               .edit_outlined,
@@ -159,7 +162,8 @@ class _UserPageState extends State<UserPage> {
                                           style: TextStyle(
                                             fontSize: 11,
                                             color: returnTheme(
-                                              context,
+                                              context:
+                                                  context,
                                             ).mediumGrey(),
                                           ),
                                           'Edit Profile',
@@ -242,7 +246,7 @@ class _UserPageState extends State<UserPage> {
                               color: greyNeutral(),
                             ),
                             color: returnTheme(
-                              context,
+                              context: context,
                             ).white(),
                           ),
                           child: Column(
@@ -259,7 +263,7 @@ class _UserPageState extends State<UserPage> {
                                 child: Icon(
                                   size: 18,
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).mediumGrey(),
                                   Icons.person,
                                 ),
@@ -270,22 +274,22 @@ class _UserPageState extends State<UserPage> {
                                   fontWeight:
                                       FontWeight.bold,
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).tertiaryColor(),
                                 ),
                                 returnUser(
-                                  context,
+                                  context: context,
                                 ).currentUser!.name,
                               ),
                               Text(
                                 style: TextStyle(
                                   fontSize: 10,
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).mediumGrey(),
                                 ),
                                 returnUser(
-                                  context,
+                                  context: context,
                                 ).currentUser!.email,
                               ),
                               Container(
@@ -341,7 +345,8 @@ class _UserPageState extends State<UserPage> {
                                             Icon(
                                               size: 18,
                                               color: returnTheme(
-                                                context,
+                                                context:
+                                                    context,
                                               ).mediumGrey(),
                                               Icons
                                                   .edit_outlined,
@@ -351,7 +356,8 @@ class _UserPageState extends State<UserPage> {
                                                 fontSize:
                                                     11,
                                                 color: returnTheme(
-                                                  context,
+                                                  context:
+                                                      context,
                                                 ).mediumGrey(),
                                               ),
                                               'Edit Profile',
@@ -423,7 +429,7 @@ class _UserPageState extends State<UserPage> {
                               color: greyNeutral(),
                             ),
                             color: returnTheme(
-                              context,
+                              context: context,
                             ).white(),
                           ),
                           child: Column(
@@ -440,7 +446,7 @@ class _UserPageState extends State<UserPage> {
                                 child: Icon(
                                   size: 18,
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).mediumGrey(),
                                   Icons.home_work_rounded,
                                 ),
@@ -451,26 +457,31 @@ class _UserPageState extends State<UserPage> {
                                   fontWeight:
                                       FontWeight.bold,
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).tertiaryColor(),
                                 ),
                                 returnCompany(
-                                  context,
+                                  context: context,
                                 ).currentCompany!.name,
                               ),
                               Text(
                                 style: TextStyle(
                                   fontSize: 10,
                                   color: returnTheme(
-                                    context,
+                                    context: context,
                                   ).mediumGrey(),
                                 ),
-                                returnCompany(context)
+                                returnCompany(
+                                          context: context,
+                                        )
                                         .currentCompany!
                                         .desc
                                         .isEmpty
                                     ? 'Company Description Not Set'
-                                    : returnCompany(context)
+                                    : returnCompany(
+                                            context:
+                                                context,
+                                          )
                                           .currentCompany!
                                           .desc,
                               ),
@@ -521,7 +532,8 @@ class _UserPageState extends State<UserPage> {
                                         Icon(
                                           size: 18,
                                           color: returnTheme(
-                                            context,
+                                            context:
+                                                context,
                                           ).mediumGrey(),
                                           Icons
                                               .edit_outlined,
@@ -530,7 +542,8 @@ class _UserPageState extends State<UserPage> {
                                           style: TextStyle(
                                             fontSize: 11,
                                             color: returnTheme(
-                                              context,
+                                              context:
+                                                  context,
                                             ).mediumGrey(),
                                           ),
                                           'Edit Company',

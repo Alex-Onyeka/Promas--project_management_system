@@ -35,7 +35,9 @@ class NormalTextfield extends StatelessWidget {
           child: Text(
             style: TextStyle(
               fontSize: 11,
-              color: returnTheme(context).mediumGrey(),
+              color: returnTheme(
+                context: context,
+              ).mediumGrey(),
               fontWeight: FontWeight.normal,
             ),
             '$title${isOptional ? ' (Optional)' : '*'}',
@@ -44,7 +46,9 @@ class NormalTextfield extends StatelessWidget {
         TextFormField(
           maxLines: numberOfLines ?? 1,
           style: TextStyle(
-            color: returnTheme(context).mediumGrey(),
+            color: returnTheme(
+              context: context,
+            ).mediumGrey(),
             fontSize: 13,
           ),
           controller: inputController,

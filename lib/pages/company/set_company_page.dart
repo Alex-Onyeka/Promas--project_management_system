@@ -389,14 +389,16 @@ class _CompanyTileState extends State<CompanyTile> {
                 Icon(
                   size: 20,
                   color: returnTheme(
-                    context,
+                    context: context,
                   ).primaryLight(),
                   Icons.home_work_outlined,
                 ),
                 Text(
                   style: TextStyle(
                     fontSize: 13,
-                    color: returnTheme(context).darkGrey(),
+                    color: returnTheme(
+                      context: context,
+                    ).darkGrey(),
                   ),
                   widget.company.name,
                 ),
@@ -404,7 +406,9 @@ class _CompanyTileState extends State<CompanyTile> {
             ),
             trailing: Icon(
               size: 23,
-              color: returnTheme(context).darkMediumGrey(),
+              color: returnTheme(
+                context: context,
+              ).darkMediumGrey(),
               !isOpen
                   ? Icons.keyboard_arrow_down_rounded
                   : Icons.keyboard_arrow_up_rounded,
@@ -420,7 +424,7 @@ class _CompanyTileState extends State<CompanyTile> {
                   endIndent: 30,
                   thickness: 0.1,
                   color: returnTheme(
-                    context,
+                    context: context,
                   ).darkMediumGrey(),
                 ),
                 SizedBox(height: 5),
@@ -433,7 +437,7 @@ class _CompanyTileState extends State<CompanyTile> {
                       style: TextStyle(
                         fontSize: 13,
                         color: returnTheme(
-                          context,
+                          context: context,
                         ).darkMediumGrey(),
                       ),
                       'Are you sure you want to send this company a Request?',
@@ -510,7 +514,7 @@ class _CompanyTileState extends State<CompanyTile> {
                   height: 30,
                   thickness: 0.1,
                   color: returnTheme(
-                    context,
+                    context: context,
                   ).darkMediumGrey(),
                 ),
               ],
@@ -550,6 +554,9 @@ class _CreateCustomerFormState
           email: emailController.text.isNotEmpty
               ? emailController.text
               : AuthService().currentUser!.email,
+          token: tokenController.text.isEmpty
+              ? null
+              : tokenController.text,
         ),
       );
       if (res == null) {
@@ -601,6 +608,8 @@ class _CreateCustomerFormState
   TextEditingController nameController =
       TextEditingController();
   TextEditingController emailController =
+      TextEditingController();
+  TextEditingController tokenController =
       TextEditingController();
   TextEditingController descController =
       TextEditingController();

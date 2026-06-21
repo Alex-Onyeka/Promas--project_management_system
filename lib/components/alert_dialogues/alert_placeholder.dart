@@ -15,10 +15,7 @@ class AlertPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 15),
-      backgroundColor: returnTheme(
-        context,
-        listen: false,
-      ).lightGrey(),
+      backgroundColor: returnTheme().lightGrey(),
       contentPadding: EdgeInsets.all(10),
       shape: OutlineInputBorder(
         borderRadius: mainBorderRadius,

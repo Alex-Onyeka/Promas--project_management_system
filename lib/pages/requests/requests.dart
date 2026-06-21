@@ -37,14 +37,11 @@ class _RequestsState extends State<Requests> {
 
   @override
   Widget build(BuildContext context) {
-    var requestP = returnRequest(context);
+    var requestP = returnRequest(context: context);
     return Scaffold(
       body: Builder(
         builder: (context) {
-          if (!returnRequest(
-            context,
-            listen: false,
-          ).isLoaded) {
+          if (!returnRequest().isLoaded) {
             return Scaffold(
               body: Center(
                 child: CircularProgressIndicator.adaptive(),
@@ -71,7 +68,7 @@ class _RequestsState extends State<Requests> {
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
                             color: returnTheme(
-                              context,
+                              context: context,
                             ).darkMediumGrey(),
                           ),
                           'All Requests',
@@ -122,7 +119,8 @@ class _RequestsState extends State<Requests> {
                                           BoxDecoration(
                                             color:
                                                 returnTheme(
-                                                  context,
+                                                  context:
+                                                      context,
                                                 ).white(),
                                           ),
                                       child: Builder(
@@ -144,7 +142,8 @@ class _RequestsState extends State<Requests> {
                                                       size:
                                                           17,
                                                       color: returnTheme(
-                                                        context,
+                                                        context:
+                                                            context,
                                                       ).tertiaryLight(),
                                                       Icons
                                                           .notifications_active_outlined,
@@ -160,7 +159,7 @@ class _RequestsState extends State<Requests> {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: returnTheme(
-                                                          context,
+                                                          context: context,
                                                         ).darkMediumGrey(),
                                                       ),
                                                       req.userName
@@ -190,7 +189,7 @@ class _RequestsState extends State<Requests> {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: returnTheme(
-                                                          context,
+                                                          context: context,
                                                         ).mediumGrey(),
                                                       ),
                                                       req.userEmail,
@@ -236,7 +235,7 @@ class _RequestsState extends State<Requests> {
                                                                 style: TextStyle(
                                                                   fontSize: 10,
                                                                   color: returnTheme(
-                                                                    context,
+                                                                    context: context,
                                                                   ).darkGrey(),
                                                                 ),
                                                                 'Request Accepted',
@@ -372,7 +371,8 @@ class _RequestsState extends State<Requests> {
                                                       size:
                                                           17,
                                                       color: returnTheme(
-                                                        context,
+                                                        context:
+                                                            context,
                                                       ).tertiaryLight(),
                                                       Icons
                                                           .notifications_active_outlined,
@@ -388,7 +388,7 @@ class _RequestsState extends State<Requests> {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: returnTheme(
-                                                          context,
+                                                          context: context,
                                                         ).darkMediumGrey(),
                                                       ),
                                                       req.userName
@@ -418,7 +418,7 @@ class _RequestsState extends State<Requests> {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: returnTheme(
-                                                          context,
+                                                          context: context,
                                                         ).mediumGrey(),
                                                       ),
                                                       req.userEmail,
@@ -467,7 +467,7 @@ class _RequestsState extends State<Requests> {
                                                                 style: TextStyle(
                                                                   fontSize: 10,
                                                                   color: returnTheme(
-                                                                    context,
+                                                                    context: context,
                                                                   ).darkGrey(),
                                                                 ),
                                                                 'Request Accepted',

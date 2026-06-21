@@ -32,7 +32,9 @@ class _LoginPageState extends State<LoginPage> {
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: returnTheme(context).white(),
+          backgroundColor: returnTheme(
+            context: context,
+          ).white(),
           body: Center(
             child: SingleChildScrollView(
               child: Column(
@@ -151,7 +153,9 @@ class _LoginFormState extends State<LoginForm> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.normal,
-              color: returnTheme(context).mediumGrey(),
+              color: returnTheme(
+                context: context,
+              ).mediumGrey(),
             ),
             'Securely Login to your Promas Account',
           ),
@@ -161,7 +165,9 @@ class _LoginFormState extends State<LoginForm> {
             width: 250,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: returnTheme(context).primaryLight(),
+              color: returnTheme(
+                context: context,
+              ).primaryLight(),
             ),
           ),
           SizedBox(height: 10),

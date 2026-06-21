@@ -17,10 +17,7 @@ class ErrorAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 15),
-      backgroundColor: returnTheme(
-        context,
-        listen: false,
-      ).containerColor(),
+      backgroundColor: returnTheme().containerColor(),
       contentPadding: EdgeInsets.all(10),
       shape: OutlineInputBorder(
         borderRadius: mainBorderRadius,
@@ -70,10 +67,7 @@ class ErrorAlert extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.normal,
-                  color: returnTheme(
-                    context,
-                    listen: false,
-                  ).darkMediumGrey(),
+                  color: returnTheme().darkMediumGrey(),
                 ),
                 message,
               ),

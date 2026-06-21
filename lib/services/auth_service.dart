@@ -88,7 +88,7 @@ class AuthService {
   }) async {
     ProjectProvider().clearCache();
     BranchProvider().clearCache();
-    returnNav(context, listen: false).navigate(0);
+    returnNav().navigate(0);
     await _client.auth.signOut();
     if (context.mounted) {
       Navigator.pushReplacement(
