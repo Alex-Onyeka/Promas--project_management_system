@@ -27,23 +27,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  Future<void> createProject() async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AddProjectDialog(
-          urlController: urlController,
-          descController: descController,
-          nameController: nameController,
-        );
-      },
-    );
-  }
-
-  final nameController = TextEditingController();
-  final urlController = TextEditingController();
-  final descController = TextEditingController();
-
   Future<CompanyClass?> getCompany() async {
     return await CompanyProvider().getMyCompany();
   }
@@ -258,14 +241,6 @@ class _DashboardState extends State<Dashboard> {
       (a, b) => b.createdAt!.compareTo(a.createdAt!),
     );
     return Scaffold(
-      // floatingActionButton: Visibility(
-      //   visible: projectsIn.isNotEmpty,
-      //   child: MainFloatingActionButton(
-      //     action: () async {
-      //       await createProject();
-      //     },
-      //   ),
-      // ),
       body: Builder(
         builder: (context) {
           if (!returnRequest().isLoaded) {
@@ -1035,7 +1010,7 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
-class CreateProjectWidgetDashboard extends StatelessWidget {
+class CreateProjectWidgetDashboard extends StatefulWidget {
   const CreateProjectWidgetDashboard({
     super.key,
     required this.theme,
@@ -1044,13 +1019,36 @@ class CreateProjectWidgetDashboard extends StatelessWidget {
   final ThemeProvider theme;
 
   @override
+  State<CreateProjectWidgetDashboard> createState() =>
+      _CreateProjectWidgetDashboardState();
+}
+
+class _CreateProjectWidgetDashboardState
+    extends State<CreateProjectWidgetDashboard> {
+  final nameController = TextEditingController();
+  final urlController = TextEditingController();
+  final descController = TextEditingController();
+  Future<void> createProject() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AddProjectDialog(
+          urlController: urlController,
+          descController: descController,
+          nameController: nameController,
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (screenSize(context) > tabletScreen) {
       return Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: theme.white(),
+          color: widget.theme.white(),
           boxShadow: [
             BoxShadow(
               color: const Color.fromARGB(18, 0, 0, 0),
@@ -1101,11 +1099,7 @@ class CreateProjectWidgetDashboard extends StatelessWidget {
                           //       repo:
                           //           'Stockall-CRM',
                           //     );
-                          // createProject();
-                          for (var pr
-                              in returnCommit().commits) {
-                            print(pr.message);
-                          }
+                          createProject();
                         },
                         title: 'Create New Project',
                       ),
@@ -1132,7 +1126,7 @@ class CreateProjectWidgetDashboard extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(20, 15, 10, 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: theme.white(),
+          color: widget.theme.white(),
           boxShadow: [
             BoxShadow(
               color: const Color.fromARGB(18, 0, 0, 0),
@@ -1182,10 +1176,7 @@ class CreateProjectWidgetDashboard extends StatelessWidget {
                         width: 220,
                         child: MainButton(
                           action: () {
-                            for (var pr
-                                in returnCommit().commits) {
-                              print(pr.message);
-                            }
+                            createProject();
                           },
                           title: 'Create New Project',
                         ),
