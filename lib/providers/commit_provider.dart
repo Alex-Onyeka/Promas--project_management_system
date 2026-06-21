@@ -81,7 +81,7 @@ class CommitProvider extends ChangeNotifier {
         files: [],
       ),
     ];
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> fetchCommits({
@@ -145,6 +145,8 @@ class CommitProvider extends ChangeNotifier {
         final commit = data['commit'];
         final stats = data['stats'];
         final files = (data['files'] as List?) ?? [];
+        print('Commit Message: ${commit['message']}');
+        print("Total Work Done: ${stats['total']}");
 
         return Commit(
           sha: sha,
@@ -175,7 +177,7 @@ class CommitProvider extends ChangeNotifier {
       }),
     );
 
-    commits = enriched;
+    commits.addAll(enriched);
     notifyListeners();
   }
 }

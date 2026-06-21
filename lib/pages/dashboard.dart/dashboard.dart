@@ -12,6 +12,7 @@ import 'package:promas/providers/branch_provider.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/project_provider.dart';
 import 'package:promas/providers/requests_provider.dart';
+import 'package:promas/providers/theme_provider.dart';
 import 'package:promas/providers/user_provider.dart';
 
 class Dashboard extends StatefulWidget {
@@ -125,41 +126,53 @@ class _DashboardState extends State<Dashboard> {
   }
 
   List<WorkEntry> data() {
-    if (returnCommit(context: context).commits.isEmpty) {
+    final commitsList = returnCommit(
+      context: context,
+    ).commits;
+
+    if (commitsList.isEmpty) {
       return [WorkEntry(DateTime.now(), 0)];
-    } else {
-      if (selectedProject == null) {
-        return returnCommit(context: context).commits
-            .map(
-              (item) => WorkEntry(
-                item.date,
-                item.total.toDouble(),
-              ),
-            )
-            .toList();
-      } else {
-        var dataTemp = returnCommit(context: context)
-            .commits
-            .where(
-              (commit) =>
-                  commit.repo ==
-                  returnProject().projectGithubName(
-                    projectUrl:
-                        selectedProject?.githubUrl ?? '',
-                  ),
-            )
-            .map(
-              (item) => WorkEntry(
-                item.date,
-                item.total.toDouble(),
-              ),
-            )
-            .toList();
-        return dataTemp.isEmpty
-            ? [WorkEntry(DateTime.now(), 0)]
-            : dataTemp;
-      }
     }
+
+    // Filter by selected project if needed
+    final filtered = selectedProject == null
+        ? commitsList
+        : commitsList.where(
+            (commit) =>
+                commit.repo ==
+                returnProject().projectGithubName(
+                  projectUrl:
+                      selectedProject?.githubUrl ?? '',
+                ),
+          );
+
+    final today = normalize(DateTime.now());
+    final sevenDaysAgo = today.subtract(
+      const Duration(days: 6),
+    );
+
+    // Only keep commits between today and 7 days ago
+    final recent = filtered
+        .where((item) {
+          final d = normalize(item.date);
+          return d.isAfter(
+                sevenDaysAgo.subtract(
+                  const Duration(days: 1),
+                ),
+              ) &&
+              d.isBefore(
+                today.add(const Duration(days: 1)),
+              );
+        })
+        .map(
+          (item) =>
+              WorkEntry(item.date, item.total.toDouble()),
+        )
+        .toList();
+
+    return recent.isEmpty
+        ? [WorkEntry(DateTime.now(), 0)]
+        : recent;
   }
 
   DateTime normalize(DateTime d) {
@@ -171,30 +184,26 @@ class _DashboardState extends State<Dashboard> {
 
     for (final item in data) {
       final day = normalize(item.date);
-
       grouped[day] = (grouped[day] ?? 0) + item.value;
     }
 
     return grouped;
   }
 
-  List<DateTime> getLast7Days(List<WorkEntry> data) {
-    final latestDate = data
-        .map((e) => normalize(e.date))
-        .reduce((a, b) => a.isAfter(b) ? a : b);
-
-    return List.generate(7, (i) {
-      return latestDate.subtract(Duration(days: 6 - i));
-    });
+  List<DateTime> getLast7Days() {
+    final today = normalize(DateTime.now());
+    return List.generate(
+      7,
+      (i) => today.subtract(Duration(days: i)),
+    ).reversed.toList();
   }
 
   List<FlSpot> groupedDataAction(List<WorkEntry> data) {
     final grouped = groupByDay(data);
-    final last7Days = getLast7Days(data);
+    final last7Days = getLast7Days();
 
     return List.generate(7, (index) {
       final day = last7Days[index];
-
       return FlSpot(index.toDouble(), grouped[day] ?? 0);
     });
   }
@@ -292,208 +301,147 @@ class _DashboardState extends State<Dashboard> {
                   //   ).mediumGrey(),
                   // ),
                   SizedBox(height: 10),
-                  SizedBox(
-                    height: 200,
-                    child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                      spacing: 15,
-                      children: [
-                        Expanded(
-                          flex: 10,
-                          child: Column(
-                            spacing: 15,
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  spacing: 15,
-                                  children: [
-                                    DashboardContainerTilesWidget(
-                                      icon: Icon(
-                                        size: 30,
-                                        color: theme
-                                            .secondaryLight(),
-                                        Icons.add_chart,
-                                      ),
-                                      title:
-                                          'Total Projects',
-                                      value:
-                                          returnProject(
-                                                context:
-                                                    context,
-                                              )
-                                              .projectsMain
-                                              .length
-                                              .toString(),
-                                    ),
-                                    DashboardContainerTilesWidget(
-                                      icon: Icon(
-                                        size: 30,
-                                        color: theme
-                                            .tertiaryColor(),
-                                        Icons
-                                            .account_tree_outlined,
-                                      ),
-                                      title:
-                                          'Total Branches',
-                                      value:
-                                          returnBranch(
-                                                context:
-                                                    context,
-                                              )
-                                              .branches
-                                              .length
-                                              .toString(),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  spacing: 15,
-                                  children: [
-                                    DashboardContainerTilesWidget(
-                                      icon: Icon(
-                                        size: 35,
-                                        color: theme
-                                            .primaryLight(),
-                                        Icons
-                                            .people_outline_outlined,
-                                      ),
-                                      title: 'Total Staffs',
-                                      value:
-                                          returnUser(
-                                                context:
-                                                    context,
-                                              ).users.length
-                                              .toString(),
-                                    ),
-                                    DashboardContainerTilesWidget(
-                                      icon: Icon(
-                                        size: 28,
-                                        color: theme
-                                            .secondaryLight(),
-                                        Icons.message,
-                                      ),
-                                      title:
-                                          'Total Requests',
-                                      value:
-                                          returnRequest(
-                                                context:
-                                                    context,
-                                              )
-                                              .unAcceptedRequests()
-                                              .length
-                                              .toString(),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 8,
-                          child: Container(
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(10),
-                              color: theme.white(),
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      const Color.fromARGB(
-                                        18,
-                                        0,
-                                        0,
-                                        0,
-                                      ),
-                                  blurRadius: 10,
-                                ),
-                              ],
-                            ),
-                            child: Stack(
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 4,
-                                      child: Column(
-                                        spacing: 10,
-                                        children: [
-                                          Expanded(
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                spacing: 5,
-                                                children: [
-                                                  Text(
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                    'Create A New Software Project!',
-                                                  ),
-                                                  Text(
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          11,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
-                                                    'Click on the button to create a new Software Project.',
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        child: Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment
+                                  .spaceBetween,
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          spacing: 15,
+                          children: [
+                            Expanded(
+                              flex: 10,
+                              child: Column(
+                                spacing: 15,
+                                children: [
+                                  Expanded(
+                                    child: Row(
+                                      spacing: 15,
+                                      children: [
+                                        DashboardContainerTilesWidget(
+                                          icon: Icon(
+                                            size: 30,
+                                            color: theme
+                                                .secondaryLight(),
+                                            Icons.add_chart,
                                           ),
-                                          MainButton(
-                                            action: () {
-                                              // returnCommit()
-                                              //     .fetchCommits(
-                                              //       owner:
-                                              //           'Alex-Onyeka',
-                                              //       repo:
-                                              //           'Stockall-CRM',
-                                              //     );
-                                              createProject();
-                                            },
-                                            title:
-                                                'Create New Project',
+                                          title:
+                                              'Total Projects',
+                                          value:
+                                              returnProject(
+                                                    context:
+                                                        context,
+                                                  )
+                                                  .projectsMain
+                                                  .length
+                                                  .toString(),
+                                        ),
+                                        DashboardContainerTilesWidget(
+                                          icon: Icon(
+                                            size: 30,
+                                            color: theme
+                                                .tertiaryColor(),
+                                            Icons
+                                                .account_tree_outlined,
                                           ),
-                                        ],
-                                      ),
+                                          title:
+                                              'Total Branches',
+                                          value:
+                                              returnBranch(
+                                                    context:
+                                                        context,
+                                                  )
+                                                  .branches
+                                                  .length
+                                                  .toString(),
+                                        ),
+                                      ],
                                     ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: SizedBox(),
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      spacing: 15,
+                                      children: [
+                                        DashboardContainerTilesWidget(
+                                          icon: Icon(
+                                            size: 35,
+                                            color: theme
+                                                .primaryLight(),
+                                            Icons
+                                                .people_outline_outlined,
+                                          ),
+                                          title:
+                                              'Total Staffs',
+                                          value:
+                                              returnUser(
+                                                    context:
+                                                        context,
+                                                  )
+                                                  .users
+                                                  .length
+                                                  .toString(),
+                                        ),
+                                        DashboardContainerTilesWidget(
+                                          icon: Icon(
+                                            size: 28,
+                                            color: theme
+                                                .secondaryLight(),
+                                            Icons.message,
+                                          ),
+                                          title:
+                                              'Total Requests',
+                                          value:
+                                              returnRequest(
+                                                    context:
+                                                        context,
+                                                  )
+                                                  .unAcceptedRequests()
+                                                  .length
+                                                  .toString(),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 8,
-                                      child: SizedBox(),
-                                    ),
-                                    Expanded(
-                                      flex: 6,
-                                      child: Image.asset(
-                                        workingMan,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                            Visibility(
+                              visible:
+                                  screenSize(context) >
+                                  tabletScreen,
+                              child: Expanded(
+                                flex: 8,
+                                child:
+                                    CreateProjectWidgetDashboard(
+                                      theme: theme,
+                                    ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Visibility(
+                        visible:
+                            screenSize(context) <=
+                            tabletScreen,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 15),
+                            SizedBox(
+                              height: 200,
+                              child:
+                                  CreateProjectWidgetDashboard(
+                                    theme: theme,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 15),
                   Container(
@@ -686,146 +634,323 @@ class _DashboardState extends State<Dashboard> {
                             ],
                           ),
                         ),
-                        Container(
-                          height: 350,
-                          padding: EdgeInsets.fromLTRB(
-                            15,
-                            5,
-                            40,
-                            5,
-                          ),
-                          child: LineChart(
-                            LineChartData(
-                              borderData: FlBorderData(
-                                border: Border.all(
-                                  color:
-                                      Colors.grey.shade200,
-                                ),
-                              ),
-                              titlesData: FlTitlesData(
-                                topTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: false,
-                                  ),
-                                ),
-                                rightTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: false,
-                                  ),
-                                ),
-                                leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    reservedSize: 50,
-                                    showTitles: true,
-                                    getTitlesWidget: (value, meta) {
-                                      return Text(
-                                        formatLargeNumber(
-                                          value.toString(),
-                                        ).split('.').first,
-                                        style:
-                                            const TextStyle(
-                                              fontSize: 11,
-                                              fontWeight:
-                                                  FontWeight
-                                                      .bold,
+                        Builder(
+                          builder: (context) {
+                            if (screenSize(context) >
+                                tabletScreen) {
+                              return Container(
+                                height: 350,
+                                padding:
+                                    EdgeInsets.fromLTRB(
+                                      15,
+                                      5,
+                                      40,
+                                      5,
+                                    ),
+                                child: LineChart(
+                                  LineChartData(
+                                    borderData: FlBorderData(
+                                      border: Border.all(
+                                        color: Colors
+                                            .grey
+                                            .shade200,
+                                      ),
+                                    ),
+                                    titlesData: FlTitlesData(
+                                      topTitles: AxisTitles(
+                                        sideTitles:
+                                            SideTitles(
+                                              showTitles:
+                                                  false,
                                             ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    reservedSize: 60,
-                                    interval: 1,
-                                    getTitlesWidget: (value, meta) {
-                                      final days =
-                                          getLast7Days(
-                                            data(),
-                                          );
-
-                                      if (value < 0 ||
-                                          value > 6) {
-                                        return const SizedBox();
-                                      }
-                                      final daysName = [
-                                        "Mon",
-                                        "Tue",
-                                        "Wed",
-                                        "Thu",
-                                        "Fri",
-                                        "Sat",
-                                        "Sun",
-                                      ];
-                                      final months = [
-                                        "Jan",
-                                        "Feb",
-                                        "Mar",
-                                        "Apr",
-                                        "May",
-                                        "June",
-                                        "July",
-                                        "Aug",
-                                        "Sept",
-                                        "Oct",
-                                        "Nov",
-                                        "Dec",
-                                      ];
-
-                                      final date =
-                                          days[value
-                                              .toInt()];
-
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(
-                                              0,
-                                              10,
-                                              0,
-                                              0,
-                                            ),
-                                        child: Column(
-                                          mainAxisSize:
-                                              MainAxisSize
-                                                  .min,
-                                          children: [
-                                            Text(
-                                              style: TextStyle(
+                                      ),
+                                      rightTitles:
+                                          AxisTitles(
+                                            sideTitles:
+                                                SideTitles(
+                                                  showTitles:
+                                                      false,
+                                                ),
+                                          ),
+                                      leftTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          reservedSize: 50,
+                                          showTitles: true,
+                                          getTitlesWidget: (value, meta) {
+                                            return Text(
+                                              formatLargeNumber(
+                                                    value
+                                                        .toString(),
+                                                  )
+                                                  .split(
+                                                    '.',
+                                                  )
+                                                  .first,
+                                              style: const TextStyle(
                                                 fontSize:
                                                     11,
                                                 fontWeight:
                                                     FontWeight
                                                         .bold,
                                               ),
-                                              "${daysName[date.weekday - 1]} - ${date.day}",
-                                            ),
-                                            Text(
-                                              style: TextStyle(
-                                                fontSize:
-                                                    11,
-                                                fontWeight:
-                                                    FontWeight
-                                                        .bold,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      bottomTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: true,
+                                          reservedSize: 60,
+                                          interval: 1,
+                                          getTitlesWidget: (value, meta) {
+                                            final days =
+                                                getLast7Days(
+                                                  // data(),
+                                                );
+
+                                            if (value < 0 ||
+                                                value > 6) {
+                                              return const SizedBox();
+                                            }
+                                            final daysName =
+                                                [
+                                                  "Mon",
+                                                  "Tue",
+                                                  "Wed",
+                                                  "Thu",
+                                                  "Fri",
+                                                  "Sat",
+                                                  "Sun",
+                                                ];
+                                            final months = [
+                                              "Jan",
+                                              "Feb",
+                                              "Mar",
+                                              "Apr",
+                                              "May",
+                                              "June",
+                                              "July",
+                                              "Aug",
+                                              "Sept",
+                                              "Oct",
+                                              "Nov",
+                                              "Dec",
+                                            ];
+
+                                            final date =
+                                                days[value
+                                                    .toInt()];
+
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                    0,
+                                                    10,
+                                                    0,
+                                                    0,
+                                                  ),
+                                              child: Column(
+                                                mainAxisSize:
+                                                    MainAxisSize
+                                                        .min,
+                                                children: [
+                                                  Text(
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          11,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    "${daysName[date.weekday - 1]} - ${date.day}",
+                                                  ),
+                                                  Text(
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          11,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    "(${months[date.month - 1]} - ${date.year})",
+                                                  ),
+                                                ],
                                               ),
-                                              "(${months[date.month - 1]} - ${date.year})",
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    lineBarsData: [
+                                      LineChartBarData(
+                                        spots:
+                                            groupedDataAction(
+                                              data(),
+                                            ),
+                                        isCurved: false,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return SingleChildScrollView(
+                                scrollDirection:
+                                    Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 350,
+                                      width: 800,
+                                      padding:
+                                          EdgeInsets.fromLTRB(
+                                            15,
+                                            5,
+                                            40,
+                                            5,
+                                          ),
+                                      child: LineChart(
+                                        LineChartData(
+                                          borderData: FlBorderData(
+                                            border: Border.all(
+                                              color: Colors
+                                                  .grey
+                                                  .shade200,
+                                            ),
+                                          ),
+                                          titlesData: FlTitlesData(
+                                            topTitles: AxisTitles(
+                                              sideTitles:
+                                                  SideTitles(
+                                                    showTitles:
+                                                        false,
+                                                  ),
+                                            ),
+                                            rightTitles: AxisTitles(
+                                              sideTitles:
+                                                  SideTitles(
+                                                    showTitles:
+                                                        false,
+                                                  ),
+                                            ),
+                                            leftTitles: AxisTitles(
+                                              sideTitles: SideTitles(
+                                                reservedSize:
+                                                    50,
+                                                showTitles:
+                                                    true,
+                                                getTitlesWidget: (value, meta) {
+                                                  return Text(
+                                                    formatLargeNumber(
+                                                      value
+                                                          .toString(),
+                                                    ).split('.').first,
+                                                    style: const TextStyle(
+                                                      fontSize:
+                                                          11,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            bottomTitles: AxisTitles(
+                                              sideTitles: SideTitles(
+                                                showTitles:
+                                                    true,
+                                                reservedSize:
+                                                    60,
+                                                interval: 1,
+                                                getTitlesWidget: (value, meta) {
+                                                  final days =
+                                                      getLast7Days(
+                                                        // data(),
+                                                      );
+
+                                                  if (value <
+                                                          0 ||
+                                                      value >
+                                                          6) {
+                                                    return const SizedBox();
+                                                  }
+                                                  final daysName = [
+                                                    "Mon",
+                                                    "Tue",
+                                                    "Wed",
+                                                    "Thu",
+                                                    "Fri",
+                                                    "Sat",
+                                                    "Sun",
+                                                  ];
+                                                  final months = [
+                                                    "Jan",
+                                                    "Feb",
+                                                    "Mar",
+                                                    "Apr",
+                                                    "May",
+                                                    "June",
+                                                    "July",
+                                                    "Aug",
+                                                    "Sept",
+                                                    "Oct",
+                                                    "Nov",
+                                                    "Dec",
+                                                  ];
+
+                                                  final date =
+                                                      days[value
+                                                          .toInt()];
+
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.fromLTRB(
+                                                          0,
+                                                          10,
+                                                          0,
+                                                          0,
+                                                        ),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Text(
+                                                          style: TextStyle(
+                                                            fontSize: 11,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                          "${daysName[date.weekday - 1]} - ${date.day}",
+                                                        ),
+                                                        Text(
+                                                          style: TextStyle(
+                                                            fontSize: 11,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                          "(${months[date.month - 1]} - ${date.year})",
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          lineBarsData: [
+                                            LineChartBarData(
+                                              spots:
+                                                  groupedDataAction(
+                                                    data(),
+                                                  ),
+                                              isCurved:
+                                                  false,
                                             ),
                                           ],
                                         ),
-                                      );
-                                    },
-                                  ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: groupedDataAction(
-                                    data(),
-                                  ),
-                                  isCurved: false,
-                                ),
-                              ],
-                            ),
-                          ),
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -837,6 +962,183 @@ class _DashboardState extends State<Dashboard> {
         },
       ),
     );
+  }
+}
+
+class CreateProjectWidgetDashboard extends StatelessWidget {
+  const CreateProjectWidgetDashboard({
+    super.key,
+    required this.theme,
+  });
+
+  final ThemeProvider theme;
+
+  @override
+  Widget build(BuildContext context) {
+    if (screenSize(context) > tabletScreen) {
+      return Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: theme.white(),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(18, 0, 0, 0),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    spacing: 10,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            spacing: 5,
+                            children: [
+                              Text(
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight:
+                                      FontWeight.bold,
+                                ),
+                                'Create A New Software Project!',
+                              ),
+                              Text(
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight:
+                                      FontWeight.normal,
+                                ),
+                                'Click on the button to create a new Software Project.',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      MainButton(
+                        action: () {
+                          // returnCommit()
+                          //     .fetchCommits(
+                          //       owner:
+                          //           'Alex-Onyeka',
+                          //       repo:
+                          //           'Stockall-CRM',
+                          //     );
+                          // createProject();
+                          for (var pr
+                              in returnCommit().commits) {
+                            print(pr.message);
+                          }
+                        },
+                        title: 'Create New Project',
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(flex: 3, child: SizedBox()),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(flex: 8, child: SizedBox()),
+                Expanded(
+                  flex: 6,
+                  child: Image.asset(workingMan),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        padding: EdgeInsets.all(30),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: theme.white(),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(18, 0, 0, 0),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                    spacing: 10,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            spacing: 5,
+                            children: [
+                              Text(
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight:
+                                      FontWeight.bold,
+                                ),
+                                'Create A New Software Project!',
+                              ),
+                              Text(
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight:
+                                      FontWeight.normal,
+                                ),
+                                'Click on the button to create a new Software Project.',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 230,
+                        child: MainButton(
+                          action: () {
+                            for (var pr
+                                in returnCommit().commits) {
+                              print(pr.message);
+                            }
+                          },
+                          title: 'Create New Project',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(flex: 3, child: SizedBox()),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(flex: 8, child: SizedBox()),
+                Expanded(
+                  flex: 6,
+                  child: Image.asset(workingMan),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
 
