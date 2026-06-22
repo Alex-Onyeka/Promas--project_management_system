@@ -4,7 +4,6 @@ import 'package:promas/classes/company_class.dart';
 import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
 import 'package:promas/components/buttons/main_button.dart';
-import 'package:promas/components/loading_widget.dart';
 import 'package:promas/constants/formats.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
@@ -243,38 +242,24 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          if (!returnRequest().isLoaded) {
-            return Scaffold(
-              body: Center(
-                child: LoadingWidget(action: () {}),
-              ),
-            );
-          } else {
-            return SingleChildScrollView(
+          // if (!returnRequest().isLoaded) {
+          //   return Scaffold(
+          //     body: Center(
+          //       child: LoadingWidget(action: () {}),
+          //     ),
+          //   );
+          // } else {
+          return RefreshIndicator(
+            onRefresh: () async {
+              await initFuncs();
+            },
+            backgroundColor: Colors.white,
+            color: theme.tertiaryLight(),
+            displacement: 10,
+            child: SingleChildScrollView(
               child: Column(
                 spacing: 2,
                 children: [
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       style: TextStyle(
-                  //         fontSize: 14,
-                  //         fontWeight: FontWeight.bold,
-                  //         color: returnTheme(
-                  //           context,
-                  //         ).darkMediumGrey(),
-                  //       ),
-                  //       'Overview',
-                  //     ),
-                  //   ],
-                  // ),
-                  // // SizedBox(height: 10),
-                  // Divider(
-                  //   thickness: 0.5,
-                  //   color: returnTheme(
-                  //     context,
-                  //   ).mediumGrey(),
-                  // ),
                   SizedBox(height: 10),
                   Column(
                     children: [
@@ -305,7 +290,7 @@ class _DashboardState extends State<Dashboard> {
                                                     ) >
                                                     tabletScreen
                                                 ? 30
-                                                : 25,
+                                                : 22,
                                             color: theme
                                                 .secondaryLight(),
                                             Icons.add_chart,
@@ -320,6 +305,12 @@ class _DashboardState extends State<Dashboard> {
                                                   .projectsMain
                                                   .length
                                                   .toString(),
+                                          action: () {
+                                            returnNav()
+                                                .navigate(
+                                                  1,
+                                                );
+                                          },
                                         ),
                                         DashboardContainerTilesWidget(
                                           icon: Icon(
@@ -329,7 +320,7 @@ class _DashboardState extends State<Dashboard> {
                                                     ) >
                                                     tabletScreen
                                                 ? 30
-                                                : 25,
+                                                : 22,
                                             color: theme
                                                 .tertiaryColor(),
                                             Icons
@@ -361,7 +352,7 @@ class _DashboardState extends State<Dashboard> {
                                                     ) >
                                                     tabletScreen
                                                 ? 35
-                                                : 28,
+                                                : 25,
                                             color: theme
                                                 .primaryLight(),
                                             Icons
@@ -377,6 +368,12 @@ class _DashboardState extends State<Dashboard> {
                                                   .users
                                                   .length
                                                   .toString(),
+                                          action: () {
+                                            returnNav()
+                                                .navigate(
+                                                  2,
+                                                );
+                                          },
                                         ),
                                         DashboardContainerTilesWidget(
                                           icon: Icon(
@@ -386,7 +383,7 @@ class _DashboardState extends State<Dashboard> {
                                                     ) >
                                                     tabletScreen
                                                 ? 28
-                                                : 22,
+                                                : 18,
                                             color: theme
                                                 .secondaryLight(),
                                             Icons.message,
@@ -401,6 +398,12 @@ class _DashboardState extends State<Dashboard> {
                                                   .unAcceptedRequests()
                                                   .length
                                                   .toString(),
+                                          action: () {
+                                            returnNav()
+                                                .navigate(
+                                                  3,
+                                                );
+                                          },
                                         ),
                                       ],
                                     ),
@@ -1019,9 +1022,10 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ],
               ),
-            );
-          }
+            ),
+          );
         },
+        // },
       ),
     );
   }
@@ -1236,12 +1240,14 @@ class DashboardContainerTilesWidget
   final String title;
   final Icon icon;
   final String value;
+  final Function()? action;
 
   const DashboardContainerTilesWidget({
     super.key,
     required this.title,
     required this.icon,
     required this.value,
+    this.action,
   });
 
   @override
@@ -1249,10 +1255,8 @@ class DashboardContainerTilesWidget
     var theme = returnTheme(context: context);
     return Expanded(
       child: Container(
-        padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: theme.white(),
           boxShadow: [
             BoxShadow(
               color: const Color.fromARGB(18, 0, 0, 0),
@@ -1260,35 +1264,58 @@ class DashboardContainerTilesWidget
             ),
           ],
         ),
-        child: Row(
-          spacing: 5,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 5,
-              children: [
-                Text(
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: theme.darkMediumGrey(),
-                  ),
-                  formatLargeNumber(value),
-                ),
-                Text(
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: theme.mediumGrey(),
-                  ),
-                  title,
-                ),
-              ],
+        child: Material(
+          color: Colors.transparent,
+          child: Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: theme.white(),
             ),
-            icon,
-          ],
+            child: InkWell(
+              borderRadius: BorderRadius.circular(5),
+              onTap: action,
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: Row(
+                  spacing: 5,
+                  crossAxisAlignment:
+                      CrossAxisAlignment.end,
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                      spacing: 5,
+                      children: [
+                        Text(
+                          style: TextStyle(
+                            fontSize:
+                                screenSize(context) >
+                                    tabletScreen
+                                ? 20
+                                : 16,
+                            fontWeight: FontWeight.bold,
+                            color: theme.darkMediumGrey(),
+                          ),
+                          formatLargeNumber(value),
+                        ),
+                        Text(
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: theme.mediumGrey(),
+                          ),
+                          title,
+                        ),
+                      ],
+                    ),
+                    icon,
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

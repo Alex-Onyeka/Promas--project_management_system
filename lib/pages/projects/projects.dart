@@ -308,37 +308,48 @@ class _ProjectsState extends State<Projects> {
                                               null,
                                         )
                                         .isNotEmpty,
-                                    child: ListView(
-                                      children: projectIn
-                                          .where(
-                                            (project) =>
-                                                project
-                                                    .githubUrl !=
-                                                null,
-                                          )
-                                          .map(
-                                            (
-                                              pro,
-                                            ) => ProjectTile(
-                                              project: pro,
-                                              viewProject: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        (
-                                                          context,
-                                                        ) {
-                                                          return ProjectPage(
-                                                            project: pro,
-                                                          );
-                                                        },
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          )
-                                          .toList(),
+                                    child: RefreshIndicator(
+                                      onRefresh: () async {
+                                        await initFuncs();
+                                      },
+                                      backgroundColor:
+                                          Colors.white,
+                                      color: returnTheme()
+                                          .tertiaryLight(),
+                                      displacement: 10,
+                                      child: ListView(
+                                        children: projectIn
+                                            .where(
+                                              (project) =>
+                                                  project
+                                                      .githubUrl !=
+                                                  null,
+                                            )
+                                            .map(
+                                              (
+                                                pro,
+                                              ) => ProjectTile(
+                                                project:
+                                                    pro,
+                                                viewProject: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder:
+                                                          (
+                                                            context,
+                                                          ) {
+                                                            return ProjectPage(
+                                                              project: pro,
+                                                            );
+                                                          },
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                            .toList(),
+                                      ),
                                     ),
                                   ),
                                   Visibility(
@@ -376,37 +387,48 @@ class _ProjectsState extends State<Projects> {
                                               null,
                                         )
                                         .isNotEmpty,
-                                    child: ListView(
-                                      children: projectIn
-                                          .where(
-                                            (project) =>
-                                                project
-                                                    .githubUrl ==
-                                                null,
-                                          )
-                                          .map(
-                                            (
-                                              pro,
-                                            ) => ProjectTile(
-                                              project: pro,
-                                              viewProject: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        (
-                                                          context,
-                                                        ) {
-                                                          return ProjectPage(
-                                                            project: pro,
-                                                          );
-                                                        },
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          )
-                                          .toList(),
+                                    child: RefreshIndicator(
+                                      onRefresh: () async {
+                                        await initFuncs();
+                                      },
+                                      backgroundColor:
+                                          Colors.white,
+                                      color: returnTheme()
+                                          .tertiaryLight(),
+                                      displacement: 10,
+                                      child: ListView(
+                                        children: projectIn
+                                            .where(
+                                              (project) =>
+                                                  project
+                                                      .githubUrl ==
+                                                  null,
+                                            )
+                                            .map(
+                                              (
+                                                pro,
+                                              ) => ProjectTile(
+                                                project:
+                                                    pro,
+                                                viewProject: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder:
+                                                          (
+                                                            context,
+                                                          ) {
+                                                            return ProjectPage(
+                                                              project: pro,
+                                                            );
+                                                          },
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                            .toList(),
+                                      ),
                                     ),
                                   ),
                                   Visibility(

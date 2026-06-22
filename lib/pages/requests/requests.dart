@@ -356,9 +356,6 @@ class _RequestsState extends State<Requests> {
                                           } else {
                                             return Column(
                                               spacing: 7,
-                                              // mainAxisAlignment:
-                                              //     MainAxisAlignment
-                                              //         .spaceBetween,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment
                                                       .end,
@@ -394,21 +391,28 @@ class _RequestsState extends State<Requests> {
                                                       req.userName
                                                           .toUpperCase(),
                                                     ),
-                                                    Container(
-                                                      margin: EdgeInsets.symmetric(
-                                                        horizontal:
-                                                            3,
-                                                      ),
-                                                      width:
-                                                          2,
-                                                      height:
-                                                          18,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(
-                                                          5,
-                                                        ),
-                                                        color:
-                                                            greyNeutral(),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  spacing:
+                                                      8,
+                                                  children: [
+                                                    Opacity(
+                                                      opacity:
+                                                          0,
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(
+                                                            size: 17,
+                                                            color: returnTheme(
+                                                              context: context,
+                                                            ).tertiaryLight(),
+                                                            Icons.notifications_active_outlined,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 2,
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
                                                     Text(
