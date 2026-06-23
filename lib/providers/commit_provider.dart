@@ -9,78 +9,24 @@ class CommitProvider extends ChangeNotifier {
   factory CommitProvider() => _instance;
   CommitProvider._internal();
 
-  List<Commit> commits = [
-    // Commit(
-    //   sha: 'HJJSB',
-    //   repo: 'Stockall-CRM',
-    //   message: 'message',
-    //   authorName: 'authorName',
-    //   date: DateTime(2026, 6, 15),
-    //   additions: 20,
-    //   deletions: 40,
-    //   total: 60,
-    //   files: [],
-    // ),
-    // Commit(
-    //   sha: 'fddsgr',
-    //   repo: 'Stockall-CRM',
-    //   message: 'message',
-    //   authorName: 'authorName',
-    //   date: DateTime(2026, 6, 17),
-    //   additions: 20,
-    //   deletions: 40,
-    //   total: 100,
-    //   files: [],
-    // ),
-    // Commit(
-    //   sha: 'fddsgr',
-    //   repo: 'Todo-App',
-    //   message: 'message',
-    //   authorName: 'authorName',
-    //   date: DateTime(2026, 6, 17),
-    //   additions: 20,
-    //   deletions: 40,
-    //   total: 100,
-    //   files: [],
-    // ),
-    // Commit(
-    //   sha: 'fddsgr',
-    //   repo: 'Todo-App',
-    //   message: 'message',
-    //   authorName: 'authorName',
-    //   date: DateTime(2026, 6, 18),
-    //   additions: 20,
-    //   deletions: 40,
-    //   total: 90,
-    //   files: [],
-    // ),
-    Commit(
-      sha: 'fddsgr',
-      repo: 'Stockall-CRM',
-      message: 'message',
-      authorName: 'authorName',
-      date: DateTime.now(),
-      additions: 0,
-      deletions: 0,
-      total: 0,
-      files: [],
-    ),
-  ];
+  List<Commit> commits = [];
+
+  List<Commit> getUserCommits({
+    required List<String> alias,
+  }) {
+    List<Commit> tempCommits = [];
+    for (var user in alias) {
+      tempCommits.addAll(
+        commits
+            .where((commit) => commit.authorEmail == user)
+            .toList(),
+      );
+    }
+    return tempCommits;
+  }
 
   void clearCache() {
-    commits = [
-      Commit(
-        sha: 'fddsgr',
-        repo: 'Stockall-CRM',
-        message: 'message',
-        authorName: 'authorName',
-        date: DateTime.now(),
-        additions: 0,
-        deletions: 0,
-        total: 0,
-        files: [],
-      ),
-    ];
+    commits.clear();
     // notifyListeners();
   }
 
@@ -145,8 +91,7 @@ class CommitProvider extends ChangeNotifier {
         final commit = data['commit'];
         final stats = data['stats'];
         final files = (data['files'] as List?) ?? [];
-        print('Commit Message: ${commit['message']}');
-        print("Total Work Done: ${stats['total']}");
+        // print(commit['author']);
 
         return Commit(
           sha: sha,
@@ -155,7 +100,7 @@ class CommitProvider extends ChangeNotifier {
           // metadata
           message: commit['message'] ?? '',
           authorName: commit['author']['name'] ?? '',
-          authorUsername: c['author']?['login'],
+          authorEmail: commit['author']?['email'] ?? '',
           date: DateTime.parse(commit['author']['date']),
 
           // stats
@@ -178,6 +123,10 @@ class CommitProvider extends ChangeNotifier {
     );
 
     commits.addAll(enriched);
+    for (var commit in commits) {
+      print('Commit Author Name: ${commit.authorName}');
+      print("Commit Author Email: ${commit.authorEmail}");
+    }
     notifyListeners();
   }
 }

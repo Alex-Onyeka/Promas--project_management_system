@@ -45,8 +45,8 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
             returnBranch().selectedStaffs.add(user);
           }
         }
+        setState(() {});
       });
-      setState(() {});
     }
   }
 
@@ -91,199 +91,208 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                 numberOfLines: 3,
               ),
               SizedBox(height: 10),
-              Builder(
-                builder: (context) {
-                  if (branchPr.selectedStaffs.isEmpty) {
-                    return Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return SelectStaffDialog(
-                                selectStaff: () {},
-                              );
-                            },
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            Icon(
-                              size: 20,
-                              color: returnTheme(
-                                context: context,
-                              ).darkMediumGrey(),
-                              Icons.person_outline_rounded,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(
-                                    vertical: 2.0,
-                                  ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment
-                                        .center,
-                                children: [
-                                  Text(
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: returnTheme(
-                                        context: context,
-                                      ).darkMediumGrey(),
+              Visibility(
+                visible: widget.branch != null,
+                child: Builder(
+                  builder: (context) {
+                    if (branchPr.selectedStaffs.isEmpty) {
+                      return Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SelectStaffDialog(
+                                  projectId:
+                                      widget.projectId,
+                                  branch: widget.branch,
+                                  selectStaff: () {},
+                                );
+                              },
+                            ).then((_) {
+                              setState(() {});
+                            });
+                          },
+                          child: Column(
+                            children: [
+                              Icon(
+                                size: 20,
+                                color: returnTheme(
+                                  context: context,
+                                ).darkMediumGrey(),
+                                Icons
+                                    .person_outline_rounded,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(
+                                      vertical: 2.0,
                                     ),
-                                    'No Staff Selected',
-                                  ),
-                                  SizedBox(width: 5),
-                                  Icon(
-                                    size: 15,
-                                    color: returnTheme(
-                                      context: context,
-                                    ).secondaryColor(),
-                                    Icons.add,
-                                  ),
-                                  Text(
-                                    style: TextStyle(
-                                      fontSize: 10,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .center,
+                                  children: [
+                                    Text(
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: returnTheme(
+                                          context: context,
+                                        ).darkMediumGrey(),
+                                      ),
+                                      'No Staff Selected',
+                                    ),
+                                    SizedBox(width: 5),
+                                    Icon(
+                                      size: 15,
                                       color: returnTheme(
                                         context: context,
                                       ).secondaryColor(),
-                                      fontWeight:
-                                          FontWeight.bold,
+                                      Icons.add,
                                     ),
-                                    'Add Staff',
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Column(
-                      children: [
-                        Column(
-                          spacing: 5,
-                          children: returnBranch(context: context)
-                              .selectedStaffs
-                              .map(
-                                (user) => ListTile(
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
-                                    children: [
-                                      Text(
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          color: returnTheme(
-                                            context:
-                                                context,
-                                          ).darkMediumGrey(),
-                                          fontWeight:
-                                              FontWeight
-                                                  .bold,
-                                        ),
-                                        user.name,
+                                    Text(
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: returnTheme(
+                                          context: context,
+                                        ).secondaryColor(),
+                                        fontWeight:
+                                            FontWeight.bold,
                                       ),
-                                      InkWell(
-                                        onTap: () {
-                                          returnBranch()
-                                              .removeSelectedStaff(
-                                                user,
-                                              );
-                                        },
-                                        child: Container(
-                                          padding:
-                                              EdgeInsets.all(
-                                                3,
-                                              ),
-                                          decoration:
-                                              BoxDecoration(
-                                                shape: BoxShape
-                                                    .circle,
-                                              ),
-                                          child: Icon(
-                                            size: 20,
+                                      'Add Staff',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          Column(
+                            spacing: 5,
+                            children: returnBranch(context: context)
+                                .selectedStaffs
+                                .map(
+                                  (user) => ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .spaceBetween,
+                                      children: [
+                                        Text(
+                                          style: TextStyle(
+                                            fontSize: 11,
                                             color: returnTheme(
                                               context:
                                                   context,
-                                            ).darkGrey(),
-                                            Icons.clear,
+                                            ).darkMediumGrey(),
+                                            fontWeight:
+                                                FontWeight
+                                                    .bold,
+                                          ),
+                                          user.name,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            returnBranch()
+                                                .removeSelectedStaff(
+                                                  user,
+                                                );
+                                          },
+                                          child: Container(
+                                            padding:
+                                                EdgeInsets.all(
+                                                  3,
+                                                ),
+                                            decoration:
+                                                BoxDecoration(
+                                                  shape: BoxShape
+                                                      .circle,
+                                                ),
+                                            child: Icon(
+                                              size: 20,
+                                              color: returnTheme(
+                                                context:
+                                                    context,
+                                              ).darkGrey(),
+                                              Icons.clear,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                        SizedBox(height: 5),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return StatefulBuilder(
-                                    builder:
-                                        (
-                                          context,
-                                          setState,
-                                        ) {
-                                          return SelectStaffDialog(
-                                            selectStaff:
-                                                () {},
-                                          );
-                                        },
-                                  );
-                                },
-                              ).then((_) {
-                                setState(() {});
-                              });
-                            },
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(
-                                    vertical: 2.0,
-                                  ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment
-                                        .center,
-                                children: [
-                                  Icon(
-                                    size: 15,
-                                    color: returnTheme(
-                                      context: context,
-                                    ).secondaryColor(),
-                                    Icons.add,
-                                  ),
-                                  Text(
-                                    style: TextStyle(
-                                      fontSize: 10,
+                                )
+                                .toList(),
+                          ),
+                          SizedBox(height: 5),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return SelectStaffDialog(
+                                          projectId: widget
+                                              .projectId,
+                                          branch:
+                                              widget.branch,
+                                          selectStaff:
+                                              () {},
+                                        );
+                                      },
+                                    );
+                                  },
+                                ).then((_) {
+                                  setState(() {});
+                                });
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(
+                                      vertical: 2.0,
+                                    ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .center,
+                                  children: [
+                                    Icon(
+                                      size: 15,
                                       color: returnTheme(
                                         context: context,
                                       ).secondaryColor(),
-                                      fontWeight:
-                                          FontWeight.bold,
+                                      Icons.add,
                                     ),
-                                    'Add Staff',
-                                  ),
-                                ],
+                                    Text(
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: returnTheme(
+                                          context: context,
+                                        ).secondaryColor(),
+                                        fontWeight:
+                                            FontWeight.bold,
+                                      ),
+                                      'Add Staff',
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 5),
-                      ],
-                    );
-                  }
-                },
+                          SizedBox(height: 5),
+                        ],
+                      );
+                    }
+                  },
+                ),
               ),
               SizedBox(height: 10),
               MainButton(
@@ -299,7 +308,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                               .trim(),
                           projectId: widget.projectId,
                           createdAt: DateTime.now(),
-                          lastUpdate: DateTime.now(),
+                          // lastUpdate: DateTime.now(),
                           level: 0,
                           desc: widget.descController.text,
                           employees: returnBranch()
@@ -322,7 +331,7 @@ class _AddBranchDialogState extends State<AddBranchDialog> {
                           projectId: widget.projectId,
                           createdAt:
                               widget.branch!.createdAt,
-                          lastUpdate: DateTime.now(),
+                          // lastUpdate: DateTime.now(),
                           level: widget.branch!.level,
                           desc: widget.descController.text
                               .trim(),

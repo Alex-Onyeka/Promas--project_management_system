@@ -23,6 +23,7 @@ class AuthService {
   Future<AuthResponse?> signUp({
     required String email,
     required String password,
+    required String gitHubAlias,
     String? name,
   }) async {
     try {
@@ -35,6 +36,7 @@ class AuthService {
         try {
           await UserProvider().createUser(
             UserClass(
+              gitHubAlias: gitHubAlias,
               id: response.user!.id,
               name: name!,
               email: email,

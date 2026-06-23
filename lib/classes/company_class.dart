@@ -4,7 +4,7 @@ class CompanyClass {
   String name;
   String desc;
   final String? email;
-  final String? token;
+  String? token;
 
   CompanyClass({
     this.id,

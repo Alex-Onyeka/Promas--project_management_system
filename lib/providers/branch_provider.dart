@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:promas/classes/branch_class.dart';
 import 'package:promas/classes/user_class.dart';
+import 'package:promas/main.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -116,20 +117,40 @@ class BranchProvider extends ChangeNotifier {
   Future<List<BranchClass>> getBranchesByCompany(
     // int companyId,
   ) async {
-    final response = await _client
-        .from(_table)
-        .select()
-        .eq(
-          'company_id',
-          CompanyProvider().currentCompany!.id!,
-        );
+    try {
+      if (returnUser().currentUser?.isAdmin == true) {
+        final response = await _client
+            .from(_table)
+            .select()
+            .eq(
+              'company_id',
+              CompanyProvider().currentCompany!.id!,
+            );
 
-    List<BranchClass> tempBranches = (response as List)
-        .map((json) => BranchClass.fromJson(json))
-        .toList();
+        List<BranchClass> tempBranches = (response as List)
+            .map((json) => BranchClass.fromJson(json))
+            .toList();
 
-    branches = tempBranches;
-    return branches;
+        branches = tempBranches;
+      } else {
+        final response = await _client
+            .from(_table)
+            .select()
+            .contains('employees', [
+              returnUser().currentUser?.id ?? '',
+            ]);
+
+        List<BranchClass> tempBranches = (response as List)
+            .map((json) => BranchClass.fromJson(json))
+            .toList();
+
+        branches = tempBranches;
+      }
+      return branches;
+    } catch (e) {
+      print('Error Getting branches: ${e.toString()}');
+      return [];
+    }
   }
 
   /// Get all branches for a project
@@ -152,7 +173,7 @@ class BranchProvider extends ChangeNotifier {
     BranchClass branch,
   ) async {
     try {
-      branch.lastUpdate = DateTime.now();
+      // branch.lastUpdate = DateTime.now();
       final response = await _client
           .from(_table)
           .update(branch.toJson())
@@ -177,7 +198,7 @@ class BranchProvider extends ChangeNotifier {
     edit.first.desc = branch.desc;
     edit.first.employees = branch.employees;
     edit.first.level = branch.level;
-    edit.first.lastUpdate = branch.lastUpdate;
+    // edit.first.lastUpdate = branch.lastUpdate;
     print(branches.length);
     notifyListeners();
   }
@@ -189,10 +210,10 @@ class BranchProvider extends ChangeNotifier {
   ) async {
     try {
       await _client.rpc(
-        'add_employees_to_branch',
+        'add_branch_employees',
         params: {
-          'p_branch': branchUuid,
-          'p_employees': employees,
+          'p_branch_uuid': branchUuid,
+          'p_employee_ids': employees,
         },
       );
       var bran = branches.where(
@@ -214,10 +235,10 @@ class BranchProvider extends ChangeNotifier {
   ) async {
     try {
       await _client.rpc(
-        'remove_employee_from_branch',
+        'remove_branch_employee',
         params: {
-          'p_branch': branchUuid,
-          'p_employee': employee,
+          'p_branch_uuid': branchUuid,
+          'p_employee_id': employee,
         },
       );
       var bran = branches.where(

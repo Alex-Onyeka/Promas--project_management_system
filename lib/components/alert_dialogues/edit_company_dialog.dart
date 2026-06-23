@@ -10,12 +10,14 @@ import 'package:promas/main.dart';
 class EditCompanyDialog extends StatefulWidget {
   final TextEditingController nameController;
   final TextEditingController descController;
+  final TextEditingController tokenController;
   final CompanyClass company;
   const EditCompanyDialog({
     super.key,
     required this.nameController,
     required this.descController,
     required this.company,
+    required this.tokenController,
   });
 
   @override
@@ -45,6 +47,10 @@ class EditCompanyDialogState
           widget.company.desc.isEmpty
           ? ''
           : widget.company.desc;
+      widget.tokenController.text =
+          widget.company.token == null
+          ? ''
+          : widget.company.token!;
       setState(() {});
     });
   }
@@ -72,6 +78,13 @@ class EditCompanyDialogState
               ),
               SizedBox(height: 6),
               NormalTextfield(
+                inputController: widget.tokenController,
+                hintText: 'Enter Github Account Token',
+                title: 'Github Token',
+                isOptional: true,
+              ),
+              SizedBox(height: 6),
+              NormalTextfield(
                 inputController: widget.descController,
                 numberOfLines: 3,
                 hintText: 'Enter Company Description',
@@ -87,12 +100,15 @@ class EditCompanyDialogState
                         widget.nameController.text;
                     widget.company.desc =
                         widget.descController.text;
+                    widget.company.token =
+                        widget.tokenController.text;
                     await returnCompany().updateCompany(
                       widget.company.id!,
                       widget.company,
                     );
                     widget.nameController.clear();
                     widget.descController.clear();
+                    widget.tokenController.clear();
                     toggleLoading(false);
                     Navigator.of(context).pop();
                   }
@@ -106,6 +122,7 @@ class EditCompanyDialogState
                 action: () {
                   widget.nameController.clear();
                   widget.descController.clear();
+                  widget.tokenController.clear();
                   Navigator.of(context).pop();
                 },
               ),

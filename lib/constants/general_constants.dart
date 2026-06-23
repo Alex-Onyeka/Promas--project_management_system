@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 double screenSize(BuildContext context) {
   return MediaQuery.of(context).size.width;
@@ -23,3 +24,11 @@ String appName = 'Promas';
 const String mainLogo = 'assets/logo.svg';
 
 const String workingMan = 'assets/workingman.png';
+
+void copyToClipboard(BuildContext context, String text) {
+  Clipboard.setData(ClipboardData(text: text));
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text("Copied to clipboard")),
+  );
+}

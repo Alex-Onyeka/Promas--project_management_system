@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:promas/classes/commit.dart';
 import 'package:promas/classes/company_class.dart';
 import 'package:promas/classes/project_class.dart';
 import 'package:promas/components/alert_dialogues/add_project_dialog.dart';
@@ -47,10 +48,13 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<void> initFuncs() async {
+    returnProject().toggleLoading(true);
+    await getCompany();
     await getAllUsers();
     await getAllProjectss();
     await getAllBranches();
     await getAllRequests();
+    returnProject().toggleLoading(false);
   }
 
   ProjectClass? selectedProject;
@@ -89,31 +93,47 @@ class _DashboardState extends State<Dashboard> {
         screenSize.width - position.dx - size.width,
         screenSize.height - position.dy,
       ),
-      items: returnProject().projectsMain.map((project) {
-        return PopupMenuItem(
-          onTap: () {
-            selectProject(project);
-          },
-          // value: 'edit',
-          child: Text(
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-            project.name,
-          ),
-        );
-      }).toList(),
+      items: returnProject().projectsMain
+          .where((pro) => pro.githubUrl != null)
+          .map((project) {
+            return PopupMenuItem(
+              onTap: () {
+                selectProject(project);
+              },
+              // value: 'edit',
+              child: Text(
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+                project.name,
+              ),
+            );
+          })
+          .toList(),
     );
   }
 
-  List<WorkEntry> data() {
+  List<Commit> data() {
     final commitsList = returnCommit(
       context: context,
     ).commits;
 
     if (commitsList.isEmpty) {
-      return [WorkEntry(DateTime.now(), 0)];
+      return [
+        Commit(
+          sha: 'sha',
+          repo: 'repo',
+          message: 'message',
+          authorName: 'authorName',
+          authorEmail: 'authorEmail',
+          date: DateTime.now(),
+          additions: 0,
+          deletions: 0,
+          total: 0,
+          files: [],
+        ),
+      ];
     }
 
     // Filter by selected project if needed
@@ -134,26 +154,29 @@ class _DashboardState extends State<Dashboard> {
     );
 
     // Only keep commits between today and 7 days ago
-    final recent = filtered
-        .where((item) {
-          final d = normalize(item.date);
-          return d.isAfter(
-                sevenDaysAgo.subtract(
-                  const Duration(days: 1),
-                ),
-              ) &&
-              d.isBefore(
-                today.add(const Duration(days: 1)),
-              );
-        })
-        .map(
-          (item) =>
-              WorkEntry(item.date, item.total.toDouble()),
-        )
-        .toList();
+    final recent = filtered.where((item) {
+      final d = normalize(item.date);
+      return d.isAfter(
+            sevenDaysAgo.subtract(const Duration(days: 1)),
+          ) &&
+          d.isBefore(today.add(const Duration(days: 1)));
+    }).toList();
 
     return recent.isEmpty
-        ? [WorkEntry(DateTime.now(), 0)]
+        ? [
+            Commit(
+              sha: 'sha',
+              repo: 'repo',
+              message: 'message',
+              authorName: 'authorName',
+              authorEmail: 'authorEmail',
+              date: DateTime.now(),
+              additions: 0,
+              deletions: 0,
+              total: 0,
+              files: [],
+            ),
+          ]
         : recent;
   }
 
@@ -161,12 +184,12 @@ class _DashboardState extends State<Dashboard> {
     return DateTime(d.year, d.month, d.day);
   }
 
-  Map<DateTime, double> groupByDay(List<WorkEntry> data) {
+  Map<DateTime, double> groupByDay(List<Commit> data) {
     final Map<DateTime, double> grouped = {};
 
     for (final item in data) {
       final day = normalize(item.date);
-      grouped[day] = (grouped[day] ?? 0) + item.value;
+      grouped[day] = (grouped[day] ?? 0) + item.total;
     }
 
     return grouped;
@@ -180,7 +203,7 @@ class _DashboardState extends State<Dashboard> {
     ).reversed.toList();
   }
 
-  List<FlSpot> groupedDataAction(List<WorkEntry> data) {
+  List<FlSpot> groupedDataAction(List<Commit> data) {
     final grouped = groupByDay(data);
     final last7Days = getLast7Days();
 
@@ -194,7 +217,6 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await getCompany();
       await initFuncs();
       if (mounted) {
         setState(() {});
@@ -205,50 +227,9 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     var theme = returnTheme(context: context);
-    List<ProjectClass> getProjectsForEmployee(
-      BuildContext context,
-    ) {
-      final user = returnUser(
-        context: context,
-      ).currentUser!;
-      final allProjects = user.isAdmin
-          ? returnProject(context: context).projects()
-          : returnProject(context: context).projectsMain;
-      final allBranches = returnBranch(
-        context: context,
-      ).branches;
-
-      final projectsIn = allProjects.where((proj) {
-        final projectBranches = allBranches.where(
-          (bran) => bran.projectId == proj.uuid,
-        );
-
-        return projectBranches.any(
-          (bran) => bran.employees.contains(user.id),
-        );
-      }).toList();
-
-      return projectsIn;
-    }
-
-    List<ProjectClass> projectsIn =
-        returnUser(context: context).currentUser!.isAdmin
-        ? returnProject(context: context).projects()
-        : getProjectsForEmployee(context);
-
-    projectsIn.sort(
-      (a, b) => b.createdAt!.compareTo(a.createdAt!),
-    );
     return Scaffold(
       body: Builder(
         builder: (context) {
-          // if (!returnRequest().isLoaded) {
-          //   return Scaffold(
-          //     body: Center(
-          //       child: LoadingWidget(action: () {}),
-          //     ),
-          //   );
-          // } else {
           return RefreshIndicator(
             onRefresh: () async {
               await initFuncs();
@@ -264,7 +245,13 @@ class _DashboardState extends State<Dashboard> {
                   Column(
                     children: [
                       SizedBox(
-                        height: 200,
+                        height:
+                            returnUser()
+                                    .currentUser
+                                    ?.isAdmin ==
+                                true
+                            ? 200
+                            : 120,
                         child: Row(
                           mainAxisAlignment:
                               MainAxisAlignment
@@ -340,72 +327,85 @@ class _DashboardState extends State<Dashboard> {
                                       ],
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Row(
-                                      spacing: 15,
-                                      children: [
-                                        DashboardContainerTilesWidget(
-                                          icon: Icon(
-                                            size:
-                                                screenSize(
-                                                      context,
-                                                    ) >
-                                                    tabletScreen
-                                                ? 35
-                                                : 25,
-                                            color: theme
-                                                .primaryLight(),
-                                            Icons
-                                                .people_outline_outlined,
-                                          ),
-                                          title:
-                                              'Total Staffs',
-                                          value:
-                                              returnUser(
-                                                    context:
+                                  Visibility(
+                                    visible:
+                                        returnUser()
+                                            .currentUser
+                                            ?.isAdmin ==
+                                        true,
+                                    child: Expanded(
+                                      child: Row(
+                                        spacing: 15,
+                                        children: [
+                                          DashboardContainerTilesWidget(
+                                            icon: Icon(
+                                              size:
+                                                  screenSize(
                                                         context,
-                                                  )
-                                                  .users
-                                                  .length
-                                                  .toString(),
-                                          action: () {
-                                            returnNav()
-                                                .navigate(
-                                                  2,
-                                                );
-                                          },
-                                        ),
-                                        DashboardContainerTilesWidget(
-                                          icon: Icon(
-                                            size:
-                                                screenSize(
-                                                      context,
-                                                    ) >
-                                                    tabletScreen
-                                                ? 28
-                                                : 18,
-                                            color: theme
-                                                .secondaryLight(),
-                                            Icons.message,
+                                                      ) >
+                                                      tabletScreen
+                                                  ? 35
+                                                  : 25,
+                                              color: theme
+                                                  .primaryLight(),
+                                              Icons
+                                                  .people_outline_outlined,
+                                            ),
+                                            title:
+                                                'Total Staffs',
+                                            value:
+                                                returnUser(
+                                                      context:
+                                                          context,
+                                                    ).users
+                                                    .where(
+                                                      (
+                                                        user,
+                                                      ) =>
+                                                          user.id !=
+                                                          returnUser().currentUser?.id,
+                                                    )
+                                                    .length
+                                                    .toString(),
+                                            action: () {
+                                              returnNav()
+                                                  .navigate(
+                                                    2,
+                                                  );
+                                            },
                                           ),
-                                          title:
-                                              'Total Requests',
-                                          value:
-                                              returnRequest(
-                                                    context:
+                                          DashboardContainerTilesWidget(
+                                            icon: Icon(
+                                              size:
+                                                  screenSize(
                                                         context,
-                                                  )
-                                                  .unAcceptedRequests()
-                                                  .length
-                                                  .toString(),
-                                          action: () {
-                                            returnNav()
-                                                .navigate(
-                                                  3,
-                                                );
-                                          },
-                                        ),
-                                      ],
+                                                      ) >
+                                                      tabletScreen
+                                                  ? 28
+                                                  : 18,
+                                              color: theme
+                                                  .secondaryLight(),
+                                              Icons.message,
+                                            ),
+                                            title:
+                                                'Total Requests',
+                                            value:
+                                                returnRequest(
+                                                      context:
+                                                          context,
+                                                    )
+                                                    .unAcceptedRequests()
+                                                    .length
+                                                    .toString(),
+                                            action: () {
+                                              returnNav()
+                                                  .navigate(
+                                                    3,
+                                                  );
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -414,7 +414,11 @@ class _DashboardState extends State<Dashboard> {
                             Visibility(
                               visible:
                                   screenSize(context) >
-                                  tabletScreen,
+                                      tabletScreen &&
+                                  returnUser()
+                                          .currentUser
+                                          ?.isAdmin ==
+                                      true,
                               child: Expanded(
                                 flex: 8,
                                 child:
@@ -429,7 +433,11 @@ class _DashboardState extends State<Dashboard> {
                       Visibility(
                         visible:
                             screenSize(context) <=
-                            tabletScreen,
+                                tabletScreen &&
+                            returnUser()
+                                    .currentUser
+                                    ?.isAdmin ==
+                                true,
                         child: Column(
                           children: [
                             SizedBox(height: 15),
@@ -525,16 +533,8 @@ class _DashboardState extends State<Dashboard> {
                                               .transparent,
                                           child: InkWell(
                                             onTap: () async {
-                                              returnProject()
-                                                  .toggleLoading(
-                                                    true,
-                                                  );
                                               await returnProject()
                                                   .getAllProjectsByCompany();
-                                              returnProject()
-                                                  .toggleLoading(
-                                                    false,
-                                                  );
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(
@@ -1322,9 +1322,9 @@ class DashboardContainerTilesWidget
   }
 }
 
-class WorkEntry {
-  final DateTime date;
-  final double value;
+// class WorkEntry {
+//   final DateTime date;
+//   final double value;
 
-  WorkEntry(this.date, this.value);
-}
+//   WorkEntry(this.date, this.value);
+// }

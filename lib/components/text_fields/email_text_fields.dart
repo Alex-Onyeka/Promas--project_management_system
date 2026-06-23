@@ -4,11 +4,13 @@ import 'package:promas/main.dart';
 class EmailTextField extends StatelessWidget {
   final TextEditingController? emailController;
   final bool isOptional;
+  final String? title;
 
   const EmailTextField({
     super.key,
     required this.emailController,
     required this.isOptional,
+    this.title,
   });
 
   @override
@@ -25,7 +27,7 @@ class EmailTextField extends StatelessWidget {
             fontSize: 11,
             fontWeight: FontWeight.normal,
           ),
-          'Email ${isOptional ? '(Optional)' : ''}',
+          '${title ?? "Email"} ${isOptional ? '(Optional)' : ''}',
         ),
         TextFormField(
           style: TextStyle(
@@ -41,11 +43,11 @@ class EmailTextField extends StatelessWidget {
           validator: (value) {
             if (isOptional == false &&
                 value.toString().isEmpty) {
-              return 'Email Field Can\'t be Empty';
+              return '${title ?? "Email"} Field Can\'t be Empty';
             } else if (value.toString().isNotEmpty &&
                 (!value!.contains('@') ||
                     !value.contains('.'))) {
-              return 'Please enter a Valid Email';
+              return 'Please enter a Valid ${title ?? "Email"}';
             } else {
               return null;
             }
@@ -56,7 +58,7 @@ class EmailTextField extends StatelessWidget {
               vertical: 13,
             ),
             isCollapsed: true,
-            hintText: 'Enter Email',
+            hintText: 'Enter ${title ?? "Email"}',
             hintStyle: TextStyle(
               fontSize: 11,
               color: Colors.grey,

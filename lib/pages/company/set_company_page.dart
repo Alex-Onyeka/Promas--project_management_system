@@ -576,6 +576,8 @@ class _CreateCustomerFormState
         print('Company Created Successfully');
         var userRes = await UserProvider().updateUser(
           UserClass(
+            gitHubAlias:
+                UserProvider().currentUser!.gitHubAlias!,
             id: UserProvider().currentUser!.id!,
             name: UserProvider().currentUser!.name,
             email: UserProvider().currentUser!.email,

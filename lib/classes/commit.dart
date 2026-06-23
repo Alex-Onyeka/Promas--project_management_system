@@ -5,7 +5,7 @@ class Commit {
   // metadata
   final String message;
   final String authorName;
-  final String? authorUsername;
+  final String? authorEmail;
   final DateTime date;
 
   // stats
@@ -21,12 +21,13 @@ class Commit {
     required this.repo,
     required this.message,
     required this.authorName,
+    required this.authorEmail,
     required this.date,
     required this.additions,
     required this.deletions,
     required this.total,
     required this.files,
-    this.authorUsername,
+    // this.authorUsername,
   });
 }
 

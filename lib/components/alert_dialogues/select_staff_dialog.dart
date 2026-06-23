@@ -10,9 +10,11 @@ import 'package:promas/main.dart';
 class SelectStaffDialog extends StatefulWidget {
   final Function() selectStaff;
   final BranchClass? branch;
+  final String projectId;
   const SelectStaffDialog({
     super.key,
     required this.selectStaff,
+    required this.projectId,
     this.branch,
   });
 
@@ -27,10 +29,22 @@ class _SelectStaffDialogState
       GlobalKey<FormState>();
   final TextEditingController nameController =
       TextEditingController();
+
   // List<UserClass> users = [];
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
+    final tempUsers = returnUser(context: context).users
+        .where(
+          (user) => !returnBranch().branches
+              .where(
+                (br) =>
+                    br.projectId ==
+                    widget.branch?.projectId,
+              )
+              .any((br) => br.employees.contains(user.id)),
+        )
+        .toList();
     return AlertPlaceholder(
       content: Form(
         key: _formKey,
@@ -58,9 +72,7 @@ class _SelectStaffDialogState
               SizedBox(height: 3),
               Builder(
                 builder: (context) {
-                  if (returnUser(
-                    context: context,
-                  ).users.isEmpty) {
+                  if (tempUsers.isEmpty) {
                     return Column(
                       children: [
                         Icon(
@@ -97,8 +109,7 @@ class _SelectStaffDialogState
                   } else {
                     return Column(
                       spacing: 5,
-                      children: returnUser(context: context)
-                          .users
+                      children: tempUsers
                           .where(
                             (us) => us.name
                                 .toLowerCase()

@@ -90,6 +90,7 @@ class _SignUpFormState extends State<SignUpForm> {
     if (_formKey.currentState!.validate()) {
       widget.switchLoading(true);
       var res = await AuthService().signUp(
+        gitHubAlias: aliasController.text,
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
         name: nameController.text.trim(),
@@ -126,6 +127,8 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController nameController =
       TextEditingController();
   TextEditingController emailController =
+      TextEditingController();
+  TextEditingController aliasController =
       TextEditingController();
   TextEditingController passwordController =
       TextEditingController();
@@ -173,6 +176,12 @@ class _SignUpFormState extends State<SignUpForm> {
           EmailTextField(
             emailController: emailController,
             isOptional: false,
+          ),
+          SizedBox(height: 5),
+          EmailTextField(
+            title: 'Github Alias',
+            emailController: aliasController,
+            isOptional: true,
           ),
           SizedBox(height: 5),
           PasswordTextField(

@@ -11,11 +11,13 @@ import 'package:promas/services/auth_service.dart';
 
 class EditProfileDialog extends StatefulWidget {
   final TextEditingController nameController;
+  final TextEditingController gitHubAlias;
   final UserClass user;
   const EditProfileDialog({
     super.key,
     required this.nameController,
     required this.user,
+    required this.gitHubAlias,
   });
 
   @override
@@ -41,6 +43,10 @@ class _EditProfileDialogState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.nameController.text = widget.user.name;
+      widget.gitHubAlias.text =
+          widget.user.gitHubAlias == null
+          ? ''
+          : widget.user.gitHubAlias!;
       setState(() {});
     });
   }
@@ -62,21 +68,31 @@ class _EditProfileDialogState
               SizedBox(height: 10),
               NormalTextfield(
                 inputController: widget.nameController,
-                hintText: 'Enter Project Name',
-                title: 'Project Name',
+                hintText: 'Enter User Name',
+                title: 'User Name',
                 isOptional: false,
               ),
-              SizedBox(height: 6),
+              SizedBox(height: 4),
+              NormalTextfield(
+                inputController: widget.gitHubAlias,
+                hintText: 'Enter Github Alias(Email)',
+                title: 'Github Alias/Email',
+                isOptional: true,
+              ),
+              SizedBox(height: 10),
               MainButton(
                 action: () async {
                   if (_formKey.currentState!.validate()) {
                     toggleLoading(true);
                     widget.user.name =
                         widget.nameController.text;
+                    widget.user.gitHubAlias =
+                        widget.gitHubAlias.text;
                     await returnUser().updateUser(
                       widget.user,
                     );
                     widget.nameController.clear();
+                    widget.gitHubAlias.clear();
                     toggleLoading(false);
                     Navigator.of(context).pop();
                   }
@@ -89,6 +105,7 @@ class _EditProfileDialogState
                 title: 'Cancel',
                 action: () {
                   widget.nameController.clear();
+                  widget.gitHubAlias.clear();
                   Navigator.of(context).pop();
                 },
               ),

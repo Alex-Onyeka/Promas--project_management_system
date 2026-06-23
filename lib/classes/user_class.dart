@@ -3,6 +3,7 @@ class UserClass {
   final DateTime? createdAt;
   String name;
   String email;
+  String? gitHubAlias;
   bool isAdmin;
   String? jobTitle;
   int? companyId;
@@ -12,6 +13,7 @@ class UserClass {
     this.createdAt,
     required this.name,
     required this.email,
+    required this.gitHubAlias,
     required this.isAdmin,
     this.jobTitle,
     this.companyId,
@@ -23,6 +25,7 @@ class UserClass {
       createdAt: DateTime.parse(json['created_at']),
       name: json['name'] ?? '',
       email: json['email'] ?? '',
+      gitHubAlias: json['git_hub_alias'] as String?,
       isAdmin: json['is_admin'],
       jobTitle: json['job_title'] ?? '',
       companyId: json['company_id'],
@@ -38,6 +41,7 @@ class UserClass {
       'is_admin': isAdmin,
       'job_title': jobTitle,
       'company_id': companyId,
+      'git_hub_alias': gitHubAlias,
     };
   }
 }

@@ -53,13 +53,31 @@ class ProjectProvider extends ChangeNotifier {
   }
 
   String projectGithubName({required String projectUrl}) {
-    return projectUrl.split('/').last;
+    try {
+      if (projectUrl.contains('/')) {
+        return projectUrl.split('/').last;
+      } else {
+        return projectUrl;
+      }
+    } catch (e) {
+      print('Error Occoured: ${e.toString()}');
+      return projectUrl;
+    }
   }
 
   String projectAuthorName({required String projectUrl}) {
-    return projectUrl.split(
-      '/',
-    )[projectUrl.split('/').length - 2];
+    try {
+      if (projectUrl.contains('/')) {
+        return projectUrl.split(
+          '/',
+        )[projectUrl.split('/').length - 2];
+      } else {
+        return projectUrl;
+      }
+    } catch (e) {
+      print('Error Occourd: ${e.toString()}');
+      return projectUrl;
+    }
   }
 
   /// Create a new project
@@ -98,26 +116,46 @@ class ProjectProvider extends ChangeNotifier {
   getAllProjectsByCompany() async {
     try {
       toggleLoading(true);
-      final response = await _client
-          .from(_table)
-          .select()
-          .eq(
-            'company_id',
-            CompanyProvider().currentCompany!.id!,
-          );
+      // projectsMain.clear();
+      if (returnUser().currentUser?.isAdmin == true) {
+        final response = await _client
+            .from(_table)
+            .select()
+            .eq(
+              'company_id',
+              CompanyProvider().currentCompany!.id!,
+            );
 
-      List<ProjectClass> tempProjects = (response as List)
-          .map((json) => ProjectClass.fromJson(json))
-          .toList();
+        List<ProjectClass> tempProjects = (response as List)
+            .map((json) => ProjectClass.fromJson(json))
+            .toList();
 
-      projectsMain = tempProjects;
-      projectsMain.sort(
-        (a, b) => b.createdAt!.compareTo(a.createdAt!),
-      );
-      notifyListeners();
-      await BranchProvider().getBranchesByCompany();
+        projectsMain = tempProjects;
+        projectsMain.sort(
+          (a, b) => b.createdAt!.compareTo(a.createdAt!),
+        );
+        notifyListeners();
+        await BranchProvider().getBranchesByCompany();
+      } else {
+        final response = await _client.rpc(
+          'get_projects_for_employee',
+          params: {
+            'p_user_id': returnUser().currentUser?.id,
+          },
+        );
+        List<ProjectClass> tempProjects = (response as List)
+            .map((json) => ProjectClass.fromJson(json))
+            .toList();
+
+        projectsMain = tempProjects;
+        projectsMain.sort(
+          (a, b) => b.createdAt!.compareTo(a.createdAt!),
+        );
+        notifyListeners();
+        await BranchProvider().getBranchesByCompany();
+      }
       returnCommit().clearCache();
-      for (var pro in tempProjects) {
+      for (var pro in projectsMain) {
         if (pro.githubUrl != null) {
           await returnCommit().fetchCommits(
             owner: projectAuthorName(
@@ -149,6 +187,7 @@ class ProjectProvider extends ChangeNotifier {
     required String projectUuid,
   }) async {
     try {
+      toggleLoading(true);
       Map<String, dynamic>? response = await _client
           .from(_table)
           .select()
@@ -173,9 +212,11 @@ class ProjectProvider extends ChangeNotifier {
           ),
         );
       }
+      toggleLoading(false);
       print('Project Gotten Successfully');
       notifyListeners();
     } catch (e) {
+      toggleLoading(false);
       print(
         'Error Fetching Single Project: ${e.toString()}',
       );
@@ -191,7 +232,7 @@ class ProjectProvider extends ChangeNotifier {
     ProjectClass project,
   ) async {
     try {
-      project.lastUpdate = DateTime.now();
+      // project.lastUpdate = DateTime.now();
       final response = await _client
           .from(_table)
           .update(project.toJson())
@@ -214,7 +255,7 @@ class ProjectProvider extends ChangeNotifier {
         .toList();
     edit.first.name = project.name;
     edit.first.desc = project.desc;
-    edit.first.lastUpdate = project.lastUpdate;
+    // edit.first.lastUpdate = project.lastUpdate;
     notifyListeners();
   }
 

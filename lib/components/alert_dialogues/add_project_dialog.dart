@@ -101,7 +101,7 @@ class _AddProjectDialogState
                       await returnProject().createProject(
                         ProjectClass(
                           createdAt: DateTime.now(),
-                          lastUpdate: DateTime.now(),
+                          // lastUpdate: DateTime.now(),
                           name: widget.nameController.text,
                           desc: widget.descController.text,
                           githubUrl:
@@ -121,7 +121,7 @@ class _AddProjectDialogState
                         widget.project!.uuid!,
                         ProjectClass(
                           createdAt: DateTime.now(),
-                          lastUpdate: DateTime.now(),
+                          // lastUpdate: DateTime.now(),
                           name: widget.nameController.text,
                           githubUrl:
                               widget

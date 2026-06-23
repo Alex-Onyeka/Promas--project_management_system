@@ -17,6 +17,8 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   final nameController = TextEditingController();
   final descController = TextEditingController();
+  final aliasController = TextEditingController();
+  final tokenController = TextEditingController();
 
   Future<void> getAllUser() async {
     await UserProvider().getCurrentUser();
@@ -127,6 +129,8 @@ class _UserPageState extends State<UserPage> {
                                         return EditProfileDialog(
                                           nameController:
                                               nameController,
+                                          gitHubAlias:
+                                              aliasController,
                                           user: UserProvider()
                                               .currentUser!,
                                         );
@@ -318,6 +322,8 @@ class _UserPageState extends State<UserPage> {
                                             return EditProfileDialog(
                                               nameController:
                                                   nameController,
+                                              gitHubAlias:
+                                                  aliasController,
                                               user: UserProvider()
                                                   .currentUser!,
                                             );
@@ -506,12 +512,20 @@ class _UserPageState extends State<UserPage> {
                                               descController,
                                           nameController:
                                               nameController,
+                                          tokenController:
+                                              tokenController,
                                           company:
                                               CompanyProvider()
                                                   .currentCompany!,
                                         );
                                       },
                                     ).then((_) {
+                                      nameController
+                                          .clear();
+                                      descController
+                                          .clear();
+                                      tokenController
+                                          .clear();
                                       setState(() {});
                                     });
                                   },
