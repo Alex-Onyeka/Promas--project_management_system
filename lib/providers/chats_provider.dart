@@ -87,6 +87,29 @@ class ChatsProvider extends ChangeNotifier {
     return chats;
   }
 
+  Future<List<Chats>> getChatsByGroup({
+    required String id,
+    required int chatType,
+  }) async {
+    String chatIdTemp = chatType == 1
+        ? 'chat_id'
+        : chatType == 2
+        ? 'branch_id'
+        : 'project_id';
+    final response = await _client
+        .from(_table)
+        .select()
+        .eq(chatIdTemp, id);
+
+    List<Chats> tempChats = (response as List)
+        .map((json) => Chats.fromJson(json))
+        .toList();
+
+    chats = tempChats;
+    notifyListeners();
+    return chats;
+  }
+
   /// Delete chat
   Future<void> deleteChat(String uuid) async {
     try {

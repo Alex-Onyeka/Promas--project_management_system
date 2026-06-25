@@ -29,6 +29,11 @@ class Commit {
     required this.files,
     // this.authorUsername,
   });
+
+  // List<CommitFile> getFiles() {
+  //   files.sort((a, b) => a.filename.compareTo(b.filename));
+  //   return files;
+  // }
 }
 
 class CommitFile {
