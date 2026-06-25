@@ -9,6 +9,7 @@ import 'package:promas/components/main_divider.dart';
 import 'package:promas/constants/formats.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
+import 'package:promas/pages/projects/branch_page/components/commit_tile_widget.dart';
 import 'package:promas/pages/projects/components/branch_staff_section.dart';
 import 'package:promas/pages/projects/project_page.dart';
 
@@ -138,18 +139,18 @@ class _BranchPageState extends State<BranchPage> {
 
     if (commitsList.isEmpty) {
       return [
-        Commit(
-          sha: 'sha',
-          repo: 'repo',
-          message: 'message',
-          authorName: 'authorName',
-          authorEmail: 'authorEmail',
-          date: DateTime.now(),
-          additions: 0,
-          deletions: 0,
-          total: 0,
-          files: [],
-        ),
+        // Commit(
+        //   sha: 'sha',
+        //   repo: 'repo',
+        //   message: 'message',
+        //   authorName: 'authorName',
+        //   authorEmail: 'authorEmail',
+        //   date: DateTime.now(),
+        //   additions: 0,
+        //   deletions: 0,
+        //   total: 0,
+        //   files: [],
+        // ),
       ];
     }
 
@@ -178,18 +179,18 @@ class _BranchPageState extends State<BranchPage> {
 
     return recent.isEmpty
         ? [
-            Commit(
-              sha: 'sha',
-              repo: 'repo',
-              message: 'message',
-              authorName: 'authorName',
-              authorEmail: 'authorEmail',
-              date: DateTime.now(),
-              additions: 0,
-              deletions: 0,
-              total: 0,
-              files: [],
-            ),
+            // Commit(
+            //   sha: 'sha',
+            //   repo: 'repo',
+            //   message: 'message',
+            //   authorName: 'authorName',
+            //   authorEmail: 'authorEmail',
+            //   date: DateTime.now(),
+            //   additions: 0,
+            //   deletions: 0,
+            //   total: 0,
+            //   files: [],
+            // ),
           ]
         : recent;
   }
@@ -946,12 +947,8 @@ class _BranchPageState extends State<BranchPage> {
                                                                   ) {
                                                                     return Text(
                                                                       formatLargeNumber(
-                                                                            value.toString(),
-                                                                          )
-                                                                          .split(
-                                                                            '.',
-                                                                          )
-                                                                          .first,
+                                                                        value.toString(),
+                                                                      ),
                                                                       style: TextStyle(
                                                                         fontSize: 11,
                                                                         fontWeight: FontWeight.bold,
@@ -1110,12 +1107,8 @@ class _BranchPageState extends State<BranchPage> {
                                                                         ) {
                                                                           return Text(
                                                                             formatLargeNumber(
-                                                                                  value.toString(),
-                                                                                )
-                                                                                .split(
-                                                                                  '.',
-                                                                                )
-                                                                                .first,
+                                                                              value.toString(),
+                                                                            ),
                                                                             style: TextStyle(
                                                                               fontSize: 11,
                                                                               fontWeight: FontWeight.bold,
@@ -1289,7 +1282,7 @@ class _BranchPageState extends State<BranchPage> {
                                                           fontWeight: FontWeight.bold,
                                                           color: theme.darkMediumGrey(),
                                                         ),
-                                                        'Files Worked On:',
+                                                        'Commits:',
                                                       ),
                                                       Builder(
                                                         builder:
@@ -1491,21 +1484,8 @@ class _BranchPageState extends State<BranchPage> {
                                                             .map(
                                                               (
                                                                 item,
-                                                              ) => Container(
-                                                                padding: EdgeInsets.symmetric(
-                                                                  vertical: 15,
-                                                                  horizontal: 15,
-                                                                ),
-                                                                decoration: BoxDecoration(
-                                                                  color: theme.containerColor(),
-                                                                ),
-                                                                child: Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      item.message,
-                                                                    ),
-                                                                  ],
-                                                                ),
+                                                              ) => CommitTileWidget(
+                                                                commit: item,
                                                               ),
                                                             )
                                                             .toList(),

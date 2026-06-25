@@ -114,70 +114,80 @@ class ProjectProvider extends ChangeNotifier {
   /// Get all projects
   Future<List<ProjectClass>>
   getAllProjectsByCompany() async {
-    try {
-      toggleLoading(true);
-      // projectsMain.clear();
-      if (returnUser().currentUser?.isAdmin == true) {
-        final response = await _client
-            .from(_table)
-            .select()
-            .eq(
-              'company_id',
-              CompanyProvider().currentCompany!.id!,
-            );
+    if (!isLoading) {
+      try {
+        toggleLoading(true);
+        // projectsMain.clear();
+        if (returnUser().currentUser?.isAdmin == true) {
+          final response = await _client
+              .from(_table)
+              .select()
+              .eq(
+                'company_id',
+                CompanyProvider().currentCompany!.id!,
+              );
 
-        List<ProjectClass> tempProjects = (response as List)
-            .map((json) => ProjectClass.fromJson(json))
-            .toList();
+          List<ProjectClass> tempProjects =
+              (response as List)
+                  .map(
+                    (json) => ProjectClass.fromJson(json),
+                  )
+                  .toList();
 
-        projectsMain = tempProjects;
-        projectsMain.sort(
-          (a, b) => b.createdAt!.compareTo(a.createdAt!),
-        );
-        notifyListeners();
-        await BranchProvider().getBranchesByCompany();
-      } else {
-        final response = await _client.rpc(
-          'get_projects_for_employee',
-          params: {
-            'p_user_id': returnUser().currentUser?.id,
-          },
-        );
-        List<ProjectClass> tempProjects = (response as List)
-            .map((json) => ProjectClass.fromJson(json))
-            .toList();
-
-        projectsMain = tempProjects;
-        projectsMain.sort(
-          (a, b) => b.createdAt!.compareTo(a.createdAt!),
-        );
-        notifyListeners();
-        await BranchProvider().getBranchesByCompany();
-      }
-      returnCommit().clearCache();
-      for (var pro in projectsMain) {
-        if (pro.githubUrl != null) {
-          await returnCommit().fetchCommits(
-            owner: projectAuthorName(
-              projectUrl: pro.githubUrl ?? '',
-            ),
-            repo: projectGithubName(
-              projectUrl: pro.githubUrl ?? '',
-            ),
+          projectsMain = tempProjects;
+          projectsMain.sort(
+            (a, b) => b.createdAt!.compareTo(a.createdAt!),
           );
+          notifyListeners();
+          await BranchProvider().getBranchesByCompany();
+        } else {
+          final response = await _client.rpc(
+            'get_projects_for_employee',
+            params: {
+              'p_user_id': returnUser().currentUser?.id,
+            },
+          );
+          List<ProjectClass> tempProjects =
+              (response as List)
+                  .map(
+                    (json) => ProjectClass.fromJson(json),
+                  )
+                  .toList();
+
+          projectsMain = tempProjects;
+          projectsMain.sort(
+            (a, b) => b.createdAt!.compareTo(a.createdAt!),
+          );
+          notifyListeners();
+          await BranchProvider().getBranchesByCompany();
         }
+        returnCommit().clearCache();
+        for (var pro in projectsMain) {
+          if (pro.githubUrl != null) {
+            await returnCommit().fetchCommits(
+              owner: projectAuthorName(
+                projectUrl: pro.githubUrl ?? '',
+              ),
+              repo: projectGithubName(
+                projectUrl: pro.githubUrl ?? '',
+              ),
+            );
+          }
+        }
+        print(
+          'Gotten All Company Projects: ${projectsMain.length}',
+        );
+        toggleLoading(false);
+        return projectsMain;
+      } catch (e) {
+        print('Error Fetching Projects: ${e.toString()}');
+        if (e is DioException) {
+          print(e.response?.data);
+        }
+        toggleLoading(false);
+        return [];
       }
-      print(
-        'Gotten All Company Projects: ${projectsMain.length}',
-      );
-      toggleLoading(false);
-      return projectsMain;
-    } catch (e) {
-      print('Error Fetching Projects: ${e.toString()}');
-      if (e is DioException) {
-        print(e.response?.data);
-      }
-      toggleLoading(false);
+    } else {
       return [];
     }
   }
@@ -186,42 +196,52 @@ class ProjectProvider extends ChangeNotifier {
   Future<void> getSingleProject({
     required String projectUuid,
   }) async {
-    try {
-      toggleLoading(true);
-      Map<String, dynamic>? response = await _client
-          .from(_table)
-          .select()
-          .eq('uuid', projectUuid)
-          .maybeSingle();
-      if (response == null) {
-        print('Project Not Found');
-        return;
-      }
+    if (!isLoading) {
+      try {
+        toggleLoading(true);
+        Map<String, dynamic>? response = await _client
+            .from(_table)
+            .select()
+            .eq('uuid', projectUuid)
+            .maybeSingle();
+        if (response == null) {
+          print('Project Not Found');
+          return;
+        }
 
-      ProjectClass temp = ProjectClass.fromJson(response);
+        ProjectClass temp = ProjectClass.fromJson(response);
 
-      addSingleProject(project: temp);
-      notifyListeners();
-      if (temp.githubUrl != null) {
-        await returnCommit().fetchCommits(
-          owner: projectAuthorName(
-            projectUrl: temp.githubUrl ?? '',
-          ),
-          repo: projectGithubName(
-            projectUrl: temp.githubUrl ?? '',
-          ),
+        addSingleProject(project: temp);
+        // notifyListeners();
+        if (temp.githubUrl != null) {
+          // for(var com in returnCommit().commits.where)
+          returnCommit().commits.removeWhere(
+            (comm) =>
+                comm.repo ==
+                projectGithubName(
+                  projectUrl: temp.githubUrl ?? '',
+                ),
+          );
+          await returnCommit().fetchCommits(
+            owner: projectAuthorName(
+              projectUrl: temp.githubUrl ?? '',
+            ),
+            repo: projectGithubName(
+              projectUrl: temp.githubUrl ?? '',
+            ),
+          );
+        }
+        toggleLoading(false);
+        print('Project Gotten Successfully');
+        notifyListeners();
+      } catch (e) {
+        toggleLoading(false);
+        print(
+          'Error Fetching Single Project: ${e.toString()}',
         );
-      }
-      toggleLoading(false);
-      print('Project Gotten Successfully');
-      notifyListeners();
-    } catch (e) {
-      toggleLoading(false);
-      print(
-        'Error Fetching Single Project: ${e.toString()}',
-      );
-      if (e is DioException) {
-        print(e.response?.data);
+        if (e is DioException) {
+          print(e.response?.data);
+        }
       }
     }
   }

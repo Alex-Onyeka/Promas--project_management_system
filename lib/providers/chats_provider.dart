@@ -32,10 +32,15 @@ class ChatsProvider extends ChangeNotifier {
   }
 
   List<Chats> getPersonalChats({
-    required String chatchatId,
+    required String user1,
+    required String user2,
   }) {
     return chats
-        .where((chat) => chat.chatId == chatchatId)
+        .where(
+          (chat) =>
+              chat.chatId ==
+              chatId(user1: user1, user2: user2),
+        )
         .toList();
   }
 

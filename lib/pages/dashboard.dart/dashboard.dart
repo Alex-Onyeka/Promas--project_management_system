@@ -31,7 +31,7 @@ class _DashboardState extends State<Dashboard> {
     return await CompanyProvider().getMyCompany();
   }
 
-  Future<void> getAllProjectss() async {
+  Future<void> getAllProjects() async {
     await ProjectProvider().getAllProjectsByCompany();
   }
 
@@ -48,13 +48,13 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<void> initFuncs() async {
-    returnProject().toggleLoading(true);
+    // returnProject().toggleLoading(true);
     await getCompany();
+    await getAllProjects();
     await getAllUsers();
-    await getAllProjectss();
     await getAllBranches();
     await getAllRequests();
-    returnProject().toggleLoading(false);
+    // returnProject().toggleLoading(false);
   }
 
   ProjectClass? selectedProject;
@@ -735,13 +735,9 @@ class _DashboardState extends State<Dashboard> {
                                           getTitlesWidget: (value, meta) {
                                             return Text(
                                               formatLargeNumber(
-                                                    value
-                                                        .toString(),
-                                                  )
-                                                  .split(
-                                                    '.',
-                                                  )
-                                                  .first,
+                                                value
+                                                    .toString(),
+                                              ),
                                               style: TextStyle(
                                                 fontSize:
                                                     11,
@@ -903,7 +899,7 @@ class _DashboardState extends State<Dashboard> {
                                                     formatLargeNumber(
                                                       value
                                                           .toString(),
-                                                    ).split('.').first,
+                                                    ),
                                                     style: TextStyle(
                                                       fontSize:
                                                           11,

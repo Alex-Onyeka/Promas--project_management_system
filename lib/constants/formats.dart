@@ -161,9 +161,7 @@ String formatLargeNumber(String numberString) {
   } else {
     // normal formatting with commas
     final formatter = NumberFormat('#,###.###');
-    return addZeroAfterDecimalPoint(
-      formatter.format(number),
-    );
+    return formatter.format(number);
   }
 }
 

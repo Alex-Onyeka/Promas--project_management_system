@@ -89,6 +89,10 @@ class MainTopBar extends StatelessWidget {
                           returnNav(
                                 context: context,
                               ).currentPage !=
+                              0 &&
+                          returnNav(
+                                context: context,
+                              ).currentPage !=
                               2 &&
                           returnNav(
                                 context: context,

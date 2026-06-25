@@ -16,34 +16,6 @@ class BranchProvider extends ChangeNotifier {
 
   List<BranchClass> branches = [];
 
-  // void addStaffToBranch(
-  //   BranchClass branch,
-  //   List<String> userIds,
-  // ) {
-  //   branch.employees.addAll(userIds);
-  //   notifyListeners();
-  // }
-
-  // void removeStaffFromBranch(
-  //   BranchClass branch,
-  //   UserClass user,
-  // ) {
-  //   branch.employees.remove(user.id);
-  //   notifyListeners();
-  // }
-
-  // void addBranchTemp(BranchClass branch) {
-  //   branches.add(branch);
-  //   print(branches.length);
-  //   notifyListeners();
-  // }
-
-  // void deleteBranchTemp(BranchClass branch) {
-  //   branches.remove(branch);
-  //   print(branches.length);
-  //   notifyListeners();
-  // }
-
   List<UserClass> selectedStaffs = [];
 
   void selectNewStaff(UserClass staff) {
@@ -117,6 +89,7 @@ class BranchProvider extends ChangeNotifier {
   Future<List<BranchClass>> getBranchesByCompany(
     // int companyId,
   ) async {
+    branches.clear();
     try {
       if (returnUser().currentUser?.isAdmin == true) {
         final response = await _client

@@ -65,7 +65,7 @@ class _MainSideBarState extends State<MainSideBar> {
                     fontWeight: FontWeight.bold,
                     color: returnTheme(
                       context: context,
-                    ).white(),
+                    ).primaryColor(),
                   ),
                   'Promas',
                 ),
