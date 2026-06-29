@@ -9,6 +9,7 @@ class NormalTextfield extends StatelessWidget {
   final bool isOptional;
   final bool? showTitle;
   final Function(String value)? onChanged;
+  final Function(String)? onFieldSubmitted;
 
   const NormalTextfield({
     super.key,
@@ -19,6 +20,7 @@ class NormalTextfield extends StatelessWidget {
     this.numberOfLines,
     this.showTitle,
     this.onChanged,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -44,6 +46,7 @@ class NormalTextfield extends StatelessWidget {
           ),
         ),
         TextFormField(
+          onFieldSubmitted: onFieldSubmitted,
           maxLines: numberOfLines ?? 1,
           style: TextStyle(
             color: returnTheme(

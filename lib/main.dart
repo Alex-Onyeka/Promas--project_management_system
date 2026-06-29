@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:promas/pages/base_page.dart';
 import 'package:promas/pages/landing_page/landing_page.dart';
 import 'package:promas/providers/branch_provider.dart';
+import 'package:promas/providers/chats_provider.dart';
 import 'package:promas/providers/commit_provider.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/nav_provider.dart';
@@ -50,6 +51,9 @@ void main() async {
         ChangeNotifierProvider<CommitProvider>.value(
           value: CommitProvider(),
         ),
+        ChangeNotifierProvider<ChatsProvider>.value(
+          value: ChatsProvider(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -61,6 +65,14 @@ ThemeProvider returnTheme({BuildContext? context}) {
     return ThemeProvider();
   } else {
     return Provider.of<ThemeProvider>(context);
+  }
+}
+
+ChatsProvider returnChats({BuildContext? context}) {
+  if (context == null) {
+    return ChatsProvider();
+  } else {
+    return Provider.of<ChatsProvider>(context);
   }
 }
 

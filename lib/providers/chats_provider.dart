@@ -19,14 +19,21 @@ class ChatsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Chats> sortedChats() {
+    chats.sort(
+      (a, b) => a.createdAt!.compareTo(b.createdAt!),
+    );
+    return chats;
+  }
+
   List<Chats> getProjectChats({required String projectId}) {
-    return chats
+    return sortedChats()
         .where((chat) => chat.projectId == projectId)
         .toList();
   }
 
   List<Chats> getBranchChats({required String branchId}) {
-    return chats
+    return sortedChats()
         .where((chat) => chat.branchId == branchId)
         .toList();
   }
@@ -35,7 +42,7 @@ class ChatsProvider extends ChangeNotifier {
     required String user1,
     required String user2,
   }) {
-    return chats
+    return sortedChats()
         .where(
           (chat) =>
               chat.chatId ==
@@ -47,18 +54,19 @@ class ChatsProvider extends ChangeNotifier {
   /// Create chat
   Future<Chats?> createChat(Chats chat) async {
     try {
-      _client
+      chats.add(chat);
+      notifyListeners();
+      var res = await _client
           .from(_table)
           .insert(chat.toJson())
           .select()
-          .single();
-      print('Chat Created Successfully');
-      // chats.add(Chats.fromJson(response));
-      chats.add(chat);
-      getChatsByCompany();
-      // return Chats.fromJson(response);
-
-      notifyListeners();
+          .maybeSingle();
+      if (res != null) {
+        print('Chat Created Successfully');
+      } else {
+        chats.remove(chat);
+        notifyListeners();
+      }
       return chat;
     } catch (e) {
       print('Failed: ${e.toString()}');
@@ -66,58 +74,130 @@ class ChatsProvider extends ChangeNotifier {
     }
   }
 
+  //
+  //
+  Future<Chats?> updateChat(Chats chat) async {
+    try {
+      var index = chats.indexWhere(
+        (chatt) => chatt.uuid == chat.uuid,
+      );
+      chats.removeWhere((chatt) => chatt.uuid == chat.uuid);
+      chats.insert(index, chat);
+      notifyListeners();
+      await _client
+          .from(_table)
+          .upsert(chat.toJson())
+          .select()
+          .maybeSingle();
+      print('Chat Updated Successfully');
+      return chat;
+    } catch (e) {
+      print('Failed: ${e.toString()}');
+      return null;
+    }
+  }
+
+  //
+  //
+
   /// Get all chats for a company
   Future<List<Chats>> getChatsByCompany(
     // int companyId,
   ) async {
-    final response = await _client
-        .from(_table)
-        .select()
-        .eq(
-          'company_id',
-          CompanyProvider().currentCompany!.id!,
-        );
+    try {
+      final response = await _client
+          .from(_table)
+          .select()
+          .eq(
+            'company_id',
+            CompanyProvider().currentCompany!.id!,
+          );
 
-    List<Chats> tempChats = (response as List)
-        .map((json) => Chats.fromJson(json))
-        .toList();
+      List<Chats> tempChats = (response as List)
+          .map((json) => Chats.fromJson(json))
+          .toList();
 
-    chats = tempChats;
-    notifyListeners();
-    return chats;
+      chats = tempChats;
+      notifyListeners();
+      print(
+        'All Chats Gotten Success: ${tempChats.length}',
+      );
+      return chats;
+    } catch (e) {
+      print('Error Getting All Chats: ${e.toString()}');
+      return [];
+    }
   }
 
+  bool _running = false;
+
+  Future<void> startRepeatingFunction({
+    required id,
+    required int chatType,
+  }) async {
+    _running = true;
+
+    while (_running) {
+      await getChatsByGroup(id: id, chatType: chatType);
+      await Future.delayed(Duration(seconds: 2));
+    }
+  }
+
+  void stopRepeatingFunction() {
+    _running = false;
+  }
+
+  //
+  //
+  //
+  //
   Future<List<Chats>> getChatsByGroup({
     required String id,
     required int chatType,
   }) async {
-    String chatIdTemp = chatType == 1
-        ? 'chat_id'
-        : chatType == 2
-        ? 'branch_id'
-        : 'project_id';
-    final response = await _client
-        .from(_table)
-        .select()
-        .eq(chatIdTemp, id);
+    try {
+      String chatIdTemp = chatType == 1
+          ? 'chat_id'
+          : chatType == 2
+          ? 'branch_id'
+          : 'project_id';
+      final response = await _client
+          .from(_table)
+          .select()
+          .eq(chatIdTemp, id);
 
-    List<Chats> tempChats = (response as List)
-        .map((json) => Chats.fromJson(json))
-        .toList();
+      List<Chats> tempChats = (response as List)
+          .map((json) => Chats.fromJson(json))
+          .toList();
+      chats.removeWhere(
+        (chat) =>
+            chat.chatId == id ||
+            chat.branchId == id ||
+            chat.projectId == id,
+      );
+      // chats.clear();
 
-    chats = tempChats;
-    notifyListeners();
-    return chats;
+      chats.addAll(tempChats);
+      notifyListeners();
+      print(
+        'Group Chats Gotten Success: ${tempChats.length}',
+      );
+      return chats;
+    } catch (e) {
+      print('Error Getting Group Chats: ${e.toString()}');
+      return [];
+    }
   }
 
   /// Delete chat
   Future<void> deleteChat(String uuid) async {
     try {
-      await _client.from(_table).delete().eq('uuid', uuid);
       chats.removeWhere((chat) => chat.uuid == uuid);
       notifyListeners();
+      await _client.from(_table).delete().eq('uuid', uuid);
+
       print('Chat Delete Successfully');
-      await getChatsByCompany();
+      // await getChatsByCompany();
     } catch (e) {
       print('Delete Failed: ${e.toString()}');
     }

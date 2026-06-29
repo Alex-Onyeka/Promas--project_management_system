@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uuid/uuid.dart';
 
 double screenSize(BuildContext context) {
   return MediaQuery.of(context).size.width;
@@ -31,4 +32,10 @@ void copyToClipboard(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(content: Text("Copied to clipboard")),
   );
+}
+
+const Uuid _uuid = Uuid();
+
+String uuidGen() {
+  return _uuid.v4();
 }

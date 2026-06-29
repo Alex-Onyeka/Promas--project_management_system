@@ -9,6 +9,7 @@ import 'package:promas/constants/formats.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
 import 'package:promas/providers/branch_provider.dart';
+import 'package:promas/providers/chats_provider.dart';
 import 'package:promas/providers/company_provider.dart';
 import 'package:promas/providers/project_provider.dart';
 import 'package:promas/providers/requests_provider.dart';
@@ -54,6 +55,7 @@ class _DashboardState extends State<Dashboard> {
     await getAllUsers();
     await getAllBranches();
     await getAllRequests();
+    await ChatsProvider().getChatsByCompany();
     // returnProject().toggleLoading(false);
   }
 
