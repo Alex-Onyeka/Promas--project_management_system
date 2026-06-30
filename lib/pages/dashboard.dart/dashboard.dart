@@ -732,7 +732,15 @@ class _DashboardState extends State<Dashboard> {
                                           ),
                                       leftTitles: AxisTitles(
                                         sideTitles: SideTitles(
-                                          reservedSize: 50,
+                                          reservedSize:
+                                              ((data().length ==
+                                                          1 &&
+                                                      data().first.total ==
+                                                          0) ||
+                                                  data()
+                                                      .isEmpty)
+                                              ? 20
+                                              : 50,
                                           showTitles: true,
                                           getTitlesWidget: (value, meta) {
                                             return Text(

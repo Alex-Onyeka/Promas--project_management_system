@@ -67,6 +67,10 @@ class NormalTextfield extends StatelessWidget {
           },
           onChanged: onChanged,
           decoration: InputDecoration(
+            fillColor: returnTheme(
+              context: context,
+            ).white(),
+            filled: true,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 13,

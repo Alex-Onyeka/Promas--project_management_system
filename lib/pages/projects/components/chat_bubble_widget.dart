@@ -116,15 +116,14 @@ class _ChatBubbleWidgetState
                       horizontal: 10,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(
-                        255,
-                        27,
-                        50,
-                        70,
-                      ),
-                      // borderRadius: BorderRadius.vertical(
-                      //   top: Radius.circular(5),
-                      // ),
+                      color: widget.replyUuid == null
+                          ? const Color.fromARGB(
+                              255,
+                              27,
+                              50,
+                              70,
+                            )
+                          : Colors.grey.shade300,
                     ),
                     child: Column(
                       // spacing: 5,
@@ -147,15 +146,19 @@ class _ChatBubbleWidgetState
                         ),
                         Row(
                           children: [
-                            Text(
-                              style: TextStyle(
-                                fontSize: 9,
-                                color: Colors.grey,
-                              ),
-                              cutLongText(
-                                50,
-                                widget.item.replyMessage ??
-                                    'Not Set',
+                            Expanded(
+                              child: Text(
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  color: Colors.grey,
+                                ),
+                                cutLongText(
+                                  50,
+                                  widget
+                                          .item
+                                          .replyMessage ??
+                                      'Not Set',
+                                ),
                               ),
                             ),
                           ],
