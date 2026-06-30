@@ -6,6 +6,10 @@ double screenSize(BuildContext context) {
   return MediaQuery.of(context).size.width;
 }
 
+double screenHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height;
+}
+
 double mobileScreen = 450;
 
 double tabletScreenSmall = 650;
@@ -25,6 +29,8 @@ String appName = 'Promas';
 const String mainLogo = 'assets/logo.svg';
 
 const String workingMan = 'assets/workingman.png';
+
+const chatBackground = 'assets/chat_background.png';
 
 void copyToClipboard(BuildContext context, String text) {
   Clipboard.setData(ClipboardData(text: text));

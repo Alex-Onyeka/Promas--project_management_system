@@ -3,6 +3,8 @@ import 'package:promas/classes/branch_class.dart';
 import 'package:promas/components/alert_dialogues/remove_staff_dialog.dart';
 import 'package:promas/components/alert_dialogues/select_staff_dialog.dart';
 import 'package:promas/main.dart';
+import 'package:promas/pages/projects/branch_page/branch_page.dart';
+import 'package:promas/providers/chats_provider.dart';
 import 'package:promas/providers/user_provider.dart';
 
 class BranchStaffSection extends StatefulWidget {
@@ -45,6 +47,8 @@ class _BranchStaffSectionState
                 .toList()
                 .isNotEmpty,
             child: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   style: TextStyle(
@@ -54,6 +58,52 @@ class _BranchStaffSectionState
                     ).darkMediumGrey(),
                   ),
                   'Active Staffs:',
+                ),
+                Visibility(
+                  visible: returnUser(
+                    context: context,
+                  ).currentUser!.isAdmin,
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return SelectStaffDialog(
+                                projectId:
+                                    widget.branch.projectId,
+                                branch: widget.branch,
+                                selectStaff: () {},
+                              );
+                            },
+                          );
+                        },
+                      ).then((_) {
+                        setState(() {});
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        spacing: 4,
+                        children: [
+                          Text(
+                            style: TextStyle(
+                              fontSize: 9,
+                              color: theme.secondaryLight(),
+                            ),
+                            'Add Staff',
+                          ),
+                          Icon(
+                            size: 13,
+                            color: theme.secondaryLight(),
+                            Icons.add,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -186,26 +236,75 @@ class _BranchStaffSectionState
                                       .spaceBetween,
                               spacing: 5,
                               children: [
-                                Row(
-                                  spacing: 5,
-                                  children: [
-                                    Icon(
-                                      size: 15,
-                                      color: returnTheme(
-                                        context: context,
-                                      ).mediumGrey(),
-                                      Icons.person,
-                                    ),
-                                    Text(
-                                      style: TextStyle(
-                                        fontSize: 12,
+                                Expanded(
+                                  child: Row(
+                                    spacing: 5,
+                                    children: [
+                                      Icon(
+                                        size: 15,
                                         color: returnTheme(
                                           context: context,
-                                        ).darkGrey(),
+                                        ).mediumGrey(),
+                                        Icons.person,
                                       ),
-                                      use.name,
+                                      Expanded(
+                                        child: Text(
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: returnTheme(
+                                              context:
+                                                  context,
+                                            ).darkGrey(),
+                                          ),
+                                          use.name,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Visibility(
+                                  visible:
+                                      use.id !=
+                                      returnUser()
+                                          .currentUser
+                                          ?.id,
+                                  child: Material(
+                                    color:
+                                        Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        openChatPage(
+                                          context: context,
+                                          id: chatId(
+                                            user1: returnUser()
+                                                .currentUser!
+                                                .id!,
+                                            user2: use.id!,
+                                          ),
+                                          index: 1,
+                                        );
+                                      },
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.all(
+                                              8,
+                                            ),
+                                        decoration:
+                                            BoxDecoration(
+                                              shape: BoxShape
+                                                  .circle,
+                                            ),
+                                        child: Icon(
+                                          size: 18,
+                                          color: returnTheme(
+                                            context:
+                                                context,
+                                          ).secondaryLight(),
+                                          Icons.chat,
+                                        ),
+                                      ),
                                     ),
-                                  ],
+                                  ),
                                 ),
                                 Visibility(
                                   visible:
@@ -213,33 +312,40 @@ class _BranchStaffSectionState
                                           .currentUser!
                                           .isAdmin ==
                                       true,
-                                  child: InkWell(
-                                    onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return RemoveStaffDialog(
-                                            branch: widget
-                                                .branch,
-                                            user: use,
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.all(8),
-                                      decoration:
-                                          BoxDecoration(
-                                            shape: BoxShape
-                                                .circle,
-                                          ),
-                                      child: Icon(
-                                        size: 18,
-                                        color: returnTheme(
+                                  child: Material(
+                                    color:
+                                        Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        showDialog(
                                           context: context,
-                                        ).mediumGrey(),
-                                        Icons.clear,
+                                          builder: (context) {
+                                            return RemoveStaffDialog(
+                                              branch: widget
+                                                  .branch,
+                                              user: use,
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.all(
+                                              8,
+                                            ),
+                                        decoration:
+                                            BoxDecoration(
+                                              shape: BoxShape
+                                                  .circle,
+                                            ),
+                                        child: Icon(
+                                          size: 18,
+                                          color: returnTheme(
+                                            context:
+                                                context,
+                                          ).mediumGrey(),
+                                          Icons.clear,
+                                        ),
                                       ),
                                     ),
                                   ),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:promas/classes/branch_class.dart';
 import 'package:promas/classes/commit.dart';
 import 'package:promas/classes/user_class.dart';
-import 'package:promas/components/alert_dialogues/alert_placeholder.dart';
 import 'package:promas/components/alert_dialogues/delete_branch_dialog.dart';
 import 'package:promas/components/main_divider.dart';
 import 'package:promas/constants/formats.dart';
@@ -11,6 +10,7 @@ import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
 import 'package:promas/pages/projects/branch_page/components/commit_tile_widget.dart';
 import 'package:promas/pages/projects/components/branch_staff_section.dart';
+import 'package:promas/pages/projects/components/chat_main_widget.dart';
 import 'package:promas/pages/projects/project_page.dart';
 
 class BranchPage extends StatefulWidget {
@@ -318,61 +318,46 @@ class _BranchPageState extends State<BranchPage> {
                                       ),
                                       branch.name,
                                     ),
-                                    Opacity(
-                                      opacity: 0,
-                                      child: Material(
-                                        color: Colors
-                                            .transparent,
-                                        child: InkWell(
-                                          onTap: () {
-                                            showDialog(
-                                              context:
-                                                  context,
-                                              builder: (firsContext) {
-                                                return AlertPlaceholder(
-                                                  content: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    spacing:
-                                                        10,
-                                                    children: [
-                                                      Text(
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: theme.darkMediumGrey(),
-                                                        ),
-                                                        'Github Instructions',
-                                                      ),
-                                                      Container(
-                                                        height:
-                                                            2,
-                                                        width:
-                                                            300,
-                                                        decoration: BoxDecoration(
-                                                          color: theme.lightMediumGrey(),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.all(
-                                                  4.0,
+                                    Material(
+                                      color: Colors
+                                          .transparent,
+                                      child: InkWell(
+                                        onTap: () {
+                                          openChatPage(
+                                            context:
+                                                context,
+                                            id:
+                                                widget
+                                                    .branch
+                                                    .uuid ??
+                                                '',
+                                            index: 2,
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.all(
+                                                4.0,
+                                              ),
+                                          child: Row(
+                                            spacing: 5,
+                                            children: [
+                                              Text(
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      11,
+                                                  color: Colors
+                                                      .grey,
                                                 ),
-                                            child: Icon(
-                                              size: 24,
-                                              color: returnTheme(
-                                                context:
-                                                    context,
-                                              ).darkGrey(),
-                                              Icons
-                                                  .menu_open_sharp,
-                                            ),
+                                                'Chat',
+                                              ),
+                                              Icon(
+                                                size: 16,
+                                                color: Colors
+                                                    .grey,
+                                                Icons.chat,
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
@@ -1514,4 +1499,17 @@ class _BranchPageState extends State<BranchPage> {
       ),
     );
   }
+}
+
+Future<Object?> openChatPage({
+  required BuildContext context,
+  required String id,
+  required int index,
+}) {
+  return showGeneralDialog(
+    context: context,
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return MainChatWidget(chatType: index, id: id);
+    },
+  );
 }

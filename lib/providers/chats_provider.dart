@@ -21,9 +21,22 @@ class ChatsProvider extends ChangeNotifier {
 
   List<Chats> sortedChats() {
     chats.sort(
-      (a, b) => a.createdAt!.compareTo(b.createdAt!),
+      (a, b) => b.createdAt!.compareTo(a.createdAt!),
     );
     return chats;
+  }
+
+  List<Chats> returnMainChats({
+    required int index,
+    required String id,
+  }) {
+    if (index == 3) {
+      return getProjectChats(projectId: id);
+    } else if (index == 2) {
+      return getBranchChats(branchId: id);
+    } else {
+      return getPersonalChats(id: id);
+    }
   }
 
   List<Chats> getProjectChats({required String projectId}) {
@@ -38,16 +51,9 @@ class ChatsProvider extends ChangeNotifier {
         .toList();
   }
 
-  List<Chats> getPersonalChats({
-    required String user1,
-    required String user2,
-  }) {
+  List<Chats> getPersonalChats({required String id}) {
     return sortedChats()
-        .where(
-          (chat) =>
-              chat.chatId ==
-              chatId(user1: user1, user2: user2),
-        )
+        .where((chat) => chat.chatId == id)
         .toList();
   }
 
