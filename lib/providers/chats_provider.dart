@@ -186,7 +186,7 @@ class ChatsProvider extends ChangeNotifier {
       chats.addAll(tempChats);
       notifyListeners();
       print(
-        'Group Chats Gotten Success: ${tempChats.length}',
+        'Group Chats Gotten Success: ${response.length}',
       );
       return chats;
     } catch (e) {
@@ -221,5 +221,9 @@ String chatId({
   required String user1,
   required String user2,
 }) {
-  return '${user1}_$user2';
+  List<String> temp = [];
+  temp.add(user1);
+  temp.add(user2);
+  temp.sort();
+  return '${temp[0]}_${temp[1]}';
 }
