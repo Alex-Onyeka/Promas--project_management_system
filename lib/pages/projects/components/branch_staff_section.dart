@@ -275,7 +275,9 @@ class _BranchStaffSectionState
                                       onTap: () {
                                         openChatPage(
                                           context: context,
-                                          id: chatId(
+                                          branchId: null,
+                                          projectId: null,
+                                          chatId: chatId(
                                             user1: returnUser()
                                                 .currentUser!
                                                 .id!,

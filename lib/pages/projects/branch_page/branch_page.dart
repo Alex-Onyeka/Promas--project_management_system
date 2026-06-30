@@ -326,11 +326,13 @@ class _BranchPageState extends State<BranchPage> {
                                           openChatPage(
                                             context:
                                                 context,
-                                            id:
+                                            branchId:
                                                 widget
                                                     .branch
                                                     .uuid ??
                                                 '',
+                                            chatId: null,
+                                            projectId: null,
                                             index: 2,
                                           );
                                         },
@@ -1503,13 +1505,20 @@ class _BranchPageState extends State<BranchPage> {
 
 Future<Object?> openChatPage({
   required BuildContext context,
-  required String id,
+  required String? projectId,
+  required String? branchId,
+  required String? chatId,
   required int index,
 }) {
   return showGeneralDialog(
     context: context,
     pageBuilder: (context, animation, secondaryAnimation) {
-      return MainChatWidget(chatType: index, id: id);
+      return MainChatWidget(
+        chatType: index,
+        projectId: projectId,
+        branchId: branchId,
+        chatId: chatId,
+      );
     },
   );
 }

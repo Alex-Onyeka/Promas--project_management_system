@@ -167,37 +167,39 @@ class _ChatBubbleWidgetState
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: widget.item.chatId == null,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(
-                      5,
-                      2,
-                      0,
-                      2,
-                    ),
-                    margin: EdgeInsets.only(bottom: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.white24,
-                    ),
-                    child: Row(
-                      // mainAxisSize:
-                      //     MainAxisSize
-                      //         .max,
-                      mainAxisAlignment:
-                          MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          style: TextStyle(
-                            fontSize: 7.5,
-                            color: theme.tertiaryLight(),
-                          ),
-                          widget.item.userId ==
-                                  returnUser()
-                                      .currentUser
-                                      ?.id
-                              ? 'You'
-                              : (returnUser().users
+                Container(
+                  padding: EdgeInsets.fromLTRB(5, 2, 0, 2),
+                  margin: EdgeInsets.only(bottom: 3),
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                  ),
+                  child: Row(
+                    // mainAxisSize:
+                    //     MainAxisSize
+                    //         .max,
+                    mainAxisAlignment:
+                        MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        style: TextStyle(
+                          fontSize: 7.5,
+                          color: theme.tertiaryLight(),
+                        ),
+                        widget.item.userId ==
+                                returnUser().currentUser?.id
+                            ? 'You'
+                            : (returnUser().users
+                                      .where(
+                                        (user) =>
+                                            user.id ==
+                                            widget
+                                                .item
+                                                .userId,
+                                      )
+                                      .isEmpty
+                                  ? (widget.item.userName ??
+                                        'Not Set')
+                                  : returnUser().users
                                         .where(
                                           (user) =>
                                               user.id ==
@@ -205,24 +207,10 @@ class _ChatBubbleWidgetState
                                                   .item
                                                   .userId,
                                         )
-                                        .isEmpty
-                                    ? (widget
-                                              .item
-                                              .userName ??
-                                          'Not Set')
-                                    : returnUser().users
-                                          .where(
-                                            (user) =>
-                                                user.id ==
-                                                widget
-                                                    .item
-                                                    .userId,
-                                          )
-                                          .first
-                                          .name),
-                        ),
-                      ],
-                    ),
+                                        .first
+                                        .name),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(

@@ -291,9 +291,13 @@ class _ProjectPageState extends State<ProjectPage> {
                                                     openChatPage(
                                                       context:
                                                           context,
-                                                      id:
+                                                      projectId:
                                                           widget.project.uuid ??
                                                           '',
+                                                      branchId:
+                                                          null,
+                                                      chatId:
+                                                          null,
                                                       index:
                                                           3,
                                                     );

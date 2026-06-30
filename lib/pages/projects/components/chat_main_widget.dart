@@ -14,12 +14,16 @@ class ChatMenuItem {
 }
 
 class MainChatWidget extends StatefulWidget {
-  final String id;
+  final String? projectId;
+  final String? branchId;
+  final String? chatId;
   final int chatType;
   const MainChatWidget({
     super.key,
-    required this.id,
+    required this.projectId,
     required this.chatType,
+    required this.chatId,
+    required this.branchId,
   });
 
   @override
@@ -32,7 +36,10 @@ class _MainChatWidgetState extends State<MainChatWidget> {
   void initState() {
     super.initState();
     returnChats().startRepeatingFunction(
-      id: widget.id,
+      id:
+          widget.projectId ??
+          widget.branchId ??
+          widget.chatId,
       chatType: widget.chatType,
     );
   }
@@ -145,7 +152,7 @@ class _MainChatWidgetState extends State<MainChatWidget> {
       backgroundColor: Colors.white,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 10.0),
+          padding: const EdgeInsets.only(top: 5.0),
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 600),
             child: Column(
@@ -225,8 +232,14 @@ class _MainChatWidgetState extends State<MainChatWidget> {
                                 reverse: true,
                                 children: returnChats(context: context)
                                     .returnMainChats(
-                                      id: widget.id,
-                                      index: 3,
+                                      id:
+                                          widget
+                                              .projectId ??
+                                          widget.branchId ??
+                                          widget.chatId ??
+                                          '',
+                                      index:
+                                          widget.chatType,
                                     )
                                     .map(
                                       (item) => Row(
@@ -346,64 +359,10 @@ class _MainChatWidgetState extends State<MainChatWidget> {
                                         ),
                                       ),
                                       NormalTextfield(
-                                        onFieldSubmitted: (value) {
-                                          if (messageController
-                                              .text
-                                              .isNotEmpty) {
-                                            final chat = Chats(
-                                              userName:
-                                                  returnUser()
-                                                      .currentUser!
-                                                      .name,
-                                              userId: returnUser()
-                                                  .currentUser!
-                                                  .id!,
-                                              uuid:
-                                                  chatEdit
-                                                      ?.uuid ??
-                                                  uuidGen(),
-                                              message:
-                                                  messageController
-                                                      .text
-                                                      .trim(),
-                                              companyId:
-                                                  returnCompany()
-                                                      .currentCompany!
-                                                      .id!,
-                                              createdAt:
-                                                  chatEdit !=
-                                                      null
-                                                  ? chatEdit
-                                                        ?.createdAt
-                                                  : DateTime.now(),
-                                              projectId:
-                                                  widget.id,
-                                              replyId:
-                                                  chatReply
-                                                      ?.uuid,
-                                              replyMessage:
-                                                  chatReply
-                                                      ?.message,
-                                              replyUserName:
-                                                  chatReply
-                                                      ?.userName,
-                                            );
-                                            chatEdit != null
-                                                ? returnChats()
-                                                      .updateChat(
-                                                        chat,
-                                                      )
-                                                : returnChats()
-                                                      .createChat(
-                                                        chat,
-                                                      );
-                                            messageController
-                                                .clear();
-                                            chatEdit = null;
-                                            chatReply =
-                                                null;
-                                          }
-                                        },
+                                        onFieldSubmitted:
+                                            (value) {
+                                              createChat();
+                                            },
                                         inputController:
                                             messageController,
                                         hintText:
@@ -437,63 +396,7 @@ class _MainChatWidgetState extends State<MainChatWidget> {
                                         ),
                                         child: InkWell(
                                           onTap: () {
-                                            if (messageController
-                                                .text
-                                                .isNotEmpty) {
-                                              final chat = Chats(
-                                                userName: returnUser()
-                                                    .currentUser!
-                                                    .name,
-                                                userId: returnUser()
-                                                    .currentUser!
-                                                    .id!,
-                                                uuid:
-                                                    chatEdit
-                                                        ?.uuid ??
-                                                    uuidGen(),
-                                                message: messageController
-                                                    .text
-                                                    .trim(),
-                                                companyId:
-                                                    returnCompany()
-                                                        .currentCompany!
-                                                        .id!,
-                                                createdAt:
-                                                    chatEdit !=
-                                                        null
-                                                    ? chatEdit
-                                                          ?.createdAt
-                                                    : DateTime.now(),
-                                                projectId:
-                                                    widget
-                                                        .id,
-                                                replyId:
-                                                    chatReply
-                                                        ?.uuid,
-                                                replyMessage:
-                                                    chatReply
-                                                        ?.message,
-                                                replyUserName:
-                                                    chatReply
-                                                        ?.userName,
-                                              );
-                                              chatEdit !=
-                                                      null
-                                                  ? returnChats()
-                                                        .updateChat(
-                                                          chat,
-                                                        )
-                                                  : returnChats()
-                                                        .createChat(
-                                                          chat,
-                                                        );
-                                              messageController
-                                                  .clear();
-                                              chatEdit =
-                                                  null;
-                                              chatReply =
-                                                  null;
-                                            }
+                                            createChat();
                                           },
                                           child: Container(
                                             padding:
@@ -583,5 +486,32 @@ class _MainChatWidgetState extends State<MainChatWidget> {
         ),
       ),
     );
+  }
+
+  void createChat() {
+    if (messageController.text.isNotEmpty) {
+      final chat = Chats(
+        userName: returnUser().currentUser!.name,
+        userId: returnUser().currentUser!.id!,
+        uuid: chatEdit?.uuid ?? uuidGen(),
+        message: messageController.text.trim(),
+        companyId: returnCompany().currentCompany!.id!,
+        createdAt: chatEdit != null
+            ? chatEdit?.createdAt
+            : DateTime.now(),
+        projectId: widget.projectId,
+        branchId: widget.branchId,
+        chatId: widget.chatId,
+        replyId: chatReply?.uuid,
+        replyMessage: chatReply?.message,
+        replyUserName: chatReply?.userName,
+      );
+      chatEdit != null
+          ? returnChats().updateChat(chat)
+          : returnChats().createChat(chat);
+      messageController.clear();
+      chatEdit = null;
+      chatReply = null;
+    }
   }
 }
