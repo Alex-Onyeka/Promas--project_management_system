@@ -6,6 +6,8 @@ import 'package:promas/components/empty_widgets/empty_widget_alt.dart';
 import 'package:promas/components/main_divider.dart';
 import 'package:promas/constants/general_constants.dart';
 import 'package:promas/main.dart';
+import 'package:promas/pages/projects/branch_page/branch_page.dart';
+import 'package:promas/providers/chats_provider.dart';
 import 'package:promas/providers/user_provider.dart';
 
 class Employees extends StatefulWidget {
@@ -178,67 +180,72 @@ class _EmployeesState extends State<Employees> {
                                             MainAxisAlignment
                                                 .spaceBetween,
                                         children: [
-                                          Row(
-                                            spacing: 5,
-                                            children: [
-                                              Icon(
-                                                size: 17,
-                                                color: returnTheme(
-                                                  context:
-                                                      context,
-                                                ).tertiaryLight(),
-                                                Icons
-                                                    .person,
-                                              ),
-                                              SizedBox(
-                                                width: 3,
-                                              ),
-                                              Text(
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      11,
-                                                  fontWeight:
-                                                      FontWeight
-                                                          .bold,
+                                          Expanded(
+                                            child: Row(
+                                              spacing: 5,
+                                              children: [
+                                                Icon(
+                                                  size: 17,
                                                   color: returnTheme(
                                                     context:
                                                         context,
-                                                  ).darkMediumGrey(),
+                                                  ).tertiaryLight(),
+                                                  Icons
+                                                      .person,
                                                 ),
-                                                user.name
-                                                    .toUpperCase(),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      3,
+                                                SizedBox(
+                                                  width: 3,
                                                 ),
-                                                width: 2,
-                                                height: 18,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        5,
-                                                      ),
-                                                  color:
-                                                      greyNeutral(),
+                                                Flexible(
+                                                  child: Text(
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          11,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: returnTheme(
+                                                        context:
+                                                            context,
+                                                      ).darkMediumGrey(),
+                                                    ),
+                                                    user.name
+                                                        .toUpperCase(),
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      11,
-                                                  fontWeight:
-                                                      FontWeight
-                                                          .bold,
-                                                  color: returnTheme(
-                                                    context:
-                                                        context,
-                                                  ).mediumGrey(),
+                                                Container(
+                                                  margin: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        3,
+                                                  ),
+                                                  width: 2,
+                                                  height:
+                                                      18,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          5,
+                                                        ),
+                                                    color:
+                                                        greyNeutral(),
+                                                  ),
                                                 ),
-                                                user.email,
-                                              ),
-                                            ],
+                                                Expanded(
+                                                  child: Text(
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          11,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: returnTheme(
+                                                        context:
+                                                            context,
+                                                      ).mediumGrey(),
+                                                    ),
+                                                    user.email,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
 
                                           Padding(
@@ -252,6 +259,46 @@ class _EmployeesState extends State<Employees> {
                                                       .center,
                                               spacing: 5,
                                               children: [
+                                                Visibility(
+                                                  visible:
+                                                      user.id !=
+                                                      returnUser()
+                                                          .currentUser
+                                                          ?.id,
+                                                  child: Material(
+                                                    color: Colors
+                                                        .transparent,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        openChatPage(
+                                                          context: context,
+                                                          branchId: null,
+                                                          projectId: null,
+                                                          chatId: chatId(
+                                                            user1: returnUser().currentUser!.id!,
+                                                            user2: user.id!,
+                                                          ),
+                                                          index: 1,
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        padding: EdgeInsets.all(
+                                                          8,
+                                                        ),
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                        child: Icon(
+                                                          size: 18,
+                                                          color: returnTheme(
+                                                            context: context,
+                                                          ).secondaryLight(),
+                                                          Icons.chat,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                                 Visibility(
                                                   visible: !user
                                                       .isSuperAdmin(),
@@ -441,6 +488,46 @@ class _EmployeesState extends State<Employees> {
                                                       .end,
                                               spacing: 5,
                                               children: [
+                                                Visibility(
+                                                  visible:
+                                                      user.id !=
+                                                      returnUser()
+                                                          .currentUser
+                                                          ?.id,
+                                                  child: Material(
+                                                    color: Colors
+                                                        .transparent,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        openChatPage(
+                                                          context: context,
+                                                          branchId: null,
+                                                          projectId: null,
+                                                          chatId: chatId(
+                                                            user1: returnUser().currentUser!.id!,
+                                                            user2: user.id!,
+                                                          ),
+                                                          index: 1,
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        padding: EdgeInsets.all(
+                                                          8,
+                                                        ),
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                        child: Icon(
+                                                          size: 18,
+                                                          color: returnTheme(
+                                                            context: context,
+                                                          ).secondaryLight(),
+                                                          Icons.chat,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                                 Visibility(
                                                   visible: !user
                                                       .isSuperAdmin(),

@@ -151,336 +151,343 @@ class _MainChatWidgetState extends State<MainChatWidget> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 5.0),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 600),
-            child: Column(
-              spacing: 5,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5.0,
-                    horizontal: 10,
-                  ),
-                  child: Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                    spacing: 5,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.symmetric(
-                                horizontal: 10.0,
-                                vertical: 5,
-                              ),
-                          child: Icon(
-                            size: 18,
-                            Icons
-                                .arrow_back_ios_new_rounded,
-                          ),
-                        ),
-                      ),
-
-                      Text(
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        'Chats',
-                      ),
-                      Opacity(
-                        opacity: 0,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.symmetric(
-                                horizontal: 10.0,
-                                vertical: 5,
-                              ),
-                          child: Icon(Icons.clear),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Divider(
-                //   color: Colors.grey.shade400,
-                //   height: 0,
-                // ),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        height: screenHeight(context),
-                        fit: BoxFit.cover,
-                        chatBackground,
-                      ),
-                      Column(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(
-                                    vertical: 5.0,
-                                    horizontal: 15,
-                                  ),
-                              child: ListView(
-                                reverse: true,
-                                children: returnChats(context: context)
-                                    .returnMainChats(
-                                      id:
-                                          widget
-                                              .projectId ??
-                                          widget.branchId ??
-                                          widget.chatId ??
-                                          '',
-                                      index:
-                                          widget.chatType,
-                                    )
-                                    .map(
-                                      (item) => Row(
-                                        mainAxisAlignment:
-                                            returnUser()
-                                                    .currentUser
-                                                    ?.id ==
-                                                item.userId
-                                            ? MainAxisAlignment
-                                                  .end
-                                            : MainAxisAlignment
-                                                  .start,
-                                        children: [
-                                          ChatBubbleWidget(
-                                            item: item,
-                                            replyUuid:
-                                                chatEdit
-                                                    ?.uuid ??
-                                                chatReply
-                                                    ?.uuid,
-                                            replyAction: () {
-                                              if (item.userId !=
-                                                  returnUser()
-                                                      .currentUser
-                                                      ?.id) {
-                                                setState(() {
-                                                  chatReply =
-                                                      item;
-                                                });
-                                                return false;
-                                              }
-                                            },
-                                            longPress: () {
-                                              showMenuAction(
-                                                buttonKeyy:
-                                                    item.key,
-                                                chat: item,
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
-                            ),
-                          ),
-                          Padding(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 600),
+              child: Column(
+                spacing: 5,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5.0,
+                      horizontal: 10,
+                    ),
+                    child: Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                      spacing: 5,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(
                                   horizontal: 10.0,
+                                  vertical: 5,
                                 ),
-                            child: Row(
-                              spacing: 5,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Visibility(
-                                        visible:
-                                            chatReply !=
-                                            null,
-                                        child: Container(
-                                          padding:
-                                              EdgeInsets.symmetric(
-                                                vertical:
-                                                    10,
-                                                horizontal:
-                                                    10,
-                                              ),
-                                          decoration: BoxDecoration(
-                                            color: Colors
-                                                .grey
-                                                .shade300,
-                                            borderRadius:
-                                                BorderRadius.vertical(
-                                                  top:
-                                                      Radius.circular(
-                                                        5,
-                                                      ),
-                                                ),
-                                          ),
-                                          child: Row(
-                                            spacing: 5,
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  style: TextStyle(
-                                                    fontSize:
-                                                        9,
-                                                    color: Colors
-                                                        .grey
-                                                        .shade700,
-                                                  ),
-                                                  cutLongText(
-                                                    60,
-                                                    chatReply?.message ??
-                                                        'Not Set',
-                                                  ),
-                                                ),
-                                              ),
-                                              InkWell(
-                                                onTap: () {
+                            child: Icon(
+                              size: 18,
+                              Icons
+                                  .arrow_back_ios_new_rounded,
+                            ),
+                          ),
+                        ),
+
+                        Text(
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          'Chats',
+                        ),
+                        Opacity(
+                          opacity: 0,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(
+                                  horizontal: 10.0,
+                                  vertical: 5,
+                                ),
+                            child: Icon(Icons.clear),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Divider(
+                  //   color: Colors.grey.shade400,
+                  //   height: 0,
+                  // ),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          height: screenHeight(context),
+                          fit: BoxFit.cover,
+                          chatBackground,
+                        ),
+                        Column(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(
+                                      vertical: 5.0,
+                                      horizontal: 15,
+                                    ),
+                                child: ListView(
+                                  reverse: true,
+                                  children: returnChats(context: context)
+                                      .returnMainChats(
+                                        id:
+                                            widget
+                                                .projectId ??
+                                            widget
+                                                .branchId ??
+                                            widget.chatId ??
+                                            '',
+                                        index:
+                                            widget.chatType,
+                                      )
+                                      .map(
+                                        (item) => Row(
+                                          mainAxisAlignment:
+                                              returnUser()
+                                                      .currentUser
+                                                      ?.id ==
+                                                  item.userId
+                                              ? MainAxisAlignment
+                                                    .end
+                                              : MainAxisAlignment
+                                                    .start,
+                                          children: [
+                                            ChatBubbleWidget(
+                                              item: item,
+                                              replyUuid:
+                                                  chatEdit
+                                                      ?.uuid ??
+                                                  chatReply
+                                                      ?.uuid,
+                                              replyAction: () {
+                                                if (item.userId !=
+                                                    returnUser()
+                                                        .currentUser
+                                                        ?.id) {
                                                   setState(() {
                                                     chatReply =
+                                                        item;
+                                                  });
+                                                  return false;
+                                                }
+                                              },
+                                              longPress: () {
+                                                showMenuAction(
+                                                  buttonKeyy:
+                                                      item.key,
+                                                  chat:
+                                                      item,
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(
+                                    horizontal: 10.0,
+                                  ),
+                              child: Row(
+                                spacing: 5,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        Visibility(
+                                          visible:
+                                              chatReply !=
+                                              null,
+                                          child: Container(
+                                            padding:
+                                                EdgeInsets.symmetric(
+                                                  vertical:
+                                                      10,
+                                                  horizontal:
+                                                      10,
+                                                ),
+                                            decoration: BoxDecoration(
+                                              color: Colors
+                                                  .grey
+                                                  .shade300,
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                    top:
+                                                        Radius.circular(
+                                                          5,
+                                                        ),
+                                                  ),
+                                            ),
+                                            child: Row(
+                                              spacing: 5,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          9,
+                                                      color: Colors
+                                                          .grey
+                                                          .shade700,
+                                                    ),
+                                                    cutLongText(
+                                                      60,
+                                                      chatReply?.message ??
+                                                          'Not Set',
+                                                    ),
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      chatReply =
+                                                          null;
+                                                    });
+                                                  },
+                                                  child: Icon(
+                                                    size:
+                                                        15,
+                                                    Icons
+                                                        .clear,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        NormalTextfield(
+                                          onFieldSubmitted:
+                                              (value) {
+                                                createChat();
+                                              },
+                                          inputController:
+                                              messageController,
+                                          hintText:
+                                              'Enter Message',
+                                          title: 'title',
+                                          isOptional: true,
+                                          numberOfLines: 1,
+                                          showTitle: false,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Material(
+                                        color: Colors
+                                            .transparent,
+                                        child: Ink(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(
+                                                  5,
+                                                ),
+                                            color:
+                                                const Color.fromARGB(
+                                                  255,
+                                                  46,
+                                                  81,
+                                                  110,
+                                                ),
+                                          ),
+                                          child: InkWell(
+                                            onTap: () {
+                                              createChat();
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  EdgeInsets.all(
+                                                    9,
+                                                  ),
+                                              child: Icon(
+                                                color: Colors
+                                                    .white,
+                                                size: 16,
+                                                Icons.send,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible:
+                                            chatEdit !=
+                                            null,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(
+                                                left: 5.0,
+                                              ),
+                                          child: Material(
+                                            color: Colors
+                                                .transparent,
+                                            child: Ink(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      5,
+                                                    ),
+                                                color:
+                                                    const Color.fromARGB(
+                                                      255,
+                                                      69,
+                                                      123,
+                                                      167,
+                                                    ),
+                                              ),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    messageController
+                                                        .clear();
+                                                    chatEdit =
                                                         null;
                                                   });
                                                 },
-                                                child: Icon(
-                                                  size: 15,
-                                                  Icons
-                                                      .clear,
+                                                child: Container(
+                                                  padding:
+                                                      EdgeInsets.all(
+                                                        9,
+                                                      ),
+                                                  child: Icon(
+                                                    color: Colors
+                                                        .white,
+                                                    size:
+                                                        16,
+                                                    Icons
+                                                        .clear,
+                                                  ),
                                                 ),
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      NormalTextfield(
-                                        onFieldSubmitted:
-                                            (value) {
-                                              createChat();
-                                            },
-                                        inputController:
-                                            messageController,
-                                        hintText:
-                                            'Enter Message',
-                                        title: 'title',
-                                        isOptional: true,
-                                        numberOfLines: 1,
-                                        showTitle: false,
                                       ),
                                     ],
                                   ),
-                                ),
-                                Row(
-                                  children: [
-                                    Material(
-                                      color: Colors
-                                          .transparent,
-                                      child: Ink(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(
-                                                5,
-                                              ),
-                                          color:
-                                              const Color.fromARGB(
-                                                255,
-                                                46,
-                                                81,
-                                                110,
-                                              ),
-                                        ),
-                                        child: InkWell(
-                                          onTap: () {
-                                            createChat();
-                                          },
-                                          child: Container(
-                                            padding:
-                                                EdgeInsets.all(
-                                                  9,
-                                                ),
-                                            child: Icon(
-                                              color: Colors
-                                                  .white,
-                                              size: 16,
-                                              Icons.send,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible:
-                                          chatEdit != null,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(
-                                              left: 5.0,
-                                            ),
-                                        child: Material(
-                                          color: Colors
-                                              .transparent,
-                                          child: Ink(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                    5,
-                                                  ),
-                                              color:
-                                                  const Color.fromARGB(
-                                                    255,
-                                                    69,
-                                                    123,
-                                                    167,
-                                                  ),
-                                            ),
-                                            child: InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  messageController
-                                                      .clear();
-                                                  chatEdit =
-                                                      null;
-                                                });
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    EdgeInsets.all(
-                                                      9,
-                                                    ),
-                                                child: Icon(
-                                                  color: Colors
-                                                      .white,
-                                                  size: 16,
-                                                  Icons
-                                                      .clear,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      ),
-                    ],
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                // Divider(
-                //   color: Colors.grey.shade300,
-                //   height: 0,
-                // ),
-              ],
+                  // Divider(
+                  //   color: Colors.grey.shade300,
+                  //   height: 0,
+                  // ),
+                ],
+              ),
             ),
           ),
         ),
