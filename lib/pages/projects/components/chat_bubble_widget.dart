@@ -132,9 +132,13 @@ class _ChatBubbleWidgetState
                           children: [
                             Text(
                               style: TextStyle(
-                                fontSize: 8,
-                                color: theme
-                                    .secondaryLight(),
+                                fontSize: 7,
+                                color: const Color.fromARGB(
+                                  226,
+                                  202,
+                                  80,
+                                  121,
+                                ),
                               ),
                               cutLongText(
                                 40,

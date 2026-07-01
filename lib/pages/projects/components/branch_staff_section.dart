@@ -62,7 +62,7 @@ class _BranchStaffSectionState
                 Visibility(
                   visible: returnUser(
                     context: context,
-                  ).currentUser!.isAdmin,
+                  ).currentUser!.isProjectManager(),
                   child: InkWell(
                     onTap: () {
                       showDialog(
@@ -143,7 +143,7 @@ class _BranchStaffSectionState
                       IgnorePointer(
                         ignoring: !returnUser(
                           context: context,
-                        ).currentUser!.isAdmin,
+                        ).currentUser!.isProjectManager(),
                         child: InkWell(
                           onTap: () {
                             showDialog(
@@ -312,7 +312,7 @@ class _BranchStaffSectionState
                                   visible:
                                       UserProvider()
                                           .currentUser!
-                                          .isAdmin ==
+                                          .isProjectManager() ==
                                       true,
                                   child: Material(
                                     color:

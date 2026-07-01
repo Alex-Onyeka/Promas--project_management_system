@@ -35,6 +35,62 @@ class _EmployeesState extends State<Employees> {
     });
   }
 
+  // final buttonKey = GlobalKey();
+  List<UserRoles> userRoles = [
+    // UserRoles(role: 'Super Admin', index: 5),
+    UserRoles(role: 'Company Admin', index: 4),
+    UserRoles(role: 'Project Manager', index: 3),
+    UserRoles(role: 'Team Lead', index: 2),
+    UserRoles(role: 'Developer', index: 1),
+  ];
+
+  void showMenuAction({
+    required GlobalKey buttonKey,
+    required UserClass user,
+  }) async {
+    final RenderBox button =
+        buttonKey.currentContext!.findRenderObject()
+            as RenderBox;
+
+    final Offset position = button.localToGlobal(
+      Offset.zero,
+    );
+
+    final Size size = button.size;
+
+    final screenSize = MediaQuery.of(context).size;
+
+    await showMenu(
+      context: context,
+      color: Colors.white,
+      constraints: BoxConstraints(
+        maxWidth: 500,
+        minWidth: 200,
+      ),
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy + size.height + 10,
+        screenSize.width - position.dx - size.width,
+        screenSize.height - position.dy,
+      ),
+      items: userRoles.map((role) {
+        return PopupMenuItem(
+          onTap: () {
+            makeAdmin(context, user, role.index);
+          },
+          // value: 'edit',
+          child: Text(
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+            role.role,
+          ),
+        );
+      }).toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var usersIn = returnUser(context: context).users
@@ -198,16 +254,17 @@ class _EmployeesState extends State<Employees> {
                                               children: [
                                                 Visibility(
                                                   visible: !user
-                                                      .isAdmin,
+                                                      .isSuperAdmin(),
                                                   child: Material(
+                                                    key: user
+                                                        .key,
                                                     color: Colors
                                                         .transparent,
                                                     child: InkWell(
                                                       onTap: () async {
-                                                        await makeAdmin(
-                                                          context,
-                                                          user,
-                                                          true,
+                                                        showMenuAction(
+                                                          buttonKey: user.key,
+                                                          user: user,
                                                         );
                                                       },
                                                       child: Padding(
@@ -220,13 +277,6 @@ class _EmployeesState extends State<Employees> {
                                                           spacing: 5,
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           children: [
-                                                            Icon(
-                                                              size: 16,
-                                                              color: returnTheme(
-                                                                context: context,
-                                                              ).mediumGrey(),
-                                                              Icons.check,
-                                                            ),
                                                             Text(
                                                               style: TextStyle(
                                                                 fontSize: 10,
@@ -234,7 +284,14 @@ class _EmployeesState extends State<Employees> {
                                                                   context: context,
                                                                 ).darkMediumGrey(),
                                                               ),
-                                                              'Make Admin',
+                                                              user.userRole(),
+                                                            ),
+                                                            Icon(
+                                                              size: 18,
+                                                              color: returnTheme(
+                                                                context: context,
+                                                              ).mediumGrey(),
+                                                              Icons.keyboard_arrow_down_rounded,
                                                             ),
                                                           ],
                                                         ),
@@ -321,20 +378,21 @@ class _EmployeesState extends State<Employees> {
                                               SizedBox(
                                                 width: 2,
                                               ),
-                                              Text(
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      11,
-                                                  fontWeight:
-                                                      FontWeight
-                                                          .bold,
-                                                  color: returnTheme(
-                                                    context:
-                                                        context,
-                                                  ).darkMediumGrey(),
+                                              Expanded(
+                                                child: Text(
+                                                  style: TextStyle(
+                                                    fontSize:
+                                                        11,
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    color: returnTheme(
+                                                      context:
+                                                          context,
+                                                    ).darkMediumGrey(),
+                                                  ),
+                                                  user.name
+                                                      .toUpperCase(),
                                                 ),
-                                                user.name
-                                                    .toUpperCase(),
                                               ),
                                               Container(
                                                 margin: EdgeInsets.symmetric(
@@ -352,19 +410,20 @@ class _EmployeesState extends State<Employees> {
                                                       greyNeutral(),
                                                 ),
                                               ),
-                                              Text(
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      11,
-                                                  fontWeight:
-                                                      FontWeight
-                                                          .bold,
-                                                  color: returnTheme(
-                                                    context:
-                                                        context,
-                                                  ).mediumGrey(),
+                                              Expanded(
+                                                child: Text(
+                                                  style: TextStyle(
+                                                    fontSize:
+                                                        11,
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    color: returnTheme(
+                                                      context:
+                                                          context,
+                                                    ).mediumGrey(),
+                                                  ),
+                                                  user.name,
                                                 ),
-                                                user.name,
                                               ),
                                             ],
                                           ),
@@ -384,16 +443,17 @@ class _EmployeesState extends State<Employees> {
                                               children: [
                                                 Visibility(
                                                   visible: !user
-                                                      .isAdmin,
+                                                      .isSuperAdmin(),
                                                   child: Material(
+                                                    key: user
+                                                        .key,
                                                     color: Colors
                                                         .transparent,
                                                     child: InkWell(
                                                       onTap: () async {
-                                                        await makeAdmin(
-                                                          context,
-                                                          user,
-                                                          true,
+                                                        showMenuAction(
+                                                          buttonKey: user.key,
+                                                          user: user,
                                                         );
                                                       },
                                                       child: Padding(
@@ -406,13 +466,6 @@ class _EmployeesState extends State<Employees> {
                                                           spacing: 5,
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           children: [
-                                                            Icon(
-                                                              size: 16,
-                                                              color: returnTheme(
-                                                                context: context,
-                                                              ).mediumGrey(),
-                                                              Icons.check,
-                                                            ),
                                                             Text(
                                                               style: TextStyle(
                                                                 fontSize: 10,
@@ -420,7 +473,14 @@ class _EmployeesState extends State<Employees> {
                                                                   context: context,
                                                                 ).darkMediumGrey(),
                                                               ),
-                                                              'Make Admin',
+                                                              user.userRole(),
+                                                            ),
+                                                            Icon(
+                                                              size: 18,
+                                                              color: returnTheme(
+                                                                context: context,
+                                                              ).mediumGrey(),
+                                                              Icons.keyboard_arrow_down_rounded,
                                                             ),
                                                           ],
                                                         ),
@@ -518,14 +578,14 @@ class _EmployeesState extends State<Employees> {
   Future<dynamic> makeAdmin(
     BuildContext context,
     UserClass user,
-    bool boolValue,
+    int role,
   ) {
     return showDialog(
       context: context,
       builder: (context) {
         return EditUserIsAdminDialog(
           user: user,
-          boolValue: boolValue,
+          role: role,
         );
       },
     );

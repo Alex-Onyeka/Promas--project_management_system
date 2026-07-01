@@ -496,7 +496,7 @@ class _BranchPageState extends State<BranchPage> {
                                               ignoring: !returnUser(
                                                 context:
                                                     context,
-                                              ).currentUser!.isAdmin,
+                                              ).currentUser!.isTeamLead(),
                                               child: Material(
                                                 color: Colors
                                                     .transparent,
@@ -558,7 +558,7 @@ class _BranchPageState extends State<BranchPage> {
                                               ignoring: !returnUser(
                                                 context:
                                                     context,
-                                              ).currentUser!.isAdmin,
+                                              ).currentUser!.isTeamLead(),
                                               child: Material(
                                                 color: Colors
                                                     .transparent,

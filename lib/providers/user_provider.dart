@@ -121,7 +121,7 @@ class UserProvider extends ChangeNotifier {
       us.name = user.name;
       us.email = user.email;
       us.jobTitle = user.jobTitle;
-      us.isAdmin = user.isAdmin;
+      us.role = user.role;
       notifyListeners();
       try {
         await getAllCompanyUsers();
@@ -195,21 +195,18 @@ class UserProvider extends ChangeNotifier {
   /// Edit User is Admin
   Future<UserClass?> editUserIdAdmin(
     String userId,
-    bool isAdmin,
+    int role,
   ) async {
     try {
       final response = await _client
           .from(_table)
-          .update({'is_admin': isAdmin})
+          .update({'role': role})
           .eq('id', userId)
           .select()
           .single();
       print('User Update Success');
-      users
-              .where((user) => user.id == userId)
-              .first
-              .isAdmin =
-          isAdmin;
+      users.where((user) => user.id == userId).first.role =
+          role;
       notifyListeners();
       try {
         await getAllCompanyUsers();

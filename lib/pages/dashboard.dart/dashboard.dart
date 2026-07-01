@@ -248,9 +248,8 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       SizedBox(
                         height:
-                            returnUser()
-                                    .currentUser
-                                    ?.isAdmin ==
+                            returnUser().currentUser
+                                    ?.isCompanyAdmin() ==
                                 true
                             ? 200
                             : 120,
@@ -333,7 +332,7 @@ class _DashboardState extends State<Dashboard> {
                                     visible:
                                         returnUser()
                                             .currentUser
-                                            ?.isAdmin ==
+                                            ?.isCompanyAdmin() ==
                                         true,
                                     child: Expanded(
                                       child: Row(
@@ -417,9 +416,8 @@ class _DashboardState extends State<Dashboard> {
                               visible:
                                   screenSize(context) >
                                       tabletScreen &&
-                                  returnUser()
-                                          .currentUser
-                                          ?.isAdmin ==
+                                  returnUser().currentUser
+                                          ?.isCompanyAdmin() ==
                                       true,
                               child: Expanded(
                                 flex: 8,
@@ -436,9 +434,8 @@ class _DashboardState extends State<Dashboard> {
                         visible:
                             screenSize(context) <=
                                 tabletScreen &&
-                            returnUser()
-                                    .currentUser
-                                    ?.isAdmin ==
+                            returnUser().currentUser
+                                    ?.isCompanyAdmin() ==
                                 true,
                         child: Column(
                           children: [

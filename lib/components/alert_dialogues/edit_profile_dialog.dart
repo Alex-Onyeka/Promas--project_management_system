@@ -166,7 +166,7 @@ class _DeleteAccountDialogState
                   await returnUser().deleteUser(
                     useracc.id!,
                   );
-                  if (useracc.isAdmin) {
+                  if (useracc.isSuperAdmin()) {
                     await returnCompany().deleteCompany(
                       returnCompany().currentCompany!.id!,
                     );

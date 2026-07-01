@@ -104,7 +104,7 @@ class _MainSideBarState extends State<MainSideBar> {
                   Visibility(
                     visible: returnUser(
                       context: context,
-                    ).currentUser!.isAdmin,
+                    ).currentUser!.isCompanyAdmin(),
                     child: MenuListItem(
                       currentSelected: returnNav(
                         context: context,
@@ -120,7 +120,7 @@ class _MainSideBarState extends State<MainSideBar> {
                   Visibility(
                     visible: returnUser(
                       context: context,
-                    ).currentUser!.isAdmin,
+                    ).currentUser!.isCompanyAdmin(),
                     child: MenuListItem(
                       currentSelected: returnNav(
                         context: context,
@@ -178,88 +178,88 @@ class _MainSideBarState extends State<MainSideBar> {
             ),
           ),
           SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 25.0,
-            ),
-            child: Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
-              spacing: 10,
-              children: [
-                Row(
-                  spacing: 5,
-                  children: [
-                    Icon(
-                      size: 14,
-                      color: returnTheme(
-                        context: context,
-                      ).darkMediumGrey(),
-                      returnTheme(
-                            context: context,
-                          ).isDarkMode
-                          ? Icons.nightlight
-                          : Icons.sunny,
-                    ),
-                    Text(
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.normal,
-                        color: returnTheme(
-                          context: context,
-                        ).darkMediumGrey(),
-                      ),
-                      returnTheme(
-                            context: context,
-                          ).isDarkMode
-                          ? 'Dark Theme'
-                          : 'Light Theme',
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: () {
-                    returnTheme().switchTheme();
-                  },
-                  child: Container(
-                    height: 20,
-                    width: 38,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        20,
-                      ),
-                      color: returnTheme(
-                        context: context,
-                      ).lightMediumGrey(),
-                    ),
-                    child: Row(
-                      mainAxisAlignment:
-                          returnTheme(
-                            context: context,
-                          ).isDarkMode
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 4,
-                          ),
-                          height: 13,
-                          width: 13,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: returnTheme(
-                              context: context,
-                            ).darkMediumGrey(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(
+          //     horizontal: 25.0,
+          //   ),
+          //   child: Row(
+          //     mainAxisAlignment:
+          //         MainAxisAlignment.spaceBetween,
+          //     spacing: 10,
+          //     children: [
+          //       Row(
+          //         spacing: 5,
+          //         children: [
+          //           Icon(
+          //             size: 14,
+          //             color: returnTheme(
+          //               context: context,
+          //             ).darkMediumGrey(),
+          //             returnTheme(
+          //                   context: context,
+          //                 ).isDarkMode
+          //                 ? Icons.nightlight
+          //                 : Icons.sunny,
+          //           ),
+          //           Text(
+          //             style: TextStyle(
+          //               fontSize: 11,
+          //               fontWeight: FontWeight.normal,
+          //               color: returnTheme(
+          //                 context: context,
+          //               ).darkMediumGrey(),
+          //             ),
+          //             returnTheme(
+          //                   context: context,
+          //                 ).isDarkMode
+          //                 ? 'Dark Theme'
+          //                 : 'Light Theme',
+          //           ),
+          //         ],
+          //       ),
+          //       InkWell(
+          //         onTap: () {
+          //           returnTheme().switchTheme();
+          //         },
+          //         child: Container(
+          //           height: 20,
+          //           width: 38,
+          //           decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(
+          //               20,
+          //             ),
+          //             color: returnTheme(
+          //               context: context,
+          //             ).lightMediumGrey(),
+          //           ),
+          //           child: Row(
+          //             mainAxisAlignment:
+          //                 returnTheme(
+          //                   context: context,
+          //                 ).isDarkMode
+          //                 ? MainAxisAlignment.end
+          //                 : MainAxisAlignment.start,
+          //             children: [
+          //               Container(
+          //                 margin: EdgeInsets.symmetric(
+          //                   horizontal: 4,
+          //                 ),
+          //                 height: 13,
+          //                 width: 13,
+          //                 decoration: BoxDecoration(
+          //                   shape: BoxShape.circle,
+          //                   color: returnTheme(
+          //                     context: context,
+          //                   ).darkMediumGrey(),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

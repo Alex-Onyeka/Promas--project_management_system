@@ -118,7 +118,8 @@ class ProjectProvider extends ChangeNotifier {
       try {
         toggleLoading(true);
         // projectsMain.clear();
-        if (returnUser().currentUser?.isAdmin == true) {
+        if (returnUser().currentUser?.isCompanyAdmin() ==
+            true) {
           final response = await _client
               .from(_table)
               .select()

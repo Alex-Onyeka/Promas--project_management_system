@@ -40,7 +40,7 @@ class AuthService {
               id: response.user!.id,
               name: name!,
               email: email,
-              isAdmin: false,
+              role: 1,
             ),
           );
         } catch (e) {

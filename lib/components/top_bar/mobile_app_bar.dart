@@ -73,9 +73,7 @@ AppBar appBar({
                       ).darkMediumGrey(),
                       fontSize: 9,
                     ),
-                    UserProvider().currentUser!.isAdmin
-                        ? 'Admin'
-                        : UserProvider().currentUser!.email,
+                    UserProvider().currentUser!.userRole(),
                   ),
                 ],
               ),
@@ -89,7 +87,7 @@ AppBar appBar({
       Visibility(
         visible: returnUser(
           context: context,
-        ).currentUser!.isAdmin,
+        ).currentUser!.isCompanyAdmin(),
         child: Padding(
           padding: const EdgeInsets.only(right: 25.0),
           child: Material(

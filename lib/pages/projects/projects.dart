@@ -99,7 +99,9 @@ class _ProjectsState extends State<Projects> {
     }
 
     List<ProjectClass> projectIn =
-        returnUser(context: context).currentUser!.isAdmin
+        returnUser(
+          context: context,
+        ).currentUser!.isCompanyAdmin()
         ? returnProject(context: context).projectsMain
         : getProjectsForEmployee(context);
     projectIn.sort(

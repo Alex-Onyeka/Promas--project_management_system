@@ -218,7 +218,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                                 visible: returnUser(
                                                   context:
                                                       context,
-                                                ).currentUser!.isAdmin,
+                                                ).currentUser!.isProjectManager(),
                                                 child: Material(
                                                   color: Colors
                                                       .transparent,
@@ -342,7 +342,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                                 visible: returnUser(
                                                   context:
                                                       context,
-                                                ).currentUser!.isAdmin,
+                                                ).currentUser!.isProjectManager(),
                                                 child: Material(
                                                   color: Colors
                                                       .transparent,
@@ -437,7 +437,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                             ignoring: !returnUser(
                                               context:
                                                   context,
-                                            ).currentUser!.isAdmin,
+                                            ).currentUser!.isProjectManager(),
                                             child: Material(
                                               color: Colors
                                                   .transparent,

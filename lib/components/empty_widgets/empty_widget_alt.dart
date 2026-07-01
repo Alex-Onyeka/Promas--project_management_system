@@ -48,7 +48,7 @@ class EmptyWidgetAlt extends StatelessWidget {
               Visibility(
                 visible: returnUser(
                   context: context,
-                ).currentUser!.isAdmin,
+                ).currentUser!.isCompanyAdmin(),
                 child: Visibility(
                   visible: showButton ?? true,
                   child: SizedBox(

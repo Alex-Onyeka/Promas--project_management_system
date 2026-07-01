@@ -170,12 +170,8 @@ class MainTopBar extends StatelessWidget {
                                   fontSize: 10,
                                 ),
                                 returnUser(
-                                      context: context,
-                                    ).currentUser!.isAdmin
-                                    ? 'Admin'
-                                    : returnUser(
-                                        context: context,
-                                      ).currentUser!.email,
+                                  context: context,
+                                ).currentUser!.userRole(),
                               ),
                             ],
                           ),
@@ -205,7 +201,7 @@ class MainTopBar extends StatelessWidget {
                 Visibility(
                   visible: returnUser(
                     context: context,
-                  ).currentUser!.isAdmin,
+                  ).currentUser!.isCompanyAdmin(),
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(

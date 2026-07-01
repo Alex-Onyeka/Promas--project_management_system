@@ -8,11 +8,11 @@ import 'package:promas/providers/user_provider.dart';
 
 class EditUserIsAdminDialog extends StatefulWidget {
   final UserClass user;
-  final bool boolValue;
+  final int role;
   const EditUserIsAdminDialog({
     super.key,
     required this.user,
-    required this.boolValue,
+    required this.role,
   });
 
   @override
@@ -49,7 +49,7 @@ class EditUserIsAdminDialogState
                 toggleLoading(true);
                 await UserProvider().editUserIdAdmin(
                   widget.user.id!,
-                  widget.boolValue,
+                  widget.role,
                 );
                 toggleLoading(false);
                 if (context.mounted) {

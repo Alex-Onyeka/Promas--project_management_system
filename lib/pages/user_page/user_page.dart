@@ -53,7 +53,7 @@ class _UserPageState extends State<UserPage> {
                 builder: (context) {
                   if (!returnUser(
                     context: context,
-                  ).currentUser!.isAdmin) {
+                  ).currentUser!.isSuperAdmin()) {
                     return Container(
                       decoration: BoxDecoration(
                         border: Border.all(

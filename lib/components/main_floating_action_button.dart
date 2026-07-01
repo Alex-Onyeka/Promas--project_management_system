@@ -14,7 +14,7 @@ class MainFloatingActionButton extends StatelessWidget {
     return Visibility(
       visible: returnUser(
         context: context,
-      ).currentUser!.isAdmin,
+      ).currentUser!.isCompanyAdmin(),
       child: Container(
         decoration: BoxDecoration(
           color: returnTheme(context: context).white(),

@@ -44,7 +44,7 @@ class EmptyWidgetMain extends StatelessWidget {
               Visibility(
                 visible: returnUser(
                   context: context,
-                ).currentUser!.isAdmin,
+                ).currentUser!.isCompanyAdmin(),
                 child: SizedBox(
                   width: 200,
                   child: MainButton(
